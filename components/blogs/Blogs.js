@@ -213,6 +213,7 @@ const Blogs = ({userEmail, logged , handleOpen}) => {
 
  
   return (
+    <div style={{display:'flex', justifyContent:'center', }}>
     <div className="blogs">
        <Toaster position="top-center" richColors /> 
       <div className="blog-header">
@@ -457,6 +458,7 @@ const Blogs = ({userEmail, logged , handleOpen}) => {
           <></>
         )}
       </div>
+    </div>
     </div>
   );
 };
