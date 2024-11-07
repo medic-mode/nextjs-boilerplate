@@ -1,0 +1,74 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0 auto;
+}
+
+
+.main-content {
+  flex: 1; 
+  padding-top: 80px;
+  width: 100%; 
+  max-width: 1300px; 
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.float {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px; /* Set a fixed width */
+  height: 50px; /* Set the same height for a perfect circle */
+  border-radius: 50%; /* Keep it circular */
+  background-color: #5AD252;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.2s ease; /* Optional hover effect */
+}
+
+.float:hover {
+  transform: scale(1.1); /* Optional hover effect */
+}
+
+.float a{
+  width: 100%; /* Make the anchor take full width */
+  height: 100%; /* Make the anchor take full height */
+  display: flex; /* Flex to center the icon */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  text-decoration: none; /* Remove underline */
+  color: white; /* Icon color */
+}
+
+
+.hidden {
+  display: none; /* This class will hide elements */
+}
+
+.loading-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background: #F8F8FF
+}
+
+
+@media (max-width: 1024px) {
+  .main-content{
+    padding-top: 70px;
+  }
+}

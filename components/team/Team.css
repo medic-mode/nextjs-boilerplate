@@ -1,0 +1,83 @@
+.team-members {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto; /* Center the container */
+}
+
+.group {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap */
+    justify-content: center; /* Center items within the group */
+    margin-bottom: 60px;
+}
+
+.members {
+    background-color: var(--dark-green);
+    color: var(--light-green);
+    padding: 15px;
+    border-radius: 15px;
+    margin: 10px; 
+    flex: 1 1 240px;
+    max-width: 240px;
+    text-align: center; /* Center text inside each member container */
+    box-sizing: border-box;
+}
+
+
+.member-photo {
+    width: 100%; /* Make image fill the parent container width */
+    max-height: 250px;
+    object-fit: cover; /* Ensure image covers the container area */
+    border-radius: 15px;
+}
+
+.members h3 {
+    margin-top: 15px;
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--orange);
+}
+
+.members p {
+    margin-top: 10px;
+    font-size: 13px;
+    font-style: italic;
+}
+
+.group2 .members, .group3 .members{
+    margin-right: 20px;
+    width: 240px;
+}
+
+
+/* Small screens: 1 item per row */
+@media (max-width: 768px) {
+    .members {
+        flex: 1 1 100%; /* Full width on small screens */
+        max-width: none;
+        margin: 10px 0; 
+    }
+
+    .member-photo{
+        max-height: 350px;
+    }
+
+    .group {
+        justify-content: center; /* Center group on small screens */
+    }
+
+    .group2 .member-photo, .group3 .member-photo{
+        max-height: 350px !important;
+        margin: 0 !important;
+    }
+
+    .group2 .members, .group3 .members{
+        margin-right: 0 !important;
+    }
+   
+}
+
+
+
+
+

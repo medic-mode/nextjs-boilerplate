@@ -1,0 +1,81 @@
+.careers-container {
+    min-width: 100vw;
+    height: 100vh;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.careers-container::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/careers/carreer-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3; /* Adjust opacity level here */
+}
+
+
+.careers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centers element both horizontally and vertically */
+    color: var(--dark-green);
+    text-align: center;
+    font-size: 10px; 
+    line-height: 35px;
+}
+
+.careers h1{
+    font-size: 30px;
+    color: var(--dark-green);
+    margin-bottom: 20px;
+}
+
+.careers h2{
+    font-size: 18px;
+}
+
+
+.careers button {
+    background-color: var(--dark-green);
+    color: var(--light-green);
+    padding: 10px 30px;
+    font-size: 15px;
+    margin: 20px 20px;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    border-radius: 8px;
+    width: 150px;
+    align-self: center;
+    cursor: pointer;
+    transition: all 0.2s ease; /* Smooth transition for effects */
+}
+
+.careers button:hover{
+  background-color: var(--orange) ; 
+  box-shadow: rgba(0, 0, 0, 0.25) 2px 2px 3px;
+}
+
+@media (max-width: 768px){
+
+    .careers div{
+        display: flex;
+        margin-top: 20px;
+    }
+
+    .careers button{
+        width: 100px;
+        padding: 10px 20px;
+    }
+}
+
+

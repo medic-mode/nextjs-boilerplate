@@ -1,0 +1,217 @@
+.contact-container {
+    margin: 0 auto; /* Center the container */
+    position: relative; /* Position for absolute children */
+}
+
+.contact {
+    position: relative; /* Make it relative for absolute positioning of the image */
+    width: 100vw; /* Set width to 100% of the viewport */
+    height: 100%; /* Full height of the viewport */
+    overflow: hidden; /* Hide overflow if needed */
+}
+
+.contact img {
+    width: 100%; /* Stretch image to full width of .contact */
+    height: 100%; /* Stretch image to full height of .contact */
+    object-fit: cover; /* Maintain aspect ratio while covering */
+    position: absolute; /* Position image absolutely */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    opacity: 0.1;
+    z-index: -10;
+}
+
+.contact-text{
+    padding: 50px;
+}
+
+.contact-heading{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    color: var(--dark-green);
+    gap: 20px;
+}
+
+.contact-info{
+    display: flex;
+    margin: 50px 0;
+}
+
+
+.contact-form {
+    padding: 50px 20px;
+    border-radius: 10px;
+    margin: 30px auto;
+    background: #f2f7f785;
+    box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, 
+                rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+    backdrop-filter: blur(10px); /* Apply blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Safari support for blur */
+    max-width: 400px;
+    flex-basis: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+
+  .contact-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 23px;
+    color: var(--dark-green);
+  }
+  
+  .contact-form form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+    
+  }
+  
+  .contact-form form input,
+  .contact-form form textarea {
+    padding: 20px;
+    margin: 10px 0;
+    width: 100%;
+    border-radius: 8px;
+    border: none;
+  }
+  
+  .contact-form form textarea:focus {
+    outline: none;
+  }
+  
+  .enquiry-btn {
+    background-color: var(--dark-green);
+    color: var(--light-green);
+    padding: 10px 30px;
+    font-size: 15px;
+    margin-top: 20px;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    border-radius: 8px;
+    width: auto;
+    align-self: center;
+    cursor: pointer;
+    transition: all 0.2s ease; /* Smooth transition for effects */
+}
+
+.enquiry-btn:hover{
+  background-color: var(--orange) ; 
+  box-shadow: rgba(0, 0, 0, 0.25) 2px 2px 3px;
+}
+
+.enquiry-btn:active {
+    transform: translateY(2px); /* Move button down when clicked */
+    box-shadow: rgba(0, 0, 0, 0.1) 1.5px 1.5px 2px; /* Change shadow */
+    /* background-color: var(--light-green);  */
+}
+
+
+.contact-address {
+    flex-basis: 50%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+    gap: 20px;  
+    margin: 30px auto;
+}
+
+.contact-address > *:nth-child(1) {
+    grid-column: span 2; /* Make the third child span across both columns */
+}
+
+.contact-address > *:nth-child(2) {
+    grid-column: span 2; /* Make the third child span across both columns */
+}
+
+.addr {
+    padding: 20px;
+    border-radius: 10px;
+    background: #f2f7f785;
+    box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, 
+                rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+    backdrop-filter: blur(10px); /* Apply blur effect */
+    -webkit-backdrop-filter: blur(10px); /* For Safari support */
+    border: 1px solid rgba(255, 255, 255, 0.6); /* Light border for structure */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--dark-green);
+}
+
+
+.addr p{
+    font-size: 14px ;
+    text-align: center;
+    font-weight: 600;
+    line-height: 25px;
+}
+
+.addr-icon{
+    font-size: 40px !important;
+    margin-bottom: 30px;
+}
+
+.addr img {
+    display: block;
+    width: 70px; 
+    height: 70px; 
+    opacity: 1; 
+    position: relative; 
+    margin-bottom: 30px;
+}
+
+.addr a{
+    color: var(--dark-green);
+    text-decoration: none;
+}
+
+.contact-icon{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+
+@media (max-width: 768px) {
+    .contact-text{
+        padding: 50px 20px;
+        text-align: center;
+    }
+
+    .contact-form{
+        width: 100%;
+    }
+
+    .contact-info{
+        flex-direction: column;
+        margin: 20px 0;
+
+    }
+
+    .contact-address > *:nth-child(1) {
+        grid-column: span 1; /* Make the third child span across both columns */
+    }
+    
+    .contact-address > *:nth-child(2) {
+        grid-column: span 1; /* Make the third child span across both columns */
+    }
+
+    .contact-address > *:nth-child(3) {
+        grid-column: span 1; /* Make the third child span across both columns */
+    }
+    .contact-address{
+        grid-template-columns: 1fr;
+    }
+
+
+
+  }

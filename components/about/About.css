@@ -1,0 +1,306 @@
+.about-container {
+    min-width: 100vw;
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.about-header {
+    position: relative;
+    background-color: black;
+    overflow: hidden; /* Prevent any overflow */
+    height: 400px;
+}
+
+.about-header img {
+    width: 100%;
+    height: 100%; /* Ensure it fills the container */
+    object-fit: cover; /* Makes sure the image fills without distortion */
+    opacity: 0.3;
+    position: absolute; /* Position the image to fill the parent */
+    top: 0;
+    left: 0;
+}
+
+.about-header-title {
+    position: absolute;
+    top: 30%; /* Adjust to fit your design */
+    left: 20%;
+    color: var(--light-green);
+}
+
+.about-header-title h1 {
+    font-size: 50px;
+    margin-bottom: 20px;
+    color: var(--light-green);
+}
+
+.about-header-title p {
+    width: 55%;
+    line-height: 28px;
+}
+
+.journey{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    color: var(--dark-green);
+}
+
+.journey h2{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: 35px;
+}
+
+.journey-content{
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    gap: 50px;
+    align-items: center;
+}
+
+.journey-content-text, .vision-content p, .mission-content p, .whatwedo-header p, .commitment p, .community p{
+    flex-basis: 60%;
+    font-size: 18px;
+    text-align: justify;
+    hyphens: auto;
+    line-height: 30px;
+}
+
+.journey-content-image{
+    flex-basis: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.journey-content-image img{
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+}
+
+
+.our-vision-container, .our-mission-container, .whatwedo-container, .community-container, .commitment-container, .leadership-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    color: var(--dark-green);
+}
+
+.our-vision, .our-mission{
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    padding: 30px 0;
+    gap: 50px;
+}
+
+.vision-image, .mission-image{
+    flex-basis: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vision-content, .mission-content{
+    flex-basis: 60%;
+    display: flex;
+    flex-direction: column;
+}
+
+.vision-content h2, .mission-content h2, .whatwedo-header h2, .commitment h2, .community h2, .leadership h2{
+    text-align: left;
+    margin-bottom: 30px;
+    font-size: 38px;
+}
+
+.vision-image img, .mission-image img{
+    max-width: 500px;
+    width: 100%;
+}
+
+.whatwedo{
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    width: 100%;
+    padding: 30px 20px;
+}
+
+.whatwedo-content{
+    padding: 30px 20px 0 20px;
+}
+
+.whatwedo-item{
+    background-color: var(--dark-green);
+    color: var(--light-green);
+    margin-bottom: 30px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    border-radius: 8px;
+}
+
+.whatwedo-item h3{
+    color: var(--orange);
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+.whatwedo-item p{
+    font-size: 15px;
+    line-height: 26px;
+}
+
+.community, .commitment{
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.leadership{
+    max-width: 1200px;
+    width: 100%;
+    padding: 30px 20px;
+}
+
+.leader{
+    background-color: var(--dark-green);
+    color: var(--light-green);
+    display: flex;
+    gap: 30px;
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 50px;
+}
+
+.leader img{
+    width: auto;
+    height: 300px;
+    border-radius: inherit;
+}
+
+.leader-content h3{
+    color: var(--orange);
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.leader-content p{
+    font-size: 16px;
+    line-height: 26px;
+    margin-bottom: 12px;
+    hyphens: auto;
+    text-align: justify;
+}
+
+
+@media (max-width: 768px) {
+
+    .about-header{
+        height: 300px;
+    }
+
+    .about-header img{
+        height: 300px;
+        width: 100%;
+        object-fit: cover;
+        object-position: -650px;
+    }
+
+    .about-header-title{
+        top: 20%;
+        left: 5%;
+    }
+
+    .about-header-title h1{
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+
+    .about-header-title p{
+        width: 90%;
+        text-align: justify;
+        hyphens: auto;
+        font-size: 14px;
+        padding: 10px;
+        line-height: 22px;
+    }
+
+    .journey-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .journey h1{
+        font-size: 30px;
+    }
+
+    .vision-content h1, .mission-content h1, .whatwedo-header h1, .whatwedo-item h1, .community h1, .community h1{
+        font-size: 30px;
+        margin-bottom: 20px;
+    }
+
+    .journey-content-text, .vision-content p, .mission-content p, .whatwedo-header p, .whatwedo-item p, .commitment p, .community p{
+        font-size: 16px;
+        line-height: 25px;
+    }
+
+    .journey-content-image img{
+        width: 100%;
+    }
+    
+    .our-vision{
+        flex-direction: column-reverse;
+        padding: 0;
+    }
+
+    .our-mission{
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .whatwedo, .community, .commitment, .leadership{
+        padding: 0;
+    }
+
+    .whatwedo-content{
+        padding: 30px 0 0 0;
+    }
+
+    .whatwedo-item{
+        flex-direction: column;
+    }
+
+    .leader{
+        flex-direction: column;
+        align-items: center;
+        padding: 30px 15px;
+    }
+
+    .leader img{
+        width: 200px;
+        height: auto;
+    }
+
+    .leader-content h1{
+        font-size: 28px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    
+    .leader-content p{
+        font-size: 16px;
+        line-height: 25px;
+    }
+}
+
+/* ************Animation************* */
+

@@ -1,0 +1,157 @@
+.signup{
+    background-color: var(--light-green);
+    padding: 30px;
+    width: 800px;
+    border-radius: 20px;
+    color: var(--dark-green);
+    font-size: 15px;
+    margin: 15px;
+    position: relative;
+}
+
+.close-modal{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    cursor: pointer
+
+}
+
+.signup-form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+input:focus{
+    outline: none; 
+}
+
+.form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    margin: 10px 0; 
+}
+
+
+.form input , .item select{
+    padding: 15px;
+    min-width: 200px; 
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: none;
+}
+
+.signup-btn{
+    margin: 10px 0 10px 0;
+    width: 80%;
+    padding: 10px;
+    background-color: var(--dark-green);
+    color: var(--light-green);
+    border-radius: 20px;
+    border: none;
+    cursor: pointer; 
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
+}
+
+.signup-btn:hover {
+    background-color: var(--orange) !important; 
+    box-shadow: rgba(0, 0, 0, 0.25) 2px 2px 3px; /* Enhance shadow on hover */
+}
+
+
+.personal-info, .profession, .contact-details, .referral{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+
+.personal-info p, .profession p, .contact-details p, .referral p{
+    font-size: 23px;
+    margin-bottom: 18px;
+} 
+
+.item{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.row{
+    display: flex;
+    flex: 1;
+    gap: 20px;
+}
+
+#dob, #gender, #nationality {
+    flex: 1;
+    min-width: 100px; 
+    width: 100%; 
+}
+
+.form-control{
+    height: 45px !important;
+    border-radius: 10px !important;
+    border: none !important;
+}
+
+
+
+#city, #state, #country, #postal-code{
+    flex: 1;
+    min-width: 100px; 
+    width: 100%; 
+}
+
+.radio-container {
+    display: flex; /* Align radio buttons in a row */
+    gap: 100px;
+}
+
+.radio {
+    display: flex; /* Align the radio button and label in a row */
+    align-items: center; /* Center align items vertically */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.radio-btn {
+    margin-bottom: 0 !important;
+    min-width: 35px !important;
+}
+
+.radio p {
+    font-size: 20px;
+    margin: 0; 
+}
+
+
+@media (max-width: 768px){
+    .form{
+        font-size: small;
+    }
+
+    .radio p {
+        font-size: 14px !important;
+    }
+
+    .signup {
+        width: 350px;
+    }
+
+    .row{
+        flex-direction: column;
+        gap: 0;
+    }
+
+   
+    
+}

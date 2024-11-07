@@ -1,0 +1,191 @@
+.navbar{
+  color: var(--light-green);
+  background-color: var(--dark-green);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 50px;
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1); 
+  width: 100%;
+  position: fixed;
+  z-index: 1300;
+}
+
+.headerlogo{
+  width: 150px;
+  height: 60px;
+  cursor: pointer;
+}
+
+.nav-images{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.social-icon {
+  cursor: pointer;
+  color: var(--light-green);
+  transition: transform 0.3s ease; /* Smooth transition */
+}
+
+.social-icon:hover {
+  transform: scale(1.1); /* Zoom in effect on hover */
+  color: var(--orange);
+}
+
+.nav-links{
+  display: flex;
+  align-items: center;
+}
+
+.account-icon{
+  display: none !important;
+}
+
+.nav-list{
+  display: flex;
+}
+
+.nav-list ul{
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+
+.nav-list ul li a{
+  display: inline-block;
+  margin: 0 5px;
+  padding: 11px;
+  font-size: 14px;
+  box-sizing: border-box; 
+  transition: transform 0.3s ease ; 
+  font-weight: 600;
+}
+.nav-list ul a{
+  text-decoration: none;
+  color: var(--light-green);
+}
+
+.nav-list ul li a:hover {
+  color: var(--orange);
+  cursor: pointer;
+  padding: 11px;
+  border-radius: 10px;
+  transform: scale(1.1);
+}
+
+.login-register-btn {
+  color: var(--dark-green);
+  background-color: var(--light-green);
+  padding: 10px 30px;
+  font-size: 13px;
+  border: none;
+  margin-left: 20px;
+  cursor: pointer;
+  border-radius: 50px;
+  width: auto;
+  font-weight: 600;
+  transition: all 0.3s ease; 
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); 
+}
+
+.login-register-btn:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
+  transform: translateY(-2px); 
+}
+
+.login-register-btn:active {
+  transform: translateY(0); 
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.menu-icon{
+  display: none;
+  cursor: pointer;
+}
+
+
+@media (max-width: 1024px) {
+  .nav-list {
+    position: absolute;
+    top: 70px; /* Start 70px from the top */
+    right: 0; /* Align to the right side */
+    width: 50%; /* Half the width of the screen */
+    height: calc(100vh - 70px) ; /* Full height minus the top offset */
+    background-color: var(--dark-green);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    opacity: 0;
+    transform: translateX(100%); /* Start completely off-screen to the right */
+    transition: opacity 0.3s ease, transform 0.4s ease, visibility 0s 0.4s;
+    visibility: hidden; /* Hide the menu initially */
+  
+}
+
+.nav-list.active {
+    opacity: 0.95; 
+    transform: translateX(0); /* Slide in to its original position */
+    visibility: visible; 
+    transition: opacity 0.3s ease, transform 0.4s ease, visibility 0s;
+  
+}
+
+
+  .nav-images{
+    gap: 10px;
+    margin-top: 5px;
+  }
+
+  .login-register-btn{
+    font-size: 10px;
+    margin-top: 0 !important; 
+    margin: 0 auto !important;
+    font-weight: 600;
+    padding: 10px 15px;
+    margin-left: 13px !important;
+  }
+
+  .navbar{
+    padding: 15px;  
+    height: 70px;
+  }
+
+  .headerlogo{
+    width: 80px;
+    height: 35px;
+    margin-top: -5px;
+  }
+
+  .nav-list ul {
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+
+  .nav-list ul li {
+    text-align: left;
+    margin-bottom: 5px;
+    padding-left: 20px;
+    font-size: 15px;
+  }
+
+  /* Show menu icon on mobile */
+  .menu-icon {
+    display: block;  
+  }
+}
+
+@media (max-width: 768px){
+  .social-icon{
+    font-size: 21px !important;
+  }
+
+  .utube-icon{
+    font-size: 27px !important;
+  }
+}

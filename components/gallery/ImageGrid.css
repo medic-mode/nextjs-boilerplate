@@ -1,0 +1,68 @@
+.image-gallery {
+  max-width: 1300px;
+  width: 100%;
+  display: flex;
+  align-items: center; /* Center align the images */
+  justify-content: center;
+  gap: 20px;
+}
+
+.fancybox__container {
+  z-index: 1500 !important;
+ 
+}
+.image-wrapper {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  /* border: 1px solid black; */
+}
+
+.gallery-thumbnail {
+  width: 300px ; /* Scale to fill the width of the wrapper */
+  height: 200px; /* Scale to fill the height of the wrapper */
+  object-fit: cover; /* Ensures image covers the container without stretching */
+  transition: transform 0.3s ease;
+  border-radius: 8px;
+}
+
+.image-wrapper:hover .gallery-thumbnail {
+  transform: scale(1.05); /* Slightly scale up on hover */
+  filter: brightness(0.7); /* Darken image on hover */
+}
+
+.gallery-caption {
+  position: absolute;
+  bottom: -100%; /* Start off-screen */
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, var(--dark-green), rgba(0, 0, 0, 0));
+  color: white;
+  padding: 10px;
+  text-align: center;
+  transition: bottom 0.3s ease;
+  line-height: 23px;
+}
+
+.image-wrapper:hover .gallery-caption {
+  bottom: 0; /* Slide into view */
+}
+
+.image-wrapper:hover .gallery-caption::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, var(--dark-green), transparent);
+  z-index: -1;
+}
+
+
+@media (max-width: 768px){
+
+  .gallery-thumbnail {
+    width: 100% ;
+  }
+}
