@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useState, useRef } from 'react';
 import './BlogDetails.css';
 import { useParams, useLocation } from 'react-router-dom';
