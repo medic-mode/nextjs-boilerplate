@@ -4,12 +4,13 @@ import BlogDetails from "@/components/blogdetail/BlogDetails";
 
 // `generateMetadata` function remains the same
 export async function generateMetadata({ params }) {
-  const postId = params.slug;
+  // Ensure params.slug is awaited before use
+  const postId = await params.slug;
 
   // Fetch blog post data
   const docRef = doc(db, 'blogPosts', postId);
   const docSnap = await getDoc(docRef);
-  
+
   if (!docSnap.exists()) {
     throw new Error('Post not found');
   }
@@ -41,7 +42,7 @@ export async function generateMetadata({ params }) {
 
 // `Page` component should await params slug properly
 export default async function Page({ params }) {
-  const postId = params.slug;
+  const postId = await params.slug; // Await the slug properly
 
   // Fetch post data for rendering
   const docRef = doc(db, 'blogPosts', postId);
