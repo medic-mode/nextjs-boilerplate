@@ -6,7 +6,7 @@ export const metadata = {
 	openGraph: {
 	  title: "Medic Mode",
 	  description: "This is a blog page",
-	  url: "https://medicmode-seo.vercel.app/blogs", 
+	  url: "https://nextjs-boilerplate-nine-theta-17.vercel.app/blogs", 
 	  images: [
 		{
 		  url: "https://firebasestorage.googleapis.com/v0/b/medic-mode.appspot.com/o/thumbnails%2Fc1.PNG?alt=media&token=63edaf0a-8ffe-431d-ba8a-bdc17be61842", 

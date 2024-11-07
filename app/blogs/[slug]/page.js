@@ -1,9 +1,8 @@
-// In your `page.js` file
-
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase"; // Adjust the import path
 import BlogDetails from "@/components/blogdetail/BlogDetails";
 
+// `generateMetadata` function remains the same
 export async function generateMetadata({ params }) {
   const postId = params.slug;
 
@@ -24,7 +23,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: postData.title,
       description: postData.description,
-      url: `https://yourwebsite.com/blogs/${postId}`, // Use your domain here
+      url: `https://nextjs-boilerplate-nine-theta-17.vercel.app/blogs/${postId}`, // Use your domain here
       images: [
         {
           url: postData.thumbnail,
@@ -40,6 +39,7 @@ export async function generateMetadata({ params }) {
   return metadata;
 }
 
+// `Page` component should await params slug properly
 export default async function Page({ params }) {
   const postId = params.slug;
 
@@ -54,5 +54,5 @@ export default async function Page({ params }) {
   const postData = docSnap.data();
 
   // Pass post data as a prop to the BlogDetails component
-  return <BlogDetails postData={postData} />;
+  return <BlogDetails postData={postData} params={params.slug} />;
 }

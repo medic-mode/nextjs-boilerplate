@@ -13,13 +13,14 @@ import Image from 'next/image';
 
 var getYouTubeID = require('get-youtube-id');
 
-const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, postData }) => {
+const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, postData, params }) => {
 
-    
-    const postId = postData.id
+
+    const postId = params
     
     const post = postData
 
+    
     const [comments, setComments] = useState([]);
     const [commentText, setCommentText] = useState('');
     const [userDetails, setUserDetails] = useState({}); // To store user details
@@ -46,39 +47,45 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, postDa
  
 
     useEffect(() => {
-        const fetchComments = async () => {
-          const commentsRef = collection(db, 'blogPosts', postId, 'comments');
-          const q = query(commentsRef, orderBy('timestamp', 'desc'));
-      
-          const unsubscribe = onSnapshot(q, async (snapshot) => {
-            const commentsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      
-            // Get all unique emails from the comments
-            const emailList = [...new Set(commentsData.map(comment => comment.email))];
-      
-            // Fetch user details in bulk
-            const usersRef = collection(db, 'users');
-            const userQuery = query(usersRef, where('email', 'in', emailList));
-            const userSnapshot = await getDocs(userQuery);
-      
-            const userDetailsMap = {};
-            userSnapshot.forEach((userDoc) => {
-              const userData = userDoc.data();
-              userDetailsMap[userDoc.id] = {
-                firstName: userData.firstName,
-                lastName: userData.lastName
-              };
+        const fetchComments = () => {
+            const commentsRef = collection(db, 'blogPosts', postId, 'comments');
+            const q = query(commentsRef, orderBy('timestamp', 'desc'));
+
+            const unsubscribe = onSnapshot(q, async (snapshot) => {
+                const commentsData = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                }));
+
+                // Fetch user details for each comment
+                const userDetailsMap = {};
+                await Promise.all(
+                    commentsData.map(async (comment) => {
+                        if (!userDetailsMap[comment.email]) {
+                            const userRef = collection(db, 'users');
+                            const userQuery = query(userRef, where('email', '==', comment.email));
+                            const userSnapshot = await getDocs(userQuery); // Use getDocs to query the data
+
+                            // Iterate over the result to find the user details
+                            userSnapshot.forEach((userDoc) => {
+                                userDetailsMap[comment.email] = {
+                                    firstName: userDoc.data().firstName,
+                                    lastName: userDoc.data().lastName,
+                                };
+                            });
+                        }
+                    }) 
+                );
+
+                setComments(commentsData);
+                setUserDetails(userDetailsMap);
             });
-      
-            setComments(commentsData);
-            setUserDetails(userDetailsMap);
-          });
-      
-          return unsubscribe;
+
+            return unsubscribe; // Cleanup the listener on unmount
         };
-      
+
         fetchComments();
-      }, [postId]);
+    }, [postId]);
 
     // Handle comment submission
     const handleCommentSubmit = async () => {
@@ -163,7 +170,6 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, postDa
           .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
           .join(" ");
       }
-
 
       
 
