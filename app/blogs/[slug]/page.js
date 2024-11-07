@@ -22,10 +22,7 @@ export const metadata = {
   
 
 export default function Page ( {params}) {
-	return (
-		<>
-		<BlogDetails slug={params.slug}/>
-	</>
+	return (<BlogDetails slug={params.slug}/>
 	)
 
 	

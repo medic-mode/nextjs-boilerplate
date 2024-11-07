@@ -9,10 +9,11 @@ export const metadata = {
 	  url: "https://medicmode-seo.vercel.app/blogs", 
 	  images: [
 		{
-		  url: "https://samuel-ponraj.github.io/medic-mode/images/og-image.jpg", 
+		  url: "https://firebasestorage.googleapis.com/v0/b/medic-mode.appspot.com/o/thumbnails%2Fc1.PNG?alt=media&token=63edaf0a-8ffe-431d-ba8a-bdc17be61842", 
 		  width: 1200,
 		  height: 630,
-		  alt: "Medic Mode - Emergency Medical Gazette"
+		  alt: "Medic Mode - Emergency Medical Gazette",
+		  unoptimized
 		}
 	  ],
 	  site_name: "Medic Mode"
