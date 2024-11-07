@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import './BlogDetails.css';
-import { useParams, useLocation } from 'react-router-dom';
-import { db } from '../../firebase'; // Add your auth configuration
+import { useRouter } from 'next/router';
+import { db } from '../../lib/firebase'; // Add your auth configuration
 import { doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, getDocs, where, deleteDoc } from 'firebase/firestore';
 import SendIcon from '@mui/icons-material/Send';
 import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
