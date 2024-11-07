@@ -178,9 +178,11 @@ const Blog = ({userEmail, logged , handleOpen}) => {
     setLikedPosts(new Set(likedPosts)); // Re-render to show liked status immediately
   };
 
+
+
+  const router = useRouter();
   
   const handleCommentIconClick = (id) => {
-    const router = useRouter();
     
     // Navigating to the blog post page with query parameter
     router.push({
@@ -221,7 +223,7 @@ const Blog = ({userEmail, logged , handleOpen}) => {
     <div className="blogs">
        <Toaster position="top-center" richColors /> 
       <div className="blog-header">
-        <img className="blog-header-image" src='/assets/blogs/blog.png' alt="Blog Header" />
+        <Image className="blog-header-image" src='/assets/blogs/blog.png' alt="Blog Header" />
           <div className="blog-heading">
             <h1>
               Our Latest <span style={{ color: 'var(--orange)' }}>Blogs</span> &{' '}
@@ -251,7 +253,7 @@ const Blog = ({userEmail, logged , handleOpen}) => {
           <div className="primary-blog" data-aos='fade-up'>
             <div className="blog-image-container">
               <Link href={`/blogs/${recentBlog.id}`} >
-                <img src={recentBlog.thumbnail} alt={recentBlog.title} />
+                <Image src={recentBlog.thumbnail} alt={recentBlog.title} />
                 
               </Link>
             </div>
@@ -390,7 +392,7 @@ const Blog = ({userEmail, logged , handleOpen}) => {
             <div key={blog.id} className="other-blogs" data-aos='zoom-in'>
               <div className="blog-image-container">
                 <Link href={`/blogs/${blog.id}`} >
-                  <img src={blog.thumbnail} alt={blog.title} />
+                  <Image src={blog.thumbnail} alt={blog.title} />
                 </Link>
               </div>
               <div className="descriptions">
