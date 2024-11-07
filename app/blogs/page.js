@@ -1,4 +1,4 @@
-import Blog from "../../components/blogs/Blogs";
+import Blogs from "../../components/blogs/Blogs";
 
 export const metadata = {
 	title: "Medic Mode - Blogs",
@@ -21,5 +21,5 @@ export const metadata = {
   
 
 export default function Page () {
-	return <Blog />
+	return <Blogs />
 }
