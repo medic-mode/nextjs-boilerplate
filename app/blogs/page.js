@@ -12,8 +12,7 @@ export const metadata = {
 		  url: "https://firebasestorage.googleapis.com/v0/b/medic-mode.appspot.com/o/thumbnails%2Fc1.PNG?alt=media&token=63edaf0a-8ffe-431d-ba8a-bdc17be61842", 
 		  width: 1200,
 		  height: 630,
-		  alt: "Medic Mode - Emergency Medical Gazette",
-		  unoptimized
+		  alt: "Medic Mode - Emergency Medical Gazette"
 		}
 	  ],
 	  site_name: "Medic Mode"
