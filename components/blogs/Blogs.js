@@ -18,12 +18,11 @@ import { RWebShare } from "react-web-share";
 import { Button } from '@mui/material';
 import { GridLoader } from 'react-spinners';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 
-
-const Blog = ({userEmail, logged , handleOpen}) => {
+const Blogs = ({userEmail, logged , handleOpen}) => {
   const [blogPosts, setBlogPosts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [years, setYears] = useState([]);
@@ -179,17 +178,12 @@ const Blog = ({userEmail, logged , handleOpen}) => {
   };
 
 
-
-  const router = useRouter();
-  
   const handleCommentIconClick = (id) => {
-    
-    // Navigating to the blog post page with query parameter
     router.push({
-        pathname: `/blogs/${id}`,
-        query: { focusOnComments: true },  // Pass the flag to focus on comments
+      pathname: `/blogs/${id}`,
+      query: { focusOnComments: 'true' },
     });
-};
+  };
 
   const handlePost = (path, e) => {
     if (!logged) {
@@ -201,7 +195,7 @@ const Blog = ({userEmail, logged , handleOpen}) => {
       handleOpen(); 
     } else {
      
-      navigate(path);
+      router.push(path);
     }
   };
 
@@ -216,14 +210,14 @@ const Blog = ({userEmail, logged , handleOpen}) => {
       </div>
     );
   }
- 
+
+  console.log(recentBlog.id)
  
   return (
-    <div style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
     <div className="blogs">
        <Toaster position="top-center" richColors /> 
       <div className="blog-header">
-        <Image className="blog-header-image" src='/assets/blogs/blog.png' alt="Blog Header" />
+        <Image className="blog-header-image" src='/assets/blogs/blog.png' alt="Blog Header" width={200} height={400}/>
           <div className="blog-heading">
             <h1>
               Our Latest <span style={{ color: 'var(--orange)' }}>Blogs</span> &{' '}
@@ -253,7 +247,7 @@ const Blog = ({userEmail, logged , handleOpen}) => {
           <div className="primary-blog" data-aos='fade-up'>
             <div className="blog-image-container">
               <Link href={`/blogs/${recentBlog.id}`} >
-                <Image src={recentBlog.thumbnail} alt={recentBlog.title} />
+                <img src={recentBlog.thumbnail} alt={recentBlog.title} />
                 
               </Link>
             </div>
@@ -310,7 +304,7 @@ const Blog = ({userEmail, logged , handleOpen}) => {
               <RWebShare
                   data={{
                     text: "Medic Modec - A Gazette for Emergency Medical Professionals",
-                    url: `https://medicmode.com/blog/${recentBlog.id}`,
+                    url: `https://medicmode.com/blogs/${recentBlog.id}`,
                     title: "Medic Mode",
 
                   }}
@@ -379,7 +373,7 @@ const Blog = ({userEmail, logged , handleOpen}) => {
                 <Button className='create-user-blog-btn' onClick={(e) => handlePost('/dashboard/create-post', e)}>Create Blog</Button>
               )
               :
-              (<Button className='create-user-blog-btn'  onClick={(e) => handlePost('/blog/create-post', e)} >Create Blog</Button>
+              (<Button className='create-user-blog-btn'  onClick={(e) => handlePost('/blogs/create-post', e)} >Create Blog</Button>
               )
               }
             </div>
@@ -392,7 +386,7 @@ const Blog = ({userEmail, logged , handleOpen}) => {
             <div key={blog.id} className="other-blogs" data-aos='zoom-in'>
               <div className="blog-image-container">
                 <Link href={`/blogs/${blog.id}`} >
-                  <Image src={blog.thumbnail} alt={blog.title} />
+                  <img src={blog.thumbnail} alt={blog.title} />
                 </Link>
               </div>
               <div className="descriptions">
@@ -447,7 +441,7 @@ const Blog = ({userEmail, logged , handleOpen}) => {
                 <RWebShare
                   data={{
                     text: "Medic Modec - A Gazette for Emergency Medical Professionals",
-                    url: `https://medicmode.com/blog/${blog.id}`,
+                    url: `https://medicmode.com/blogs/${blog.id}`,
                     title: "Medic Mode",
                   }}
                   onClick={() => toast.success('Shared successfully!', {
@@ -465,8 +459,7 @@ const Blog = ({userEmail, logged , handleOpen}) => {
         )}
       </div>
     </div>
-    </div>
   );
 };
 
-export default Blog;
+export default Blogs;

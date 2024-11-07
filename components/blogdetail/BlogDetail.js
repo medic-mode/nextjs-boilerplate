@@ -1,5 +1,4 @@
 "use client"
-
 import { useEffect, useState, useRef } from 'react';
 import './BlogDetails.css';
 import { useRouter } from 'next/router';
@@ -15,11 +14,12 @@ import Image from 'next/image';
 
 var getYouTubeID = require('get-youtube-id');
 
-const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading }) => {
+const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }) => {
 
     const router = useRouter();
 
-    const { postId } = router.query; // Extract postId from the URL
+    
+
     const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
     const [commentText, setCommentText] = useState('');
@@ -47,28 +47,31 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading }) => {
     // Fetch the blog post details
     useEffect(() => {
         const fetchPost = async () => {
-
-            if (!id) return;
-
+          if (typeof window !== "undefined") {
+            const { postId } = router.query;
+    
+            if (!postId) return; // Exit if no postId
+    
             try {
-                const docRef = doc(db, 'blogPosts', postId); // Get the specific document by ID
-                const docSnap = await getDoc(docRef);
-        
-                if (docSnap.exists()) {
-                    setPost({ id: docSnap.id, ...docSnap.data() });
-                } else {
-                    console.log('No such document!');
-                }
+              const docRef = doc(db, 'blogPosts', postId); // Get the specific document by ID
+              const docSnap = await getDoc(docRef);
+    
+              if (docSnap.exists()) {
+                setPost({ id: docSnap.id, ...docSnap.data() });
+              } else {
+                console.log('No such document!');
+              }
             } catch (error) {
-                console.error('Error fetching post: ', error);
+              console.error('Error fetching post: ', error);
             } finally {
-                setLoading(false);
+              // Safely set loading to false if component is still mounted
+              setLoading(false);
             }
+          }
         };
-
+    
         fetchPost();
-        // eslint-disable-next-line
-    }, [postId]);
+      }, [router.query]);
 
     useEffect(() => {
         const fetchComments = () => {

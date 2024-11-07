@@ -1,3 +1,4 @@
+
 import BlogDetail from "@/components/blogdetail/BlogDetail";
 
 export const metadata = {
@@ -20,6 +21,14 @@ export const metadata = {
   };
   
 
-export default function Page () {
-	return <BlogDetail />
+export default function Page ( {params}) {
+	return (
+		<>
+	<div>{params.slug}</div>
+	{/* <BlogDetail slug={params.slug}/> */}
+	</>
+	)
+
+	
+	
 }
