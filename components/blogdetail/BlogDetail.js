@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import './BlogDetails.css';
 import { useRouter } from 'next/router';
 import { db } from '../../lib/firebase'; // Add your auth configuration
@@ -10,6 +10,7 @@ import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
 import { toast, Toaster } from 'sonner';
 import YouTube from 'react-youtube';
 import { GridLoader } from 'react-spinners';
+import Image from 'next/image';
 
 
 var getYouTubeID = require('get-youtube-id');
@@ -249,7 +250,7 @@ console.log(post.content)
                 {post.slideImages && post.slideImages.length > 0 && (
                     <div className="slides-container">
                         {post.slideImages.map((slide, index) => (
-                            <img 
+                            <Image 
                                 key={index} 
                                 src={slide} // Ensure this is the URL from Firebase Storage
                                 alt={`Slide ${index + 1}`} 
