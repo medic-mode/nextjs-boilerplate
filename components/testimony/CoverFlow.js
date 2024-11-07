@@ -76,7 +76,7 @@ export default function CoverFlow() {
                     <p>{testimony.profession}</p>
                    </div>
                 </div>
-                <p className='person-message'>"{testimony.message}"</p>
+                <p className='person-message'>&quot;{testimony.message}&quot;</p>
                 <Rating name="read-only" value={5} readOnly />
               </div>
             </SwiperSlide>

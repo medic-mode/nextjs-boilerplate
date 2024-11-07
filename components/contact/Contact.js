@@ -70,7 +70,7 @@ const Contact = () => {
         <div className="contact-text">
           <div className="contact-heading">
             <h1>GET IN <span style={{color:'var(--orange)'}}>TOUCH WITH US</span></h1>
-            <p>Your thoughts and inquiries are important to us! Don't hesitate to contact our team for assistance or to share your ideas.</p>
+            <p>Your thoughts and inquiries are important to us! Don&apos;t hesitate to contact our team for assistance or to share your ideas.</p>
           </div>
           <div className="contact-info">
             <div className="contact-address">

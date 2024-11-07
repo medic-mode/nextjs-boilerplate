@@ -206,7 +206,7 @@ const Login = ({ setIsSignUp, handleClose, setLogged, error, setError, setUserEm
                 LOGIN
               </button>
 
-              <p style={{fontSize:'13px'}}>Don't have an account? <span style={{ fontWeight: 'bolder', cursor: 'pointer' }}
+              <p style={{fontSize:'13px'}}>Don&apos;t have an account? <span style={{ fontWeight: 'bolder', cursor: 'pointer' }}
                   onClick={() => { setIsSignUp(true); setError(''); }}>Sign up</span></p>
             </>
           )}
