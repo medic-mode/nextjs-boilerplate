@@ -1,0 +1,242 @@
+.blog-detail-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; 
+    min-height: 100vh; 
+}
+
+.blog-details {
+  width: 100vw;
+  max-width: 1300px;
+  padding: 20px;
+}
+
+.blog-details img {
+    display: block; 
+    padding: 20px;
+    width: 100%; /* Set the width to 100% to stretch the image */
+    height: auto; /* Maintain aspect ratio */
+    margin: 0 0 20px; /* Centering is not needed anymore, so just add space below */
+    border-radius: 8px; /* Rounded corners for images */
+}
+
+
+.blog-detail-description{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 15px;
+}
+
+.blog-detail-description h3 {
+    font-size: 15px; 
+    color: var(--grey); 
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.blog-detail-title h1 {
+    font-size: 2.5rem;
+    margin-top: 40px;
+    margin-bottom: 15px; 
+    color: var(--dark-green);
+}
+
+.blog-detail-content {
+    font-size: 16px; 
+    line-height: 1.6; 
+    color: #666666; 
+    background-color: transparent !important;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+  
+}
+
+
+
+.blog-detail-content span, .blog-detail-content h2 strong, .blog-detail-content p strong, .blog-detail-content h1 strong{
+  background-color: transparent !important;
+}
+
+.blog-detail-content h1{
+  margin: 13px 0 10px 0;
+}
+
+.blog-detail-content h2{
+  margin: 10px 0 5px 0;
+}
+
+
+
+.blog-detail-content li{
+  margin-left: 30px;
+  list-style: disc;
+}
+
+
+
+.blog-detail-content img {
+  height: 300px;
+  width: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.slides-container img{
+  height: 500px !important;
+  width: auto !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+
+.comment{
+    margin: 20px 0;
+}
+
+.comment-section {
+    width: 100%; 
+    display: flex;
+    justify-content: center; 
+    margin-top: 60px;
+    flex-direction: column;
+    
+  }
+
+  .comment-section h3{
+    text-align: left;
+    color: var(--dark-green);
+    margin-bottom: 10px;
+  }
+  
+  .input-wrapper {
+    position: relative;
+    width: 100%; 
+    margin-top: 15px;
+  }
+  
+  .input-wrapper textarea {
+    width: 100%;
+    height: 80px;
+    resize: none;
+    border-radius: 10px;
+    border: none;
+    padding: 10px 40px 10px 10px;
+    font-size: 15px;
+    background-color: white;
+  }
+
+  .input-wrapper textarea:focus{
+    outline: none;
+  }
+
+  .separator{
+    border: 1px solid var(--dark-green);
+  }
+
+  .user-comment-details{
+    display: flex;
+    align-items: center;
+  }
+
+  .user-comment-details h3{
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  .comment-details{
+    margin-bottom: 25px;
+  }
+
+  .user-comment-details p{
+    font-size: 13px;
+    color: gray;
+  }
+
+  .comment-text{
+    margin-top: 15px;
+    margin-left: 50px;
+    font-size: 17px;
+  }
+
+  .delete-text {
+    margin-left: 15px;
+    font-size: 12px;
+    color: grey;
+    cursor: pointer;
+}
+
+.delete-text:hover {
+    text-decoration: underline;
+}
+
+
+.youtube-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: auto;
+  overflow: hidden;
+  width: 70%; 
+  padding-bottom: calc(70% * 9 / 16); 
+  margin: 50px auto; 
+}
+
+.youtube-link iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+
+@media (max-width: 768px){
+
+    .blog-detail-description{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+
+    .blog-detail-title h1{
+      margin-top: 10px !important;
+      margin-bottom: 20px !important;
+    }
+
+    .blog-detail-description h3{
+        font-size: 10px;
+        margin-bottom: 5px;
+    }
+
+    .blog-detail-content img{
+      width: 100%;
+      height: auto
+    }
+
+    .slides-container img{
+      width: 100% !important;
+      height: auto !important;
+    }
+
+    .blog-detail-title h1{
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        margin-top: 20px;
+    }
+
+    .youtube-link{
+      width: 90%;
+      padding-bottom: calc(90% * 9 / 16); 
+    }
+
+    .scroll-progress-bar{
+      top: 70px !important;
+    }
+
+   
+    
+}

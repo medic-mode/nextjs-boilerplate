@@ -182,10 +182,10 @@ const Blog = ({userEmail, logged , handleOpen}) => {
   const handleCommentIconClick = (id) => {
     const router = useRouter();
     
-    
+    // Navigating to the blog post page with query parameter
     router.push({
         pathname: `/blogs/${id}`,
-        query: { focusOnComments: true },  // Pass state as a query parameter
+        query: { focusOnComments: true },  // Pass the flag to focus on comments
     });
 };
 
