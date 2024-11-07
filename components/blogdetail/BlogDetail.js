@@ -16,6 +16,9 @@ import Image from 'next/image';
 var getYouTubeID = require('get-youtube-id');
 
 const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading }) => {
+
+    const router = useRouter();
+
     const { postId } = router.query; // Extract postId from the URL
     const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
@@ -23,7 +26,8 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading }) => {
     const [userDetails, setUserDetails] = useState({}); // To store user details
 
     const commentSectionRef = useRef(null);
-
+    
+    
 
     const [scrollProgress, setScrollProgress] = useState(0);
 
@@ -43,6 +47,9 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading }) => {
     // Fetch the blog post details
     useEffect(() => {
         const fetchPost = async () => {
+
+            if (!id) return;
+
             try {
                 const docRef = doc(db, 'blogPosts', postId); // Get the specific document by ID
                 const docSnap = await getDoc(docRef);
