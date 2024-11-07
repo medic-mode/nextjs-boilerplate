@@ -16,9 +16,7 @@ import Image from 'next/image';
 var getYouTubeID = require('get-youtube-id');
 
 const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading }) => {
-    const { postId } = useParams(); // Extract postId from the URL
-    const location = useLocation(); // Use useLocation to access the state
-    const { state } = location || {};
+    const { postId } = router.query; // Extract postId from the URL
     const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
     const [commentText, setCommentText] = useState('');
