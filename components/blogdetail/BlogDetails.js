@@ -1,7 +1,6 @@
 "use client"
 import { useEffect, useState, useRef } from 'react';
 import './BlogDetails.css';
-import { useRouter } from 'next/router';
 import { db } from '../../lib/firebase'; 
 import { doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, getDocs, where, deleteDoc } from 'firebase/firestore';
 import SendIcon from '@mui/icons-material/Send';
@@ -14,13 +13,13 @@ import Image from 'next/image';
 
 var getYouTubeID = require('get-youtube-id');
 
-const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }) => {
+const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, postData }) => {
 
     
-    const postId = slug
+    const postId = postData.id
     
+    const post = postData
 
-    const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
     const [commentText, setCommentText] = useState('');
     const [userDetails, setUserDetails] = useState({}); // To store user details
@@ -44,74 +43,42 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }
     }, []);
 
 
-    // Fetch the blog post details
-    useEffect(() => {
-        const fetchPost = async () => {
-          
-    
-            try {
-              const docRef = doc(db, 'blogPosts', postId); // Get the specific document by ID
-              const docSnap = await getDoc(docRef);
-    
-              if (docSnap.exists()) {
-                setPost({ id: docSnap.id, ...docSnap.data() });
-              } else {
-                console.log('No such document!');
-              }
-            } catch (error) {
-              console.error('Error fetching post: ', error);
-            } finally {
-              // Safely set loading to false if component is still mounted
-              setLoading(false);
-            }
-          
-        };
-    
-        fetchPost();
-      },[] );
-
-      console.log(postId)
+ 
 
     useEffect(() => {
-        const fetchComments = () => {
-            const commentsRef = collection(db, 'blogPosts', postId, 'comments');
-            const q = query(commentsRef, orderBy('timestamp', 'desc'));
-
-            const unsubscribe = onSnapshot(q, async (snapshot) => {
-                const commentsData = snapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data(),
-                }));
-
-                // Fetch user details for each comment
-                const userDetailsMap = {};
-                await Promise.all(
-                    commentsData.map(async (comment) => {
-                        if (!userDetailsMap[comment.email]) {
-                            const userRef = collection(db, 'users');
-                            const userQuery = query(userRef, where('email', '==', comment.email));
-                            const userSnapshot = await getDocs(userQuery); // Use getDocs to query the data
-
-                            // Iterate over the result to find the user details
-                            userSnapshot.forEach((userDoc) => {
-                                userDetailsMap[comment.email] = {
-                                    firstName: userDoc.data().firstName,
-                                    lastName: userDoc.data().lastName,
-                                };
-                            });
-                        }
-                    }) 
-                );
-
-                setComments(commentsData);
-                setUserDetails(userDetailsMap);
+        const fetchComments = async () => {
+          const commentsRef = collection(db, 'blogPosts', postId, 'comments');
+          const q = query(commentsRef, orderBy('timestamp', 'desc'));
+      
+          const unsubscribe = onSnapshot(q, async (snapshot) => {
+            const commentsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+            // Get all unique emails from the comments
+            const emailList = [...new Set(commentsData.map(comment => comment.email))];
+      
+            // Fetch user details in bulk
+            const usersRef = collection(db, 'users');
+            const userQuery = query(usersRef, where('email', 'in', emailList));
+            const userSnapshot = await getDocs(userQuery);
+      
+            const userDetailsMap = {};
+            userSnapshot.forEach((userDoc) => {
+              const userData = userDoc.data();
+              userDetailsMap[userDoc.id] = {
+                firstName: userData.firstName,
+                lastName: userData.lastName
+              };
             });
-
-            return unsubscribe; // Cleanup the listener on unmount
+      
+            setComments(commentsData);
+            setUserDetails(userDetailsMap);
+          });
+      
+          return unsubscribe;
         };
-
+      
         fetchComments();
-    }, [postId]);
+      }, [postId]);
 
     // Handle comment submission
     const handleCommentSubmit = async () => {
@@ -197,7 +164,7 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }
           .join(" ");
       }
 
-console.log(post.content)
+
       
 
     return (
