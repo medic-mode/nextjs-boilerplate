@@ -95,40 +95,40 @@ const Header = () => {
         <div className={`nav-list ${isMenuOpen ? "active" : ""}`}>
           <ul>
             <li>
-              <Link href="/" onClick={() => setIsMenuOpen(false)}>
+              {/* <Link href="/" onClick={() => setIsMenuOpen(false)}> */}
                 HOME
-              </Link>
+              {/* </Link> */}
             </li>
             <li>
-              <Link href="/about" onClick={() => setIsMenuOpen(false)}>
+              {/* <Link href="/about" onClick={() => setIsMenuOpen(false)}> */}
                 ABOUT US
-              </Link>
+              {/* </Link> */}
             </li>
             <li>
-              <Link href="/courses" onClick={() => setIsMenuOpen(false)}>
+              {/* <Link href="/courses" onClick={() => setIsMenuOpen(false)}> */}
                 COURSES
-              </Link>
+              {/* </Link> */}
             </li>
             <li>
-              <Link href="/blogs" onClick={() => setIsMenuOpen(false)}>
+              {/* <Link href="/blogs" onClick={() => setIsMenuOpen(false)}> */}
                 BLOGS
-              </Link>
+              {/* </Link> */}
             </li>
             <li>
-              <Link href="/careers" onClick={() => setIsMenuOpen(false)}>
+              {/* <Link href="/careers" onClick={() => setIsMenuOpen(false)}> */}
                 CAREERS
-              </Link>
+              {/* </Link> */}
             </li>
             <li>
-              <Link href="/contact" onClick={() => setIsMenuOpen(false)}>
+              {/* <Link href="/contact" onClick={() => setIsMenuOpen(false)}> */}
                 CONTACT US
-              </Link>
+              {/* </Link> */}
             </li>
 
             <li>
-              <Link href="/dashboard" onClick={() => setIsMenuOpen(false)}>
+              {/* <Link href="/dashboard" onClick={() => setIsMenuOpen(false)}> */}
                 DASHBOARD
-              </Link>
+              {/* </Link> */}
             </li>
           </ul>
         </div>
