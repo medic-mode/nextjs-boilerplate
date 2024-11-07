@@ -1,5 +1,5 @@
 
-import BlogDetail from "@/components/blogdetail/BlogDetail";
+import BlogDetails from "@/components/blogdetail/BlogDetails";
 
 export const metadata = {
 	title: "Medic Mode - Blogs",
@@ -24,8 +24,7 @@ export const metadata = {
 export default function Page ( {params}) {
 	return (
 		<>
-	<div>{params.slug}</div>
-	{/* <BlogDetail slug={params.slug}/> */}
+		<BlogDetails slug={params.slug}/>
 	</>
 	)
 

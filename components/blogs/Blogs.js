@@ -211,7 +211,6 @@ const Blogs = ({userEmail, logged , handleOpen}) => {
     );
   }
 
-  console.log(recentBlog.id)
  
   return (
     <div className="blogs">

@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from 'react';
 import './BlogDetails.css';
 import { useRouter } from 'next/router';
-import { db } from '../../lib/firebase'; // Add your auth configuration
+import { db } from '../../lib/firebase'; 
 import { doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, getDocs, where, deleteDoc } from 'firebase/firestore';
 import SendIcon from '@mui/icons-material/Send';
 import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
@@ -16,8 +16,8 @@ var getYouTubeID = require('get-youtube-id');
 
 const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }) => {
 
-    const router = useRouter();
-
+    
+    const postId = slug
     
 
     const [post, setPost] = useState(null);
@@ -47,10 +47,7 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }
     // Fetch the blog post details
     useEffect(() => {
         const fetchPost = async () => {
-          if (typeof window !== "undefined") {
-            const { postId } = router.query;
-    
-            if (!postId) return; // Exit if no postId
+          
     
             try {
               const docRef = doc(db, 'blogPosts', postId); // Get the specific document by ID
@@ -67,11 +64,13 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }
               // Safely set loading to false if component is still mounted
               setLoading(false);
             }
-          }
+          
         };
     
         fetchPost();
-      }, [router.query]);
+      },[] );
+
+      console.log(postId)
 
     useEffect(() => {
         const fetchComments = () => {
@@ -156,7 +155,7 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }
     };
 
     useEffect(() => {
-        if (!loading && post && state?.focusOnComments) {
+        if (!loading && post ) {
             if (comments.length || comments.length === 0) {
                 // Ensure the comments section exists
                 if (commentSectionRef.current) {
@@ -171,7 +170,7 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }
                 }
             }
         }
-    }, [loading, post, comments, state]);
+    }, [loading, post, comments]);
     
 
    
@@ -258,12 +257,14 @@ console.log(post.content)
                 {post.slideImages && post.slideImages.length > 0 && (
                     <div className="slides-container">
                         {post.slideImages.map((slide, index) => (
-                            <Image 
-                                key={index} 
-                                src={slide} // Ensure this is the URL from Firebase Storage
-                                alt={`Slide ${index + 1}`} 
-                                style={{ width: '100%', height: 'auto', objectFit: 'cover', margin: '10px 0' }} 
-                            />
+                            <Image
+                            key={index}
+                            src={slide}  // Assuming slide is the URL string
+                            alt={`Slide ${index + 1}`}
+                            width={500}
+                            height={400}
+                            style={{ width: '100%', height: 'auto', objectFit: 'cover', margin: '10px 0' }}
+                          />
                         ))}
                     </div>
                 )}
