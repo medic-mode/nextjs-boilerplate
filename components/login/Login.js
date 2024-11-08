@@ -50,7 +50,6 @@ const Login = ({ setIsSignUp, handleClose, setLogged, error, setError, setUserEm
         }
     } catch (error) {
         setError("Error logging in.");
-        console.log(error)
     }
 };
 

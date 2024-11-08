@@ -19,10 +19,14 @@ import { Button } from '@mui/material';
 import { GridLoader } from 'react-spinners';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useAuth } from "../AuthContext";
+import { useRouter } from 'next/navigation';
 
 
-const Blogs = ({userEmail, logged , handleOpen}) => {
+const Blogs = () => {
+
+  const { logged, handleOpen, userEmail } = useAuth();
+
   const [blogPosts, setBlogPosts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [years, setYears] = useState([]);
@@ -33,7 +37,7 @@ const Blogs = ({userEmail, logged , handleOpen}) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [likedPosts, setLikedPosts] = useState(new Set());
   const [loading, setLoading] = useState(true);
-  
+  const router = useRouter()
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -178,12 +182,6 @@ const Blogs = ({userEmail, logged , handleOpen}) => {
   };
 
 
-  const handleCommentIconClick = (id) => {
-    router.push({
-      pathname: `/blogs/${id}`,
-      query: { focusOnComments: 'true' },
-    });
-  };
 
   const handlePost = (path, e) => {
     if (!logged) {
@@ -211,7 +209,13 @@ const Blogs = ({userEmail, logged , handleOpen}) => {
     );
   }
 
- 
+
+  
+
+  const handleCommentIconClick = (id) => {
+    router.push(`/blogs/${id}?focusOnComments=true`); 
+  };
+
   return (
     <div style={{display:'flex', justifyContent:'center', }}>
     <div className="blogs">
@@ -246,9 +250,8 @@ const Blogs = ({userEmail, logged , handleOpen}) => {
           
           <div className="primary-blog" data-aos='fade-up'>
             <div className="blog-image-container">
-              <Link href={`/blogs/${recentBlog.id}`} >
+              <Link href={`/blogs/${recentBlog.id}`}>
                 <img src={recentBlog.thumbnail} alt={recentBlog.title} />
-                
               </Link>
             </div>
             <div className="descriptions">
@@ -261,10 +264,10 @@ const Blogs = ({userEmail, logged , handleOpen}) => {
                 <p>{recentBlog.category.toUpperCase()}</p>
               </div>
               <div className="title">
-                <Link href={`/blogs/${recentBlog.id}`} style={{ textDecoration: 'none' }}>
+                <Link href={`/blogs/${recentBlog.id}`}  style={{ textDecoration: 'none' }}>
                   <h2>{recentBlog.title}</h2>
                 </Link>
-              </div>
+              </div> 
             </div>
             <div className="likes">
 			{likedPosts.has(recentBlog.id) ? (
@@ -304,7 +307,7 @@ const Blogs = ({userEmail, logged , handleOpen}) => {
               <RWebShare
                   data={{
                     text: "Medic Modec - A Gazette for Emergency Medical Professionals",
-                    url: `https://medicmode.com/blogs/${recentBlog.id}`,
+                    url: `https://nextjs-boilerplate-nine-theta-17.vercel.app/blogs/${recentBlog.id}`,
                     title: "Medic Mode",
 
                   }}
@@ -441,7 +444,7 @@ const Blogs = ({userEmail, logged , handleOpen}) => {
                 <RWebShare
                   data={{
                     text: "Medic Modec - A Gazette for Emergency Medical Professionals",
-                    url: `https://medicmode.com/blogs/${blog.id}`,
+                    url: `https://nextjs-boilerplate-nine-theta-17.vercel.app/blogs/${blog.id}`,
                     title: "Medic Mode",
                   }}
                   onClick={() => toast.success('Shared successfully!', {

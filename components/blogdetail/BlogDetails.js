@@ -8,11 +8,13 @@ import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
 import { toast, Toaster } from 'sonner';
 import YouTube from 'react-youtube';
 import { GridLoader } from 'react-spinners';
-
+import { useSearchParams } from 'next/navigation';
 
 var getYouTubeID = require('get-youtube-id');
 
 const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }) => {
+
+    const searchParams = useSearchParams();
     
     const postId = slug
 
@@ -146,10 +148,12 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }
     useEffect(() => {
         if (!loading && post ) {
             if (comments.length || comments.length === 0) {
+
+                const focusOnComments = searchParams.get('focusOnComments') === 'true';
                 // Ensure the comments section exists
-                if (commentSectionRef.current) {
+                if (focusOnComments && commentSectionRef.current) {
                    
-                    const offset = 100; // Height of the navbar
+                    const offset = 100; 
                     const topPosition = commentSectionRef.current.getBoundingClientRect().top + window.scrollY - offset;
     
                     window.scrollTo({
@@ -266,7 +270,7 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }
 
 
                 {/* Comment Section */}
-                <div className="comment-section" ref={commentSectionRef}>
+                <div className="comment-section" id='comment-section' ref={commentSectionRef}>
                     <h3>COMMENTS</h3>
                     <hr className='separator'/>
 

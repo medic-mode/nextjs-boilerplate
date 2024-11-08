@@ -14,7 +14,7 @@ import Signup from "../signup/Signup";
 import { useAuth } from "../AuthContext";
 
 const Header = () => {
-  const { setUserEmail, logged, setLogged, handleLogout } = useAuth();
+  const { setUserEmail, logged, setLogged, handleLogout, userEmail } = useAuth();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -124,17 +124,18 @@ const Header = () => {
                 CONTACT US
               </Link>
             </li>
-
+            {userEmail === 'admin@medicmode.com' && 
             <li>
               <Link href="/dashboard" onClick={() => setIsMenuOpen(false)}>
                 DASHBOARD
               </Link>
             </li>
+            }
           </ul>
         </div>
         <div className="account">
           {logged ? (
-            <button className="login-register-btn" onClick={handleLogout}>
+            <button className="login-register-btn" onClick={handleLogout} >
               LOGOUT
             </button>
           ) : (
