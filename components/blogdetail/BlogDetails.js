@@ -1,33 +1,28 @@
 "use client"
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './BlogDetails.css';
-import { db } from '../../lib/firebase'; 
+import { db } from '../../lib/firebase'; // Add your auth configuration
 import { doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, getDocs, where, deleteDoc } from 'firebase/firestore';
 import SendIcon from '@mui/icons-material/Send';
 import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
 import { toast, Toaster } from 'sonner';
 import YouTube from 'react-youtube';
 import { GridLoader } from 'react-spinners';
-import Image from 'next/image';
 
 
 var getYouTubeID = require('get-youtube-id');
 
-const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, postData, params }) => {
-
-
-    const postId = params
+const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }) => {
     
-    const post = postData
+    const postId = slug
 
-    
+    const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
     const [commentText, setCommentText] = useState('');
     const [userDetails, setUserDetails] = useState({}); // To store user details
 
     const commentSectionRef = useRef(null);
-    
-    
+
 
     const [scrollProgress, setScrollProgress] = useState(0);
 
@@ -44,7 +39,26 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, postDa
     }, []);
 
 
- 
+    // Fetch the blog post details
+    useEffect(() => {
+        const fetchPost = async () => {
+            try {
+                const docRef = doc(db, 'blogPosts', postId); // Get the specific document by ID
+                const docSnap = await getDoc(docRef);
+        
+                if (docSnap.exists()) {
+                    setPost({ id: docSnap.id, ...docSnap.data() });
+                } else {
+                    console.log('No such document!');
+                }
+            } catch (error) {
+                console.error('Error fetching post: ', error);
+            }
+        };
+
+        fetchPost();
+        // eslint-disable-next-line
+    }, [postId]);
 
     useEffect(() => {
         const fetchComments = () => {
@@ -171,6 +185,7 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, postDa
           .join(" ");
       }
 
+
       
 
     return (
@@ -230,14 +245,12 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, postDa
                 {post.slideImages && post.slideImages.length > 0 && (
                     <div className="slides-container">
                         {post.slideImages.map((slide, index) => (
-                            <Image
-                            key={index}
-                            src={slide}  // Assuming slide is the URL string
-                            alt={`Slide ${index + 1}`}
-                            width={500}
-                            height={400}
-                            style={{ width: '100%', height: 'auto', objectFit: 'cover', margin: '10px 0' }}
-                          />
+                            <img 
+                                key={index} 
+                                src={slide} // Ensure this is the URL from Firebase Storage
+                                alt={`Slide ${index + 1}`} 
+                                style={{ width: '100%', height: 'auto', objectFit: 'cover', margin: '10px 0' }} 
+                            />
                         ))}
                     </div>
                 )}
