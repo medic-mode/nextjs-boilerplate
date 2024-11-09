@@ -33,6 +33,8 @@ const CreatePost = () => {
 
   const navigate = useRouter();
 
+  console.log(logged)
+
   useEffect(() => {
     if (logged === false) {
       // Redirect after a short delay to allow the toast to show briefly
@@ -156,6 +158,7 @@ const CreatePost = () => {
 
 
   return (
+   
     <div className="create-post-container">
       <Toaster position="top-center" richColors/>
       <h1>Create Blog</h1>

@@ -1,10 +1,8 @@
 "use client"; 
-import { useAuth } from '@/components/AuthContext';
+
 import CreatePost from '@/components/dashboard/createpost/CreatePost';
 
 export default function page() {
-
-
 
 
   return (

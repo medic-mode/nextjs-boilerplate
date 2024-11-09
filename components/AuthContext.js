@@ -10,6 +10,9 @@ export const AuthProvider = ({ children }) => {
   const [userEmail, setUserEmail] = useState('');
   const [logged, setLogged] = useState(false);
   const [loading, setLoading] = useState(true)
+  const [open, setOpen] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('loggedUser');
@@ -32,9 +35,16 @@ export const AuthProvider = ({ children }) => {
     toast.success('Logout successful!', { duration: 3000 })
   };
 
+  const handleOpen = () => setOpen(true);
+
+  const handleClose = () => {
+    setOpen(false);
+    setIsSignUp(false);
+    setError("");
+  };
 
   return (
-    <AuthContext.Provider value={{ userEmail, logged, setUserEmail, setLogged, handleLogin, handleLogout, loading, setLoading }}>
+    <AuthContext.Provider value={{ userEmail, logged, handleOpen, handleClose, setUserEmail, setLogged, handleLogin, handleLogout, loading, setLoading, open, setOpen, isSignUp, setIsSignUp, error, setError}}>
       <Toaster position="top-center" richColors/>
       {children}
     </AuthContext.Provider>

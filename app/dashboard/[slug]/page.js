@@ -15,7 +15,7 @@ import { useEffect } from 'react';
 import { GridLoader } from 'react-spinners';
 
 const DashboardPage = () => {
-  const { loading, logged } = useAuth();
+  const { loading, logged } = useAuth();  // Check your useAuth logic to ensure this returns the correct value
   const router = useRouter();
   const { slug } = useParams();
 
@@ -25,23 +25,13 @@ const DashboardPage = () => {
     'review-event', 'gallery', 'faculties'
   ];
 
+
   useEffect(() => {
-    if (logged === false) {
-      // Redirect if not logged in
-      router.push('/');
-    } else if (!slug || !validSlugs.includes(slug)) {
+     if (!slug || !validSlugs.includes(slug)) {
       // Redirect to dashboard if slug is invalid
       router.push('/dashboard');
     }
-  }, [logged, slug, router]);
-
-  if (loading || logged === undefined) {
-    return (
-      <div className="loading-container">
-        <GridLoader color={"#0A4044"} loading={true} size={10} />
-      </div>
-    );
-  }
+  }, [slug, router]);
 
 
 

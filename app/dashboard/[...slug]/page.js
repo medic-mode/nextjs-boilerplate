@@ -10,35 +10,36 @@ import { GridLoader } from 'react-spinners';
 
 const DashboardPage = () => {
 
-  const {loading} = useAuth()
+  const {loading, logged} = useAuth()
   const router = useRouter();
 
     const { slug } = useParams();
-    const route = slug.join('/');
+
+    const baseRoute = slug ? `${slug[0]}/${slug[1]}` : '';
 
     const validSlugs = ['review-post/edit-post', 'review-course/edit-course', 'review-event/edit-event'];
 
     useEffect(() => {
-      if (logged === false) {
-        // Redirect if not logged in
-        router.push('/');
-      } else if (!slug || !validSlugs.includes(slug)) {
+      if (!slug || !validSlugs.includes(baseRoute)) {
         // Redirect to dashboard if slug is invalid
         router.push('/dashboard');
       }
-    }, [logged, slug, router]);
+    }, [ slug, router]);
+
+
+    useEffect(() => {
+      if (logged === false) {
+        router.push('/');
+      }
+    }, [logged, router]);
 
   return (
+    
     <div className="dashboard-main-content">
-        {route === 'review-post/edit-post' && <EditPost />}
-        {route === 'review-course/edit-course' && <EditCourse />}
-        {route === 'review-event/edit-event' && <EditEvent />}
+        {baseRoute  === 'review-post/edit-post' && <EditPost />}
+        {baseRoute  === 'review-course/edit-course' && <EditCourse />}
+        {baseRoute  === 'review-event/edit-event' && <EditEvent />}
 
-        {(!slug || !validSlugs.includes(slug)) && (
-          <div className="loading-container">
-            <GridLoader color={"#0A4044"} loading={loading} size={10} />
-          </div>
-        )}
     </div>
   );
 };

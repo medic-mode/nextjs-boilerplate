@@ -14,15 +14,13 @@ import Signup from "../signup/Signup";
 import { useAuth } from "../AuthContext";
 
 const Header = () => {
-  const { setUserEmail, logged, setLogged, handleLogout, userEmail } = useAuth();
+  const { setUserEmail, logged, setLogged, handleLogout, userEmail, handleOpen, handleClose, isSignUp, setIsSignUp, error, setError, open} = useAuth();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  const [open, setOpen] = useState(false);
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [error, setError] = useState("");
+  
 
   const modalStyle = {
     position: "fixed",
@@ -39,13 +37,7 @@ const Header = () => {
     padding: "100px 20px 20px",
   };
 
-  const handleOpen = () => setOpen(true);
-
-  const handleClose = () => {
-    setOpen(false);
-    setIsSignUp(false);
-    setError("");
-  };
+  
 
   return (
     <div className="navbar">
