@@ -31,7 +31,7 @@
 
 .slider-arrow {
     background-color: var(--dark-green);
-    color: var(--light-green);
+    color: var(--orange);
     width: fit-content;
     padding: 10px;
     position: fixed;
@@ -42,6 +42,7 @@
     justify-content: center;
     cursor: pointer;
     transition: left 0.3s ease;
+    border-radius: 0 0 10px 0;
 }
 
 .dashboard.closed + .dashboard-main .slider-arrow {

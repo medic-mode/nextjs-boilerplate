@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './CreatePost.css';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
@@ -9,9 +9,14 @@ import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; 
 import { toast, Toaster } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthContext';
+import { GridLoader } from 'react-spinners';
 
 
-const CreatePost = ({userEmail}) => {
+const CreatePost = () => {
+
+  const {userEmail, logged, loading} = useAuth()
+
   const [author, setAuthor] = useState('');
   const [coAuthor, setCoAuthor] = useState('');
   const [title, setTitle] = useState('');
@@ -27,6 +32,25 @@ const CreatePost = ({userEmail}) => {
 
 
   const navigate = useRouter();
+
+  useEffect(() => {
+    if (logged === false) {
+      // Redirect after a short delay to allow the toast to show briefly
+      const timeout = setTimeout(() => {
+        navigate.push('/blogs');
+      }, 500);
+
+      return () => clearTimeout(timeout); // Cleanup timeout on component unmount
+    }
+  }, [logged, navigate]);
+
+  if (!logged) {
+    return (
+      <div className="loading-container">
+        <GridLoader color={"#0A4044"} loading={loading} size={10} />
+      </div>
+    );
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
