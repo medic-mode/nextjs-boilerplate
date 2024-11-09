@@ -10,7 +10,7 @@ import { GridLoader } from 'react-spinners';
 
 const DashboardPage = () => {
 
-  const {loading, logged} = useAuth()
+  const {setLoading, logged} = useAuth()
   const router = useRouter();
 
     const { slug } = useParams();
@@ -20,6 +20,7 @@ const DashboardPage = () => {
     const validSlugs = ['review-post/edit-post', 'review-course/edit-course', 'review-event/edit-event'];
 
     useEffect(() => {
+     
       if (!slug || !validSlugs.includes(baseRoute)) {
         // Redirect to dashboard if slug is invalid
         router.push('/dashboard');

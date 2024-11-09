@@ -15,7 +15,7 @@ import { useEffect } from 'react';
 import { GridLoader } from 'react-spinners';
 
 const DashboardPage = () => {
-  const { loading, logged } = useAuth();  // Check your useAuth logic to ensure this returns the correct value
+  const { loading, logged, setLoading } = useAuth();  // Check your useAuth logic to ensure this returns the correct value
   const router = useRouter();
   const { slug } = useParams();
 
@@ -33,6 +33,24 @@ const DashboardPage = () => {
     }
   }, [slug, router]);
 
+  useEffect(() => {
+    setLoading(false)
+
+    // Only redirect if not logged and loading is false
+    if (!loading && !logged) {
+      console.log("Redirecting to homepage");
+      router.push('/');
+    }
+  }, [loading, logged, router]);
+
+  if (loading) {
+    // Show the loader if loading is true
+    return (
+      <div className="loading-container">
+        <GridLoader color={"#0A4044"} loading={loading} size={10} />
+      </div>
+    );
+  }
 
 
   return (

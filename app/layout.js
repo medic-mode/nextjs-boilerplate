@@ -10,7 +10,8 @@ export default function RootLayout({ children }) {
 
   const pathname = usePathname();
 
-  const isDashboard = pathname.startsWith('/dashboard');
+  const isDashboard = pathname.startsWith('/dashboard') 
+  
 
   return (
     <html lang="en">
