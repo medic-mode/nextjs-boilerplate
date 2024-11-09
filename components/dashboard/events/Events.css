@@ -1,0 +1,53 @@
+.create-events-container{
+    width: 100%;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    color: var(--dark-green);
+    font-size: 15px;
+}
+
+.create-events-container h1{
+    text-align: center; 
+}
+
+.p-field{
+    display: flex;
+    flex-direction: column;
+}
+
+.create-events-container form{
+    padding: 30px;
+}
+
+.create-events-container form input, .create-events-container form textarea{
+    padding: 10px;
+    margin: 10px 0 20px 0;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+}
+
+
+.create-events-btn{
+    background-color: var(--dark-green);
+    color: var(--light-green);
+    padding: 10px 30px;
+    font-size: 15px;
+    margin-top: 10px;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px){
+
+    .create-events-container{
+        width: 99%;
+    }
+
+    .create-events-container form{
+        padding: 30px 0 !important;
+    }
+
+}

@@ -6,8 +6,10 @@ import { toast, Toaster } from 'sonner';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+
   const [userEmail, setUserEmail] = useState('');
   const [logged, setLogged] = useState(false);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const storedEmail = localStorage.getItem('loggedUser');
@@ -32,7 +34,7 @@ export const AuthProvider = ({ children }) => {
 
 
   return (
-    <AuthContext.Provider value={{ userEmail, logged, setUserEmail, setLogged, handleLogin, handleLogout }}>
+    <AuthContext.Provider value={{ userEmail, logged, setUserEmail, setLogged, handleLogin, handleLogout, loading, setLoading }}>
       <Toaster position="top-center" richColors/>
       {children}
     </AuthContext.Provider>

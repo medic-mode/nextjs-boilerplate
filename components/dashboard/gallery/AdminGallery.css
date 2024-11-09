@@ -1,0 +1,128 @@
+.admin-gallery{
+    margin: 30px;
+}
+
+.admin-gallery h1{
+    color: var(--dark-green);
+    margin-bottom: 20px;
+    font-size: 30px;
+    text-align: center;
+}
+
+.upload-image{
+    max-width: 800px;
+    width: 100%;
+}
+
+.upload-image input{
+    margin-left: 10px;
+}
+
+.upload-image label{
+    color: var(--dark-green);
+}
+
+.admin-gallery-images{
+    padding: 30px 20px 50px 20px;
+}
+
+.admin-gallery-images h2{
+    color: var(--dark-green);
+    margin-bottom: 10px;
+}
+
+.g-field{
+    display: flex;
+    flex-direction: column;
+}
+
+.g-field input{
+    margin-left: 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+    background-color: white;
+    margin: 20px;
+}
+
+.add-new-btn{
+    width: 100px;
+    /* background-color: var(--light-green);
+    color: var(--dark-green); */
+    color: var(--dark-green);
+    padding: 5px;
+    font-size: 12px;
+    margin-top: 10px;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.upload-gallery-btn{
+    width: 150px;
+    background-color: var(--dark-green);
+    color: var(--light-green);
+    padding: 10px;
+    font-size: 15px;
+    margin-top: 30px;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: all 0.2s ease;
+}
+
+.upload-gallery-btn:hover{
+    background-color: var(--orange) ; 
+  box-shadow: rgba(0, 0, 0, 0.25) 2px 2px 3px;
+}
+
+
+  
+  .table-responsive {
+    overflow-x: auto; /* Allows horizontal scrolling on small screens */
+  }
+  
+  table {
+    width: 100%; /* Full width */
+    border-collapse: collapse; /* Combine borders */
+  }
+  
+  
+  .table-responsive img {
+    width: 200px !important; 
+    height: 100px !important; /* Maintain aspect ratio */
+  }
+  
+  .gallery-delete-btn {
+    padding: 5px 10px; /* Padding for buttons */
+    background-color: #d9534f; /* Bootstrap danger color */
+    color: white; /* White text */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+  }
+  
+  .gallery-delete-btn:hover {
+    background-color: #c9302c; /* Darker shade on hover */
+  }
+  
+  .caption-cell {
+    white-space: wrap !important;
+}
+
+  
+  /* Media Query for small screens */
+  @media (max-width: 768px) {
+
+    .admin-gallery{
+      margin: 20px 0 !important;
+    }
+
+    th, td {
+      font-size: 12px; /* Smaller text on small screens */
+    }
+  }

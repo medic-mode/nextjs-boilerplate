@@ -1,0 +1,75 @@
+.dashboard-layout {
+    width: 100%;
+    padding-top: 80px;
+    display: flex;
+}
+
+.dashboard {
+    position: sticky; /* Make the sidebar sticky */
+    top: 80px; /* Adjust based on your header's height */
+    left: 0;
+    height: 100vh; /* Ensure full height of viewport */
+    width: 230px;
+    transition: transform 0.3s ease;
+    z-index: 100;
+}
+
+.dashboard.closed {
+    transform: translateX(-100%); /* Slide sidebar out of view */
+}
+
+.dashboard-main {
+    flex: 1;
+    overflow-x: auto;
+    transition: margin-left 0.3s ease;
+    margin-left: -230px
+}
+
+.dashboard-main.shifted {
+    margin-left: 0
+}
+
+.slider-arrow {
+    background-color: var(--dark-green);
+    color: var(--light-green);
+    width: fit-content;
+    padding: 10px;
+    position: fixed;
+    top: 80px;
+    left: 230px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: left 0.3s ease;
+}
+
+.dashboard.closed + .dashboard-main .slider-arrow {
+    left: 0;
+}
+
+@media (max-width: 1024px) {
+    .dashboard-layout {
+        padding-top: 70px;
+    }
+}
+
+@media (max-width: 768px) {
+
+
+
+    .dashboard {
+        width: 200px;
+        top: 70px;
+    }
+
+    .dashboard-main {
+        margin-left: -200px !important;
+    }
+
+    .slider-arrow {
+        top: 70px;
+        left: 200px;
+        z-index: 222;
+    }
+}

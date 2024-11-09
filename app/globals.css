@@ -20,13 +20,19 @@ body {
 
 }
 
-.content-wrapper {
-  height: 100vh;
+.next-app {
   display: flex;
-  flex: 1;
   flex-direction: column;
-  justify-content: space-between;
-  padding-top: 80px;
+  min-height: 100vh; /* Make the container take up at least the full viewport height */
+}
+
+.content-wrapper {
+  flex-grow: 1; /* This allows the content to take up all remaining space */
+  padding-top: 80px; /* Adjust for header height */
+}
+
+.content-footer {
+  margin-top: auto; /* Push footer to the bottom */
 }
 
 * {
@@ -42,6 +48,7 @@ a {
 
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {

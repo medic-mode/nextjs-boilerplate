@@ -1,0 +1,22 @@
+
+.review-course-container {
+    margin: 0 auto;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+  }
+  
+  .review-course-container h1 {
+    color: var(--dark-green);
+    margin-bottom: 20px;
+    text-align: center; /* Center the title */
+  }
+
+  
+
+  
+
+  
+
+  

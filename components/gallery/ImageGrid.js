@@ -4,7 +4,7 @@ import './ImageGrid.css';
 import { Fancybox } from '@fancyapps/ui';
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
 import { db } from '../../lib/firebase';
-// import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 
 const ImageGrid = () => {
   const [images, setImages] = useState([]);

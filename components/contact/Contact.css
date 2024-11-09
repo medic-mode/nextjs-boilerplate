@@ -82,6 +82,7 @@
     width: 100%;
     border-radius: 8px;
     border: none;
+    font-family: "Montserrat", sans-serif;
   }
   
   .contact-form form textarea:focus {

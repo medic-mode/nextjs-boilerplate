@@ -1,0 +1,85 @@
+.faculty-container {
+    padding: 20px;
+    color: var(--dark-green);
+}
+
+.faculty-container h2{
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.faculty-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+}
+
+.faculty-item { /* Corrected here */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px 20px;
+    gap: 10px;
+    font-size: 13px;
+}
+
+.faculty-item input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid lightgray;
+    font-size: 15px;
+}
+
+
+.faculty-btn {
+    background-color: var(--dark-green) !important;
+    color: var(--light-green) !important;
+    padding: 10px 20px !important;
+    font-size: 15px;
+    margin-top: 10px !important;
+    margin-left: 20px;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; /* Default shadow */
+    border-radius: 25px !important;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease; /* Added transition for shadow and transform */
+    cursor: pointer; /* Ensure the cursor changes to pointer */
+}
+
+.faculty-btn:hover {
+    background-color: var(--orange) !important; 
+    box-shadow: rgba(0, 0, 0, 0.25) 2px 2px 3px; /* Enhance shadow on hover */
+}
+
+@media (max-width: 768px) {
+
+    .faculty-list{
+        width: 100%;
+        overflow: auto;
+    }
+    .faculty-inputs {
+        grid-template-columns: 1fr; /* Single column layout on smaller screens */
+    }
+
+    .faculty-container {
+        padding: 20px 0;
+    }
+
+    .image-input {
+        max-width: 90%; /* Limit image input width for better appearance */
+    }
+
+    .faculty-item {
+        padding: 0;
+        width: 100%; /* Ensure items take full width */
+    }
+
+    .faculty-item input {
+        width: 100%;
+    }
+
+    .faculty-btn {
+        margin-left: 0; /* Remove left margin on small screens */
+        width: 100%; /* Make button full width */
+        margin-top: 10px; /* Ensure spacing above button */
+    }
+}
