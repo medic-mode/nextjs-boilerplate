@@ -11,13 +11,15 @@ import ReviewPost from '@/components/dashboard/reviewpost/ReviewPost';
 import UserTable from '@/components/dashboard/users/UserTable';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { GridLoader } from 'react-spinners';
 
 const DashboardPage = () => {
   const { loading, logged, setLoading } = useAuth();  // Check your useAuth logic to ensure this returns the correct value
   const router = useRouter();
   const { slug } = useParams();
+
+  
 
   const validSlugs = [
     'users', 'create-post', 'review-post', 
@@ -38,7 +40,6 @@ const DashboardPage = () => {
 
     // Only redirect if not logged and loading is false
     if (!loading && !logged) {
-      console.log("Redirecting to homepage");
       router.push('/');
     }
   }, [loading, logged, router]);

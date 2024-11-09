@@ -102,7 +102,7 @@ const EditPost = () => {
   
 
   return (
-    <div className="create-post-container">
+    <div className="edit-post-container">
       <Toaster position="top-center" richColors />
       <h1>Edit Blog</h1>
       <form onSubmit={handleSubmit}>

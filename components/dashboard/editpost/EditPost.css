@@ -7,6 +7,10 @@
     font-size: 15px;
 }
 
+.edit-post-container h1{
+    text-align: center; 
+}
+
 .p-field{
     display: flex;
     flex-direction: column;
@@ -47,7 +51,7 @@
        width: 99%;
     }
 
-    .edit-post-container h1{
-        text-align: center;
+    .edit-post-container form{
+        padding: 30px 0 !important; 
     }
 }

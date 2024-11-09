@@ -5,7 +5,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import YouTubeIcon from "@mui/icons-material/YouTube";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Hamburger from "hamburger-react";
 import Link from "next/link";
 import { Box, Modal } from "@mui/material";
@@ -20,7 +20,6 @@ const Header = () => {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  
 
   const modalStyle = {
     position: "fixed",
