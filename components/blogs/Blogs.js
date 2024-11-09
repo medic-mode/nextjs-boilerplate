@@ -221,7 +221,7 @@ const Blogs = () => {
     <div className="blogs">
        <Toaster position="top-center" richColors /> 
       <div className="blog-header">
-        <Image className="blog-header-image" src='/assets/blogs/blog.png' alt="Blog Header" width={200} height={400}/>
+        <Image className="blog-header-image" src='/assets/blogs/blog.png' alt="Blog Header" width={1280} height={400} priority />
           <div className="blog-heading">
             <h1>
               Our Latest <span style={{ color: 'var(--orange)' }}>Blogs</span> &{' '}

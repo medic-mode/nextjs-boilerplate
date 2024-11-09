@@ -2,10 +2,10 @@ import Blogs from "../../components/blogs/Blogs";
 
 export const metadata = {
 	title: "Medic Mode - Blogs",
-	description: "This is a blog page",
+	description: "Medicmode LLP’s blog provides expert insights, training tips, and industry updates to help paramedics and healthcare professionals stay informed and enhance care standards.",
 	openGraph: {
-	  title: "Medic Mode",
-	  description: "This is a blog page",
+	  title: "Medic Mode - Blogs",
+	  description: "Medicmode LLP’s blog provides expert insights, training tips, and industry updates to help paramedics and healthcare professionals stay informed and enhance care standards.",
 	  url: "https://nextjs-boilerplate-nine-theta-17.vercel.app/blogs", 
 	  images: [
 		{

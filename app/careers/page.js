@@ -4,7 +4,7 @@ export const metadata = {
 	title: "Medic Mode - Careers",
 	description: "A Gazette for Emergency Medical Professionals",
 	openGraph: {
-	  title: "Medic Mode",
+	  title: "Medic Mode - Careers",
 	  description: "A Gazette for Emergency Medical Professionals",
 	  url: "https://medicmode-seo.vercel.app/careers", 
 	  images: [

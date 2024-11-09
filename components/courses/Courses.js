@@ -15,9 +15,11 @@ import { collection, getDocs, orderBy, query, where, doc, updateDoc } from 'fire
 import Link from 'next/link';
 import { GridLoader } from 'react-spinners';
 import { toast } from 'sonner';
+import { useAuth } from '../AuthContext';
 
-const Courses = ({ logged }) => {
+const Courses = () => {
 
+  const {logged} = useAuth()
 
   useEffect(() => {
     window.scrollTo(0, 0);

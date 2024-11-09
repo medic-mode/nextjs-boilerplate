@@ -3,10 +3,10 @@ import Contact from "@/components/contact/Contact";
 
 export const metadata = {
 	title: "Medic Mode - Contact Us",
-	description: "This is a Contact page",
+	description: "Your thoughts and inquiries are important to us! Don't hesitate to contact our team for assistance or to share your ideas.",
 	openGraph: {
-	  title: "Medic Mode",
-	  description: "This is a Contact page",
+	  title: "Medic Mode - Contact Us",
+	  description: "Your thoughts and inquiries are important to us! Don't hesitate to contact our team for assistance or to share your ideas.",
 	  url: "https://medicmode-seo.vercel.app/contact", 
 	  images: [
 		{
