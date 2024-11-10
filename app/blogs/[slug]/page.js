@@ -3,6 +3,7 @@ import { db } from '../../../lib/firebase';
 import BlogDetail from '@/components/blogdetail/BlogDetails';
 
 export async function generateMetadata({ params }) {
+    
     const postId = params.slug;
     const docRef = doc(db, 'blogPosts', postId);
     const docSnap = await getDoc(docRef);
