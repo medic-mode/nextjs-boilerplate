@@ -1,6 +1,6 @@
 .edit-post-container{
-    width: 1000px;
-    margin: 20px auto;
+    width: 100%;
+    margin: 40px auto;
     display: flex;
     flex-direction: column;
     color: var(--dark-green);
@@ -25,12 +25,13 @@
     margin: 10px 0 20px 0;
     border: 1px solid lightgray;
     border-radius: 5px;
+    background-color: white;
 }
 
 .content-editor{
     margin: 10px 0 20px 0;
     flex: 1;
-
+    z-index: 1 !important;
 }
 
 .create-post-btn{
@@ -42,16 +43,16 @@
     border: none;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     border-radius: 8px;
-    
 }
 
 @media (max-width: 768px){
 
     .edit-post-container{
-       width: 99%;
+        width: 99%;
     }
 
     .edit-post-container form{
         padding: 30px 0 !important; 
     }
+
 }

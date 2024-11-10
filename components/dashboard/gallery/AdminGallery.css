@@ -119,7 +119,7 @@
   @media (max-width: 768px) {
 
     .admin-gallery{
-      margin: 20px 0 !important;
+      margin: 20px 15px !important;
     }
 
     th, td {

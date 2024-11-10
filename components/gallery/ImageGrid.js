@@ -1,14 +1,16 @@
-"use client"
-import React, { useEffect, useState } from 'react';
+"use client";
+import React, { useEffect, useState, useRef } from 'react';
 import './ImageGrid.css';
 import { Fancybox } from '@fancyapps/ui';
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
 import { db } from '../../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const ImageGrid = () => {
   const [images, setImages] = useState([]);
-  const [fancyboxInitialized, setFancyboxInitialized] = useState(false);
+  const fancyboxInitialized = useRef(false); // Using useRef to avoid re-renders
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -28,34 +30,33 @@ const ImageGrid = () => {
     fetchImages();
 
     // Initialize Fancybox only once
-    if (!fancyboxInitialized) {
+    if (!fancyboxInitialized.current) {
       Fancybox.bind('[data-fancybox="gallery"]', {
         Carousel: {
           infinite: false,
         },
       });
-      setFancyboxInitialized(true);
+      fancyboxInitialized.current = true; // Set to true after initialization
     }
-  }, [fancyboxInitialized]); // Only run when fancyboxInitialized changes
+  }, []);
 
   return (
     <div
       className="image-gallery"
       style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}
     >
-      
       {images.map((image) => (
         <div key={image.id} className="image-wrapper">
-          
           <a
             data-fancybox="gallery"
             href={image.carouselImages[0]}
             data-caption={image.caption}
           >
-            <img
-              alt=""
+            <LazyLoadImage
+              alt={image.caption}
               src={image.thumbnail}
               className="gallery-thumbnail"
+              effect="blur" // Optional: adds a blur effect while loading
             />
           </a>
           <div className="gallery-caption">
@@ -68,7 +69,7 @@ const ImageGrid = () => {
               href={carouselImage}
               style={{ display: 'none' }}
               data-caption={image.caption}
-              aria-label={`View ${image.caption}`} 
+              aria-label={`View ${image.caption}`}
             />
           ))}
         </div>

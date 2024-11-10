@@ -1,10 +1,11 @@
 "use client"
-import React, {  useState } from 'react';
+import "./EditPost.css"
+import React, {  useEffect, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Editor } from 'primereact/editor';
 import { db, storage } from '../../../lib/firebase'; // Adjust the path as necessary
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; 
 import { toast, Toaster } from 'sonner';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -13,21 +14,47 @@ const EditPost = () => {
   const searchParams = useSearchParams();  // This will fetch query parameters
   const postId = searchParams.get('id');  // Fetch 'id' from the URL query
 
-  // Initialize state variables with values from query parameters
-  const [author, setAuthor] = useState(searchParams.get('author') || '');
-  const [coAuthor, setCoAuthor] = useState(searchParams.get('coAuthor') || '');
-  const [title, setTitle] = useState(searchParams.get('title') || '');
-  const [category, setCategory] = useState(searchParams.get('category') || '');
-  const [content, setContent] = useState(searchParams.get('content') || '');
-  const [keyword, setKeyword] = useState(searchParams.get('keyword') ? JSON.parse(searchParams.get('keyword')) : []); 
-  const [reference, setReference] = useState(searchParams.get('reference') || '');
-  const [thumbnail, setThumbnail] = useState(searchParams.get('thumbnail') || null);
-  const [preview, setPreview] = useState(searchParams.get('thumbnail') ? JSON.parse(searchParams.get('thumbnail')) : null); 
-  const [youtubeUrl, setYoutubeUrl] = useState(searchParams.get('youtubeUrl') || '');
-  const [slideImages, setSlideImages] = useState(searchParams.get('slideImages') ? JSON.parse(searchParams.get('slideImages')) : []);
-  const [slidePreviews, setSlidePreviews] = useState(
-    searchParams.get('slideImages') ? JSON.parse(searchParams.get('slideImages')) : []
-  );
+
+  const [author, setAuthor] = useState('');
+  const [coAuthor, setCoAuthor] = useState('');
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
+  const [content, setContent] = useState('');
+  const [keyword, setKeyword] = useState([]);
+  const [reference, setReference] = useState('');
+  const [thumbnail, setThumbnail] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [slideImages, setSlideImages] = useState([]);
+  const [slidePreviews, setSlidePreviews] = useState([]);
+
+  useEffect(() => {
+    async function fetchPostData() {
+      if (!postId) return;
+
+      const docRef = doc(db, 'blogPosts', postId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const postData = docSnap.data();
+
+        setAuthor(postData.author || '');
+        setCoAuthor(postData.coAuthor || '');
+        setTitle(postData.title || '');
+        setCategory(postData.category || '');
+        setContent(postData.content || '');
+        setKeyword(postData.keyword || []);
+        setReference(postData.reference || '');
+        setThumbnail(postData.thumbnail || null);
+        setPreview(postData.thumbnail || null); // For previewing
+        setYoutubeUrl(postData.youtubeUrl || '');
+        setSlideImages(postData.slideImages || []);
+        setSlidePreviews(postData.slideImages || []); // For previewing slide images
+      }
+    }
+
+    fetchPostData();
+  }, [postId]);
  
 
   const navigate = useRouter()

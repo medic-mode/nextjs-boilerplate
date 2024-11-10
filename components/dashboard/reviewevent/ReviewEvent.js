@@ -98,11 +98,7 @@ const ReviewEvent = () => {
                   href={{
                     pathname: '/dashboard/review-event/edit-event',
                     query: {
-                      id: event.id,
-                      date: event.date,
-                      title: event.title,
-                      location: event.location,
-                      description: event.description
+                      id: event.id
                     }
                   }}
                 >

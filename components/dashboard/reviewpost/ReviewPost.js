@@ -157,18 +157,7 @@ const ReviewPost = () => {
                     href={{
                       pathname: '/dashboard/review-post/edit-post',
                       query: {
-                        id: post.id,
-                        author: post.author,
-                        coAuthor: post.coAuthor,
-                        title: post.title,
-                        category: post.category,
-                        content: post.content,
-                        keyword: JSON.stringify(post.keyword),  // Stringify complex data
-                        reference: post.reference,
-                        thumbnail: JSON.stringify(post.thumbnail),
-                        youtubeUrl: post.youtubeUrl,
-                        slideImages: JSON.stringify(post.slideImages),  // Stringify complex data
-                        preview: post.preview,
+                        id: post.id
                       }
                     }}
                   >

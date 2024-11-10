@@ -12,14 +12,14 @@ export async function generateMetadata({ params }) {
     
     const course = docSnap.data();
 
-    
+    const cleanDescription = course.courseDescription.replace(/<\/?[^>]+(>|$)/g, "");
 
     return {
         title: `Medic Mode - ${course.courseTitle}`,
-        description: course.courseDescription,
+        description: cleanDescription,
         openGraph: {
             title: course.courseTitle,
-            description: course.courseDescription,
+            description: cleanDescription,
             images: course.thumbnail,
             url: `https://nextjs-boilerplate-nine-theta-17.vercel.app/blogs/${courseId}`,
         },

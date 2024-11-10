@@ -1,10 +1,10 @@
 "use client"
-import React, {  useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Editor } from 'primereact/editor';
 import { db, storage } from '../../../lib/firebase'; // Adjust the path as necessary
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; 
 import { toast, Toaster } from 'sonner';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -14,20 +14,49 @@ const EditCourse = () => {
   const searchParams = useSearchParams();  // This will fetch query parameters
   const courseId = searchParams.get('id');
 
-  const [courseTitle, setCourseTitle] = useState(searchParams.get('courseTitle') || '');
-  const [duration, setDuration] = useState(searchParams.get('duration') || '');
-  const [mode, setMode] = useState(searchParams.get('mode') || '');
-  const [audience, setAudience] = useState(searchParams.get('audience') || []);
+
+  const [courseTitle, setCourseTitle] = useState('');
+  const [duration, setDuration] = useState('');
+  const [mode, setMode] = useState('');
+  const [audience, setAudience] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
-  const [preview, setPreview] = useState(searchParams.get('thumbnail') ? JSON.parse(searchParams.get('thumbnail')) : null); 
-  const [courseDescription, setCourseDescription] = useState(searchParams.get('courseDescription') || '');
-  const [topics, setTopics] = useState(searchParams.get('topics') || '');
-  const [trainer, setTrainer] = useState(searchParams.get('trainer') || '');
-  const [priceDetail, setPriceDetail] = useState(searchParams.get('priceDetail') || '');
-  const [price, setPrice] = useState(Number(searchParams.get('price')) || 0);
-  const [highlights, setHighlights] = useState(searchParams.get('highlights') || '');
-  
-  const ratingValue = parseFloat(searchParams.get('ratingValue')) || 3.5;
+  const [preview, setPreview] = useState(null);
+  const [courseDescription, setCourseDescription] = useState('');
+  const [topics, setTopics] = useState('');
+  const [trainer, setTrainer] = useState('');
+  const [priceDetail, setPriceDetail] = useState('');
+  const [price, setPrice] = useState(0);
+  const [highlights, setHighlights] = useState('');
+  const [ratingValue, setRatingValue] = useState(3.5);
+
+  useEffect(() => {
+    async function fetchCourseData() {
+      if (!courseId) return;
+
+      const docRef = doc(db, 'courses', courseId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const courseData = docSnap.data();
+
+        setCourseTitle(courseData.courseTitle || '');
+        setDuration(courseData.duration || '');
+        setMode(courseData.mode || '');
+        setAudience(courseData.audience || []);
+        setThumbnail(courseData.thumbnail || null);
+        setPreview(courseData.thumbnail || null);  // For previewing
+        setCourseDescription(courseData.courseDescription || '');
+        setTopics(courseData.topics || '');
+        setTrainer(courseData.trainer || '');
+        setPriceDetail(courseData.priceDetail || '');
+        setPrice(courseData.price || 0);
+        setHighlights(courseData.highlights || '');
+        setRatingValue(parseFloat(courseData.ratingValue) || 3.5);
+      }
+    }
+
+    fetchCourseData();
+  }, [courseId]);
   
   
     const navigate = useRouter()

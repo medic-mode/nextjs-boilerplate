@@ -1,21 +1,43 @@
 "use client"
-import React, { useState } from 'react'
+import "./EditEvent.css"
+import React, { useEffect, useState } from 'react'
 import { Toaster, toast } from 'sonner';
 import { InputText } from 'primereact/inputtext';
 import { db } from '../../../lib/firebase'; 
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 const EditEvent = () => {
 
   const searchParams = useSearchParams();  
+
   const eventId = searchParams.get('id');
 
 
-  const [title, setTitle] = useState(searchParams.get('title') || '');
-  const [location, setLocation] = useState(searchParams.get('location') || '');
-  const [date, setDate] = useState(searchParams.get('date') || '');
-  const [description, setDescription] = useState(searchParams.get('description') || '');
+  const [title, setTitle] = useState('');
+  const [location, setLocation] = useState('');
+  const [date, setDate] = useState('');
+  const [description, setDescription] = useState('');
+
+  useEffect(() => {
+    async function fetchEventData() {
+      if (!eventId) return;
+
+      const docRef = doc(db, 'events', eventId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const eventData = docSnap.data();
+
+        setTitle(eventData.title || '');
+        setLocation(eventData.location || '');
+        setDate(eventData.date || '');
+        setDescription(eventData.description || '');
+      }
+    }
+
+    fetchEventData();
+  }, [eventId]);
 
   const navigate = useRouter()
 
@@ -39,7 +61,7 @@ const EditEvent = () => {
   };
 
   return (
-    <div className="create-events-container">
+    <div className="edit-events-container">
       <Toaster position="top-center" richColors />
       <h1>Edit Event</h1>
       <form onSubmit={handleSubmit}>

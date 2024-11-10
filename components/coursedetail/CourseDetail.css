@@ -61,6 +61,8 @@
   .course-description {
     font-size: 20px;
     margin: 20px 0;
+    text-align: justify;
+    hyphens: auto;
   }
 
   .date-rating{
@@ -270,13 +272,14 @@
 
     .svg-icon{
         stroke: var(--dark-green);
-        width: 40px;
-        height: 40px;
+        width: 40px !important;
+        height: 40px !important;
     }
     
     .svg-icon-clock{
-        width: 30px;
-        height: 30px;
+        width: 30px !important;
+        height: 30px !important;
+        margin-right: 5px;
     }
 
       .course-icon-para p{

@@ -43,6 +43,7 @@
     cursor: pointer;
     transition: left 0.3s ease;
     border-radius: 0 0 10px 0;
+    z-index: 2;
 }
 
 .dashboard.closed + .dashboard-main .slider-arrow {
@@ -52,6 +53,14 @@
 @media (max-width: 1024px) {
     .dashboard-layout {
         padding-top: 70px;
+    }
+
+    .dashboard{
+        top: 60px;
+    }
+
+    .slider-arrow{
+        top: 70px;
     }
 }
 

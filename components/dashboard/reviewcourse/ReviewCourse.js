@@ -160,18 +160,7 @@ if (loading) {
                       href={{
                         pathname: "/dashboard/review-course/edit-course",
                         query: {
-                          id: course.id,
-                          courseTitle: course.courseTitle,
-                          duration: course.duration,
-                          mode: course.mode,
-                          audience: course.audience,
-                          thumbnail: JSON.stringify(course.thumbnail),
-                          topics: course.topics,
-                          price: course.price,
-                          priceDetail: course.priceDetail,
-                          trainer: course.trainer,
-                          highlights: course.highlights,
-                          courseDescription: course.courseDescription,
+                          id: course.id
                         },
                       }}
                     >
