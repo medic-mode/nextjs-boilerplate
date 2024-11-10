@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
             title: post.title,
             description: post.description,
             images: post.thumbnail,
-            url: `https://nextjs-boilerplate-nine-theta-17.vercel.app/blogs/${postId}`,
+            url: `https://medicmode.com/blogs/${postId}`,
         },
     };
 }

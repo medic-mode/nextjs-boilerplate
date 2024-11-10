@@ -6,7 +6,7 @@ export const metadata = {
 	openGraph: {
 	  title: "Medic Mode",
 	  description: "A Gazette for Emergency Medical Professionals - Empowering paramedics and first responders with innovative training, research, and community-focused initiatives to create a safer, more prepared India.",
-	  url: "https://medicmode-updated.vercel.app/", 
+	  url: "https://medicmode.com/", 
 	  images: [
 		{
 		  url: "https://firebasestorage.googleapis.com/v0/b/medic-mode.appspot.com/o/logo%2Fmedicmode.png?alt=media&token=8ea38f8d-fabd-49af-adb6-d1a94042f3fc", 
