@@ -31,9 +31,12 @@ import { collection, getDocs } from 'firebase/firestore';
 
 
 
+
 export default function Home() {
 
 	
+
+
 	useEffect(() => {
 		Aos.init({ duration: 1000 });
 	  }, []);
