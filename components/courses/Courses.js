@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { GridLoader } from 'react-spinners';
 import { toast } from 'sonner';
 import { useAuth } from '../AuthContext';
+import { LazyLoadImage } from 'react-lazy-load-image-component'; 
 
 const Courses = () => {
 
@@ -181,7 +182,13 @@ const Courses = () => {
             {filteredCourses.slice(0, visibleCourses).map((course) => (
               <div className="course-list" key={course.id} data-aos="fade-up">
                 <Link href={`/courses/${course.id}`} >
-                  <img src={course.thumbnail} alt={course.courseTitle} />
+                <LazyLoadImage
+                                src={course.thumbnail}
+                                alt={course.courseTitle}
+                                effect="blur"
+                                threshold={100}
+                                width='100%'
+                            />
                   <h3>{course.courseTitle}</h3>
                   <div className="course-category">
                     <p>{capitalizeFirstLetter(course.mode)} | {course.priceDetail}</p>
