@@ -305,7 +305,7 @@ const Blogs = () => {
               <RWebShare
                   data={{
                     text: "Medic Modec - A Gazette for Emergency Medical Professionals",
-                    url: `https://nextjs-boilerplate-nine-theta-17.vercel.app/blogs/${recentBlog.id}`,
+                    url: `https://medicmode.com/blogs/${recentBlog.id}`,
                     title: "Medic Mode",
 
                   }}
@@ -442,7 +442,7 @@ const Blogs = () => {
                 <RWebShare
                   data={{
                     text: "Medic Modec - A Gazette for Emergency Medical Professionals",
-                    url: `https://nextjs-boilerplate-nine-theta-17.vercel.app/blogs/${blog.id}`,
+                    url: `https://medicmode.com/blogs/${blog.id}`,
                     title: "Medic Mode",
                   }}
                   onClick={() => toast.success('Shared successfully!', {
