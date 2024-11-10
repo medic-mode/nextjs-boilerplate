@@ -9,7 +9,7 @@ export const metadata = {
 	  url: "https://medicmode-updated.vercel.app/", 
 	  images: [
 		{
-		  url: "https://firebasestorage.googleapis.com/v0/b/medic-mode.appspot.com/o/logo%2Fmedicmode.png?alt=media&token=4ab025c7-f186-4b51-a8e5-b408e21f327c", 
+		  url: "https://firebasestorage.googleapis.com/v0/b/medic-mode.appspot.com/o/logo%2Fmedicmode.png?alt=media&token=8ea38f8d-fabd-49af-adb6-d1a94042f3fc", 
 		  width: 1200,
 		  height: 630,
 		  alt: "Medic Mode - Emergency Medical Gazette"
