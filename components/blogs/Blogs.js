@@ -210,10 +210,8 @@ const Blogs = () => {
   }
 
 
-  
-
   const handleCommentIconClick = (id) => {
-    router.push(`/blogs/${id}?focusOnComments=true`); 
+    router.push(`/blogs/${id}?focusOnComments=true`, undefined, { shallow: true });
   };
 
   return (
