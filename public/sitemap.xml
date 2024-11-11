@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <!-- Home Page -->
+  <url>
+    <loc>https://medicmode.com/</loc>
+    <lastmod>2024-11-11</lastmod>  <!-- Update with the last modified date of the page -->
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>  <!-- Set the priority, with 1.0 being the highest -->
+  </url>
+
+  <!-- About Page -->
+  <url>
+    <loc>https://medicmode.com/about</loc>
+    <lastmod>2024-11-11</lastmod>  <!-- Update with the last modified date of the page -->
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Courses Page -->
+  <url>
+    <loc>https://medicmode.com/courses</loc>
+    <lastmod>2024-11-11</lastmod>  <!-- Update with the last modified date of the page -->
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Blogs Page -->
+  <url>
+    <loc>https://medicmode.com/blogs</loc>
+    <lastmod>2024-11-11</lastmod>  <!-- Update with the last modified date of the page -->
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Contact Page -->
+  <url>
+    <loc>https://medicmode.com/contact</loc>
+    <lastmod>2024-11-11</lastmod>  <!-- Update with the last modified date of the page -->
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Careers Page -->
+  <url>
+    <loc>https://medicmode.com/careers</loc>
+    <lastmod>2024-11-11</lastmod>  <!-- Update with the last modified date of the page -->
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>

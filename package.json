@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -21,6 +22,7 @@
     "get-youtube-id": "^1.0.1",
     "hamburger-react": "^2.5.1",
     "next": "15.0.2",
+    "next-sitemap": "^4.2.3",
     "primeicons": "^7.0.0",
     "primereact": "^10.8.4",
     "quill": "^2.0.2",
