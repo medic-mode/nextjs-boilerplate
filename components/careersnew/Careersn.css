@@ -1,0 +1,145 @@
+.careers-container {
+    min-width: 100vw;
+    width: 100%;
+    height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    
+}
+
+.career-header {
+    position: relative;
+    background-color: var(--dark-green);
+    overflow: hidden; /* Prevent any overflow */
+    height: 250px;
+}
+
+.career-header-image img {
+    width: 100%;
+    height: 100%; 
+    object-fit: cover; 
+    opacity: 0.3;
+    position: absolute; 
+    top: 0;
+    left: 0;
+}
+
+.career-header-content {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   height: 100%;
+    margin-top: 50px;
+}
+
+.career-header-content h1 {
+    font-size: 50px;
+    color: var(--light-green);
+    z-index: 1;
+    margin-bottom: 10px;
+    
+}
+
+.career-header-content p{
+    color: var(--light-green);
+    z-index: 1;
+}
+
+
+.career-main{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+}
+
+.career-search-bar{
+    max-width: 1300px;
+    width: 100%;
+    position: absolute;
+    background-color: white;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+
+.search-jobs {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.search-jobs input {
+    max-width: 600px;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.select-jobs{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.select-jobs select{
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid rgba(211, 211, 211, 0.36);
+    color: var(--dark-green);
+    width: auto;
+}
+
+.select-jobs select:focus{
+    outline: none;
+}
+
+
+@media (max-width: 768px){
+
+    .career-header-content{
+        margin-top: 40px;
+    }
+
+    .career-header-content h1 {
+        font-size: 30px;
+    }
+
+    .career-header-content p{
+        text-align: center;
+        font-size: 13px;
+        line-height: 20px;
+    }
+    .career-search-bar{
+        flex-direction: column;
+    }
+
+    .career-search-bar{
+        height: auto;
+        padding-bottom: 20px;
+    }
+
+    .search-jobs input{
+        max-width: auto;
+        text-align: center;
+    }
+
+    .select-jobs{
+        font-size: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .select-jobs select{
+        font-size: 12px;
+    }
+
+}

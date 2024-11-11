@@ -304,7 +304,7 @@ const Blogs = () => {
               </div>
               <RWebShare
                   data={{
-                    text: "Medic Modec - A Gazette for Emergency Medical Professionals",
+                    text: "Medic Mode - A Gazette for Emergency Medical Professionals",
                     url: `https://medicmode.com/blogs/${recentBlog.id}`,
                     title: "Medic Mode",
 
@@ -441,7 +441,7 @@ const Blogs = () => {
               </div> 
                 <RWebShare
                   data={{
-                    text: "Medic Modec - A Gazette for Emergency Medical Professionals",
+                    text: "Medic Mode - A Gazette for Emergency Medical Professionals",
                     url: `https://medicmode.com/blogs/${blog.id}`,
                     title: "Medic Mode",
                   }}
