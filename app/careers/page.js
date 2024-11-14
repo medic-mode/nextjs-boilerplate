@@ -4,11 +4,11 @@ import CareersLayout from "@/components/careersnew/CareersLayout";
 
 export const metadata = {
 	title: "Medic Mode - Careers",
-	description: "Medicmode LLP’s course offers high-quality, accessible training programs designed to enhance the skills and knowledge of paramedics and healthcare professionals, empowering them to deliver exceptional care.",
+	description: "Be Part of the Frontline in Emergency Care – Shaping Lifesaving Careers for Dedicated Paramedics",
 	openGraph: {
 	  title: "Medic Mode - Careers",
-	  description: "Medicmode LLP’s course offers high-quality, accessible training programs designed to enhance the skills and knowledge of paramedics and healthcare professionals, empowering them to deliver exceptional care.",
-	  url: "https://medicmode.com/courses", 
+	  description: "Be Part of the Frontline in Emergency Care – Shaping Lifesaving Careers for Dedicated Paramedics",
+	  url: "https://medicmode.com/careers", 
 	  images: [
 		{
 		  url: "https://firebasestorage.googleapis.com/v0/b/medic-mode.appspot.com/o/thumbnails%2Fmedicmode.jpg?alt=media&token=edae836c-b34a-419c-a1c8-89a22f317c3f", 
