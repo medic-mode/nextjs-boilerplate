@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import './CareersLayout.css';
 import { db } from '../../lib/firebase'; // Ensure you have Firebase configured and exported in firebase.js
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 const CareersLayout = ({ children }) => {
     const [jobAreas, setJobAreas] = useState([]);
@@ -22,8 +22,9 @@ const CareersLayout = ({ children }) => {
     const [searchQuery, setSearchQuery] = useState(''); // New state for search query
 
     const fetchJobs = async () => {
-        const jobsRef = collection(db, 'jobs'); // Adjust to your Firestore collection
-        const jobSnapshot = await getDocs(jobsRef);
+        const jobsRef = collection(db, 'jobs'); 
+        const approvedJobsQuery = query(jobsRef, where("approved", "==", true));
+        const jobSnapshot = await getDocs(approvedJobsQuery);
         const jobList = jobSnapshot.docs.map(doc => ({
             ...doc.data(),  // Spread the job document data
             id: doc.id      
