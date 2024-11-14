@@ -2,6 +2,7 @@
 import { useAuth } from '@/components/AuthContext';
 import EditCourse from '@/components/dashboard/editcourse/EditCourse';
 import EditEvent from '@/components/dashboard/editevent/EditEvent';
+import EditJob from '@/components/dashboard/editjobs/EditJob';
 import EditPost from '@/components/dashboard/editpost/EditPost';
 import { useParams } from 'next/navigation'; 
 import { useRouter } from 'next/navigation';
@@ -17,7 +18,7 @@ const DashboardPage = () => {
 
     const baseRoute = slug ? `${slug[0]}/${slug[1]}` : '';
 
-    const validSlugs = ['review-post/edit-post', 'review-course/edit-course', 'review-event/edit-event'];
+    const validSlugs = ['review-post/edit-post', 'review-course/edit-course', 'review-event/edit-event', 'review-job/edit-job'];
 
     useEffect(() => {
      
@@ -40,7 +41,7 @@ const DashboardPage = () => {
         {baseRoute  === 'review-post/edit-post' && <EditPost />}
         {baseRoute  === 'review-course/edit-course' && <EditCourse />}
         {baseRoute  === 'review-event/edit-event' && <EditEvent />}
-
+        {baseRoute  === 'review-job/edit-job' && <EditJob />}
     </div>
   );
 };

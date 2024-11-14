@@ -1,0 +1,83 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1400;
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 100%;
+    position: relative;
+  }
+  
+  .close-btn {
+    background-color: transparent;
+    color: var(--dark-green);
+    border: none;
+    font-size: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    
+  }
+
+ 
+
+  .modal-content h2{
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .apply-form label{
+    font-size: 13px;
+  }
+  
+  .apply-form div {
+    margin-bottom: 15px;
+  }
+  
+  .apply-form label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .apply-form input, .apply-form select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .apply-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0A4044;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease; 
+  }
+  
+  .apply-form button:hover {
+    background-color: var(--orange) ; 
+    box-shadow: rgba(0, 0, 0, 0.25) 2px 2px 3px; /* Enhance shadow on hover */
+  }
+  
+
+  @media (max-width: 768px){
+    .modal-overlay {
+      padding: 0 20px;
+    }
+  }

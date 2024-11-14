@@ -22,10 +22,10 @@ const Contact = () => {
       message,
     };
 
-    // Replace with your actual EmailJS service, template, and user IDs
-    const serviceId = process.env.NEXT_PUBLIC_SERVICE_ID;
-    const templateId = process.env.NEXT_PUBLIC_TEMPLATE_ID;
-    const userId = process.env.NEXT_PUBLIC_USER_ID;
+   
+    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+    const templateId = process.env.NEXT_PUBLIC_CONTACT_FORM_TEMPLATE;
+    const userId = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
 
     emailjs.send(serviceId, templateId, templateParams, userId)
       .then((response) => {

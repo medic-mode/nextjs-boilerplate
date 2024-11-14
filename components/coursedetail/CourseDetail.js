@@ -76,9 +76,9 @@ const CourseDetail = ({slug}) => {
       };
   
       // Replace these with your own EmailJS service ID, template ID, and user ID
-      const SERVICE_ID = 'service_jbddplr';
-      const TEMPLATE_ID = 'template_5oi23ne';
-      const USER_ID = '8gfCpUiFRvZQNHCt0';
+      const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+      const TEMPLATE_ID = process.env.NEXT_PUBLIC_COURSE_FORM_TEMPLATE;
+      const USER_ID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
   
       emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, USER_ID)
         .then((response) => {

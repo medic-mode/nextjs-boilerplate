@@ -1,6 +1,7 @@
 "use client"
 
 import { useAuth } from "@/components/AuthContext";
+import UserTable from "@/components/dashboard/users/UserTable";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { GridLoader } from "react-spinners";
@@ -38,14 +39,13 @@ import { GridLoader } from "react-spinners";
 	return (
 		<>
 		{logged ? (
-      <div className="welcome-dashboard" style={{display:'flex', alignItems:'center', justifyContent:'center', height:'70vh'}}>
-            <h1 style={{color:'var(--orange)'}}>Welcome to Dashboard</h1>
-        </div>) : (
+      <UserTable />
+    ) :(
 			<div className="loading-container">
             <GridLoader color={"#0A4044"} loading={loading} size={10} />
           </div>
 		)}
-        </>
+    </>
     )
 }
 

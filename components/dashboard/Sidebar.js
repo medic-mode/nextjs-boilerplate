@@ -30,6 +30,11 @@ return(
                   <Link className='hover' href="/dashboard/events" onClick={() => setSidebarOpen(false)} ><li>New Event</li></Link>
                   <Link className='hover' href="/dashboard/review-event" onClick={() => setSidebarOpen(false)} ><li>Event List</li></Link>
                 </ul>
+              <li className='list-heading' style={{marginTop:'10px'}}>Careers</li>  
+                <ul>
+                    <Link className='hover' href="/dashboard/create-job" onClick={() => setSidebarOpen(false)} ><li>Create Job</li></Link>
+                    <Link className='hover' href="/dashboard/review-job" onClick={() => setSidebarOpen(false)} ><li>Review Job</li></Link>
+                </ul>
                 <li className='list-heading' style={{marginTop:'10px'}}>Gallery</li>  
                 <ul>
                     <Link className='hover' href="/dashboard/gallery" onClick={() => setSidebarOpen(false)} ><li>Gallery</li></Link>

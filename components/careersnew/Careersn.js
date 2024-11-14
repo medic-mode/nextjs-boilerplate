@@ -1,77 +1,49 @@
-"use client"
-import Image from 'next/image'
-import './Careersn.css'
+// Careers.js
+'use client'
+import './Careersn.css';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import Link from 'next/link';
 
 const Careers = () => {
 
-  
 
-  return (
-    <div className='careers-container'>
-        <div className="career-header">
-            <div className="career-header-content">
-                <h1>Careers</h1>
-                <p>Be Part of the Frontline in Emergency Care – Shaping Lifesaving Careers for Dedicated Paramedics</p>
-            </div>
-            <div className="career-header-image">
-                <Image
-                src='/assets/careers/header.jpg'  
-                alt="career-header-image"
-                width={500}
-                height={500}
-                objectFit="cover"
-            />
-            </div>
-        </div>
-        <div className="career-main">
-        <div className="career-search-bar">
-            <div className="search-jobs">
-            <input type="text" placeholder="Search jobs by keywords" className="search-input" />
-            </div>
-            <div className="select-jobs">
-            <select name="category" className="select-input">
-                <option value="">All Jobs</option>
-                <option value="paramedic">Paramedic</option>
-                <option value="admin">Admin</option>
-                <option value="nurse">Nurse</option>
-                <option value="office">Office</option>
-            </select>
-
-            <select name="jobType" className="select-input">
-                <option value="">Job Type</option>
-                <option value="part-time">Part Time</option>
-                <option value="full-time">Full Time</option>
-                <option value="freelance">Freelance</option>
-            </select>
-
-            <select name="experience" className="select-input">
-                <option value="">Experience</option>
-                <option value="fresher">Fresher</option>
-                <option value="1-3">1-3 Years</option>
-                <option value="4-6">4-6 Years</option>
-                <option value="7+">7+ Years</option>
-            </select>
-
-            <select name="country" className="select-input">
-                <option value="">Country</option>
-                <option value="us">United States</option>
-                <option value="uk">United Kingdom</option>
-            </select>
-
-            <select name="city" className="select-input">
-                <option value="">City</option>
-                <option value="new-york">New York</option>
-                <option value="los-angeles">Los Angeles</option>
-                <option value="london">London</option>
-                <option value="manchester">Manchester</option>
-                <option value="birmingham">Birmingham</option>
-            </select>
+    const formatDate = (createdAt) => {
+        if (!createdAt) return 'Unknown date'; 
+        
+        const date = createdAt.toDate(); 
+        const now = new Date();
+        
+       
+        const diffInMs = now - date;
+        const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+    
+        if (diffInDays === 0) {
+            return 'Today';
+        } else if (diffInDays === 1) {
+            return 'Yesterday';
+        } else {
+            return `${diffInDays} days ago`;
+        }
+    };
+    return (
+        <div className="job-list-container">
+            <h1>Our Current <span style={{ color: 'var(--orange)' }}>Openings</span></h1>
+            <div className="job-list">
+                {filteredJobs.map((job) => (
+                    <div className="jobs" key={job.id}>
+                        <h2>{job.jobTitle}</h2>
+                        <p className='job-posted'>{formatDate(job.createdAt)}</p>
+                        <p className='job-location'><LocationOnIcon style={{fontSize:'18px'}}/> {job.city}, {job.state}, {job.country}</p>
+                        <p className='job-type'><AccessTimeIcon style={{fontSize:'14px'}}/> {job.jobType}</p>
+                        <Link href={`/careers/${job.id}`}>
+                            <button className='job-details-btn'>Apply</button>
+                        </Link>
+                    </div>
+                ))}
             </div>
         </div>
-        </div>
-    </div>
+    );
+};
 
-  )
-}
-
-export default Careers
+export default Careers;

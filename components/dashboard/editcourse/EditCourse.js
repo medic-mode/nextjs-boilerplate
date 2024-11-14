@@ -11,7 +11,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 const EditCourse = () => {
 
-  const searchParams = useSearchParams();  // This will fetch query parameters
+  const searchParams = useSearchParams();  
   const courseId = searchParams.get('id');
 
 
@@ -104,7 +104,7 @@ const EditCourse = () => {
         navigate.push('/dashboard')
       } catch (error) {
         toast.error('Error updating course');
-        console.error('Error updating course:', error);
+
       }
     };
 

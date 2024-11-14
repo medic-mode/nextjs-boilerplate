@@ -1,12 +1,14 @@
 "use client";
 import { useAuth } from '@/components/AuthContext';
 import CreateCourse from '@/components/dashboard/createcourse/CreateCourse';
+import Createjobs from '@/components/dashboard/createjobs/Createjobs';
 import CreatePost from '@/components/dashboard/createpost/CreatePost';
 import Events from '@/components/dashboard/events/Events';
 import Faculties from '@/components/dashboard/faculties/Faculties';
 import AdminGallery from '@/components/dashboard/gallery/AdminGallery';
 import ReviewCourse from '@/components/dashboard/reviewcourse/ReviewCourse';
 import ReviewEvent from '@/components/dashboard/reviewevent/ReviewEvent';
+import ReviewJob from '@/components/dashboard/reviewjob/ReviewJob';
 import ReviewPost from '@/components/dashboard/reviewpost/ReviewPost';
 import UserTable from '@/components/dashboard/users/UserTable';
 import { useParams } from 'next/navigation';
@@ -23,7 +25,7 @@ const DashboardPage = () => {
 
   const validSlugs = [
     'users', 'create-post', 'review-post', 
-    'create-course', 'review-course', 'events', 
+    'create-course', 'review-course', 'events', 'create-job', 'review-job',
     'review-event', 'gallery', 'faculties'
   ];
 
@@ -63,6 +65,8 @@ const DashboardPage = () => {
       {slug === 'review-course' && <ReviewCourse />}
       {slug === 'events' && <Events />}
       {slug === 'review-event' && <ReviewEvent />}
+      {slug === 'create-job' && <Createjobs />}
+      {slug === 'review-job' && <ReviewJob />}
       {slug === 'gallery' && <AdminGallery />}
       {slug === 'faculties' && <Faculties />}
     </div>
