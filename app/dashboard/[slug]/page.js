@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from '@/components/AuthContext';
 import CreateCourse from '@/components/dashboard/createcourse/CreateCourse';
-import Createjobs from '@/components/dashboard/createjobs/Createjobs';
+import CreateJobs from '@/components/dashboard/createjobs/CreateJobs';
 import CreatePost from '@/components/dashboard/createpost/CreatePost';
 import Events from '@/components/dashboard/events/Events';
 import Faculties from '@/components/dashboard/faculties/Faculties';
@@ -65,7 +65,7 @@ const DashboardPage = () => {
       {slug === 'review-course' && <ReviewCourse />}
       {slug === 'events' && <Events />}
       {slug === 'review-event' && <ReviewEvent />}
-      {slug === 'create-job' && <Createjobs />}
+      {slug === 'create-job' && <CreateJobs />}
       {slug === 'review-job' && <ReviewJob />}
       {slug === 'gallery' && <AdminGallery />}
       {slug === 'faculties' && <Faculties />}

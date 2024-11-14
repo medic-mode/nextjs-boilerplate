@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import './Reviewjob.css'
+import './ReviewJob.css'
 import { db } from '../../../lib/firebase'; // Adjust the path as necessary
 import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { GridLoader } from 'react-spinners';
