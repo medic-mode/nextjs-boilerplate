@@ -13,7 +13,8 @@ return(
             <div className="dashboard-heading">
               <h2>Dashboard</h2>
             </div> 
-            <ul>
+            <div className='sidebar-scroll'>
+            <ul >
               <Link href="/dashboard/users" className='hover' style={{marginTop:'10px'}} onClick={() => setSidebarOpen(false)} ><li>User List</li></Link>
               <li className='list-heading' style={{marginTop:'10px'}}>Blogs</li>
                 <ul>
@@ -44,6 +45,7 @@ return(
                     <Link className='hover' href="/dashboard/faculties" onClick={() => setSidebarOpen(false)} ><li>Faculty</li></Link>
                 </ul>
             </ul>
+            </div>
           </div>
 
  )

@@ -15,13 +15,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* Load the Google Analytics script */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=G-KV23NQK3GB`}
           strategy="afterInteractive"
         />
         
-        {/* Initialize Google Analytics */}
         <Script
           id="google-analytics"
           strategy="afterInteractive"
@@ -39,7 +37,6 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <AuthProvider>
-          {/* Add GoogleAnalytics component with GA ID */}
           <GoogleAnalytics gaId="G-KV23NQK3GB" />
           <div className="next-app">
             <div className="content-header">

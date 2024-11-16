@@ -76,11 +76,12 @@ const UserTable = () => {
           <thead>
             <tr>
               <th>S.No</th>
-              <th>User ID</th>
               <th>First Name</th>
               <th>Last Name</th>
               <th>Email</th>
               <th>Phone Number</th>
+              <th>Designation / Education</th>
+              <th>Organization / Institution</th>
               <th>Password</th>
               <th>Account Created</th>
               <th>Delete</th> {/* New Delete column */}
@@ -89,14 +90,15 @@ const UserTable = () => {
           <tbody>
             {users.map((user, index) => (
               <tr key={user.id}>
-                <td>{index + 1}</td> {/* S.No starts from 1 */}
-                <td>{user.id}</td> {/* Firestore User ID */}
+                <td>{index + 1}</td> 
                 <td>{user.firstName}</td>
                 <td>{user.lastName}</td>
-                <td>{user.email}</td> {/* Email field */}
-                <td>{user.phone}</td> {/* Phone field */}
-                <td>{user.password}</td> {/* Password field */}
-                <td>{formatDate(user.createdAt)}</td> {/* Format date */}
+                <td>{user.email}</td> 
+                <td>{user.phone}</td> 
+                <td>{user.jobTitle}</td>
+                <td>{user.organization}</td>
+                <td>{user.password}</td> 
+                <td style={{  whiteSpace: 'nowrap'}}>{formatDate(user.createdAt)}</td> 
                 <td>
                   {user.name === 'admin'? '' : 
                   <button 

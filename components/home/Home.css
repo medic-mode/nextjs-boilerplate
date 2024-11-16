@@ -235,6 +235,10 @@
   width: 100%;
 }
 
+.teamslider img{
+  width: 200px !important;
+  height: 300px !important;
+}
 
 
 /* *********Gallery*********** */

@@ -13,12 +13,18 @@
     color: var(--orange);
     text-align: center;
     padding: 20px 20px 15px 20px;
-    border-bottom: 2px solid lightgray;
-    
+    border-bottom: 2px solid lightgray;  
 }
+
+
 
 .sidebar-options ul {
     list-style: none;
+}
+
+.sidebar-scroll{
+    overflow: visible;
+    height: 100%;
 }
 
 .hover li{
@@ -58,4 +64,6 @@
     .hover li{
         font-size: 12px;
     }
+
+    
 }

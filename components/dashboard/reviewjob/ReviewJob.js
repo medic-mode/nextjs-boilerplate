@@ -21,9 +21,8 @@ const ReviewJob = () => {
         const jobs = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setJobs(jobs);
 
-        // Initialize approval status and approved posts
         const initialApprovalStatus = {};
-        const approvedList = []; // Temporary array to hold approved posts
+        const approvedList = []; 
 
         jobs.forEach((job) => {
           initialApprovalStatus[job.id] = job.approved === true;
