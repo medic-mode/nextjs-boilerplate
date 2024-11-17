@@ -194,6 +194,11 @@ margin: 20px 0;
 }
 
 @media (max-width: 768px) {
+
+    .course-heading h1{
+        font-size: 30px !important;
+    }
+
 .course-container{
     width: 100%;
 }

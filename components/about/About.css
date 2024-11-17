@@ -204,6 +204,10 @@
 
 @media (max-width: 768px) {
 
+    h2{
+        font-size: 30px !important;
+    }
+
     .about-header{
         height: 300px;
     }
