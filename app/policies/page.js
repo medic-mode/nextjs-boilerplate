@@ -42,7 +42,7 @@ const page = () => {
         </ul>
         <p>Please contact us to exercise any of these rights or for further information.</p>
         <h2>7. Changes to This Privacy Policy</h2>
-        <p>Medicmode LLP reserves the right to update this Privacy Policy as necessary. Any changes will be communicated through our website, and the "Effective Date" at the top will reflect the most recent update. We encourage you to review this policy periodically.</p>
+        <p>Medicmode LLP reserves the right to update this Privacy Policy as necessary. Any changes will be communicated through our website, and the &ldquo;Effective Date&ldquo; at the top will reflect the most recent update. We encourage you to review this policy periodically.</p>
         <h2>8. Contact Us</h2>
         <p>If you have any questions about this Privacy Policy, please contact us at:</p>
         <p><strong>Medicmode LLP</strong></p>
