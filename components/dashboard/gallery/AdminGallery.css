@@ -118,6 +118,10 @@
   /* Media Query for small screens */
   @media (max-width: 768px) {
 
+    .admin-gallery h1{
+      font-size: 23px !important;
+    }
+
     .admin-gallery{
       margin: 20px 15px !important;
     }
