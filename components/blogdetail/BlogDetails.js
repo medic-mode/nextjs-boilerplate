@@ -43,6 +43,7 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }
 
     // Fetch the blog post details
     useEffect(() => {
+        
         const fetchPost = async () => {
             try {
                 const docRef = doc(db, 'blogPosts', postId); // Get the specific document by ID

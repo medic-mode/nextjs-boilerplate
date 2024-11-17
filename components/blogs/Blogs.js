@@ -248,7 +248,7 @@ const Blogs = () => {
           
           <div className="primary-blog" data-aos='fade-up'>
             <div className="blog-image-container">
-              <Link href={`/blogs/${recentBlog.id}`}>
+              <Link href={`/blogs/${recentBlog.id}`} >
                 <img src={recentBlog.thumbnail} alt={recentBlog.title} />
               </Link>
             </div>
@@ -262,7 +262,7 @@ const Blogs = () => {
                 <p>{recentBlog.category.toUpperCase()}</p>
               </div>
               <div className="title">
-                <Link href={`/blogs/${recentBlog.id}`}  style={{ textDecoration: 'none' }}>
+                <Link href={`/blogs/${recentBlog.id}`}  style={{ textDecoration: 'none' }} >
                   <h2>{recentBlog.title}</h2>
                 </Link>
               </div> 

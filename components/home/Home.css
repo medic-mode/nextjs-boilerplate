@@ -267,6 +267,9 @@
     height: calc(38vh - 80px);
   }
 
+  h2{
+    font-size: 30px !important;
+  }
 
   .intro-text{
     top: 50% !important;

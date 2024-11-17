@@ -7,6 +7,7 @@ import "./globals.css";
 import { usePathname } from 'next/navigation';
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import Script from 'next/script';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
@@ -45,7 +46,14 @@ export default function RootLayout({ children }) {
             {isDashboard ? (
               <DashboardLayout>{children}</DashboardLayout> 
             ) : (
-              <div className="content-wrapper">{children}</div> 
+              <div className="content-wrapper">
+                {children}
+                <div className="float">
+                    <a href="https://wa.me/919008761372" className="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">
+                        <WhatsAppIcon style={{ fontSize: '25px', color: 'white' }} />
+                    </a>
+                </div>
+              </div> 
             )}
             <div className="content-footer">
               <Footer />
