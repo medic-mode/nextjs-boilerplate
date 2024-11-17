@@ -23,8 +23,10 @@
 
 .privacy-policy p{
     margin-bottom: 10px;
-    line-height: 23px;
+    line-height: 25px;
     font-size: 16px;
+    hyphens: auto;
+    text-align: justify;
 }
 
 .privacy-policy ul{
