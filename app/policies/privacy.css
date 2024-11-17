@@ -35,7 +35,7 @@
 }
 
 .privacy-policy ul li{
-    line-height: 35px;
+    margin-bottom: 15px;
 }
 
 @media (max-width: 768px) {
@@ -49,6 +49,12 @@
 
     .privacy-policy h1{
         font-size: 30px;
+    }
+
+    .privacy-policy ul li{
+        font-size: 14px !important;
+        line-height: 24px !important;
+        margin-bottom: 10px;
     }
 
     .privacy-policy p{
