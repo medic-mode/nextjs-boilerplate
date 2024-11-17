@@ -20,6 +20,8 @@ const Footer = () => {
                         <li><Link href="/courses">Courses</Link></li>
                         <li><Link href="/careers">Careers</Link></li>
                         <li><Link href="/contact">Contact Us</Link></li>
+                        <li><Link href="/policies">Privacy Policy</Link></li>
+                        
                     </ul>
             </div>
             <div className="footer-courses">
