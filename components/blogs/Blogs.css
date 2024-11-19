@@ -139,7 +139,7 @@
 }
 
 .blog-options h2 {
-    font-size: 18px;
+    font-size: 18px !important;
     color: var(--dark-green);
     margin-bottom: 10px;
     text-transform: uppercase;
@@ -319,6 +319,8 @@
         top: 182px;
         left: -25px;
     }
+
+    
 
     .create-blog-btn{
         padding: 5px 8px;
