@@ -116,7 +116,7 @@
     }
 
     .career-header-content h2{
-        font-size: 13px;
+        font-size: 13px !important;
         text-align: center;
         padding: 0 20px;
     }
@@ -125,11 +125,38 @@
         padding: 30px 0;
     }
 
-    .select-jobs{
-        justify-content: center;
-    }
 
     .career-search-bar input{
         text-align: center;
+    }
+
+    .career-header-content p{
+        text-align: center;
+        font-size: 13px;
+        line-height: 20px;
+    }
+    .career-search-bar{
+        flex-direction: column;
+    }
+
+    .career-search-bar{
+        height: auto;
+        padding-bottom: 20px;
+    }
+
+    .search-jobs input{
+        max-width: auto;
+        text-align: center;
+    }
+
+    .select-jobs{
+        font-size: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .select-jobs select{
+        font-size: 12px;
     }
 }

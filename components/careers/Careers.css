@@ -12,6 +12,10 @@
     padding: 0 20px;
 }
 
+.job-list-container h1{
+    font-size: 32px;
+}
+
 .job-list{
     max-width: 1300px;
     width: 100%;
@@ -35,7 +39,7 @@
 }
 
 .jobs h2{
-    font-size: 18px;
+    font-size: 18px !important;
     margin-bottom: 10px;
     color: var(--orange);
     width: 83%;
@@ -91,50 +95,18 @@
 
 @media (max-width: 768px){
 
-    .career-header-content{
-        margin-top: 40px;
-    }
-
-    .career-header-content h1 {
-        font-size: 30px;
+    .job-list-container h1{
+        font-size: 25px;
     }
 
     .jobs h2 {
-        width: 75%;
+        width: 75%;   
     }
 
   
 
     
 
-    .career-header-content p{
-        text-align: center;
-        font-size: 13px;
-        line-height: 20px;
-    }
-    .career-search-bar{
-        flex-direction: column;
-    }
-
-    .career-search-bar{
-        height: auto;
-        padding-bottom: 20px;
-    }
-
-    .search-jobs input{
-        max-width: auto;
-        text-align: center;
-    }
-
-    .select-jobs{
-        font-size: 8px;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .select-jobs select{
-        font-size: 12px;
-    }
+    
 
 }
