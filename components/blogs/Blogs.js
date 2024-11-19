@@ -211,8 +211,14 @@ const Blogs = () => {
 
 
   const handleCommentIconClick = (id) => {
+    setLoading(true)
     router.push(`/blogs/${id}?focusOnComments=true`, undefined, { shallow: true });
   };
+
+  const viewBlogs = (id) => {
+    setLoading(true);
+    router.push(`/blogs/${id}`)
+  }
 
   return (
     <div style={{display:'flex', justifyContent:'center', }}>
@@ -248,9 +254,9 @@ const Blogs = () => {
           
           <div className="primary-blog" data-aos='fade-up'>
             <div className="blog-image-container">
-              <Link href={`/blogs/${recentBlog.id}`} >
+              <div onClick={() => viewBlogs(recentBlog.id)} style={{cursor:'pointer'}}>
                 <img src={recentBlog.thumbnail} alt={recentBlog.title} />
-              </Link>
+              </div>
             </div>
             <div className="descriptions">
               <div className="details">
@@ -262,9 +268,9 @@ const Blogs = () => {
                 <p>{recentBlog.category.toUpperCase()}</p>
               </div>
               <div className="title">
-                <Link href={`/blogs/${recentBlog.id}`}  style={{ textDecoration: 'none' }} >
+                <div onClick={() => viewBlogs(recentBlog.id)} style={{cursor:'pointer'}}>
                   <h2>{recentBlog.title}</h2>
-                </Link>
+                </div>
               </div> 
             </div>
             <div className="likes">
@@ -386,9 +392,9 @@ const Blogs = () => {
           otherBlogs.map(blog => (
             <div key={blog.id} className="other-blogs" data-aos='zoom-in'>
               <div className="blog-image-container">
-                <Link href={`/blogs/${blog.id}`} >
+                <div onClick={() => viewBlogs(blog.id)} style={{cursor:'pointer'}}>
                   <img src={blog.thumbnail} alt={blog.title} />
-                </Link>
+                </div>
               </div>
               <div className="descriptions">
                 <div className="details">
@@ -400,9 +406,9 @@ const Blogs = () => {
                   <p>{blog.category.toUpperCase()}</p>
                 </div>
                 <div className="title">
-                  <Link href={`/blogs/${blog.id}`} style={{ textDecoration: 'none' }}>
+                  <div onClick={() => viewBlogs(blog.id)} style={{cursor:'pointer'}}>
                     <h2>{blog.title}</h2>
-                  </Link>
+                  </div>
                 </div>
               </div>
               <div className="likes">

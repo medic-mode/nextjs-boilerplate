@@ -11,35 +11,31 @@ import ApplyForm from './ApplyForm';
 import { Toaster } from 'sonner';
 
 const JobDetails = ({ slug }) => {
-
   const { loading, setLoading } = useAuth();
-
-  const jobId = slug;
   const [jobData, setJobData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); 
 
   useEffect(() => {
     const fetchJob = async () => {
-        try {
-            const docRef = doc(db, 'jobs', jobId);
-            const docSnap = await getDoc(docRef);
-    
-            if (docSnap.exists()) {
-                setJobData({ id: docSnap.id, ...docSnap.data() });
-                setLoading(false)
-            } else {
-                console.log('No such document!');
-                setLoading(false);
-            }
-        } catch (error) {
-            console.error('Error fetching job data: ', error);
-            setLoading(false);
+      try {
+        setLoading(true);
+        const docRef = doc(db, 'jobs', slug);  // Use the slug directly
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+          setJobData({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          console.log('No such document!');
         }
+      } catch (error) {
+        console.error('Error fetching job data: ', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchJob();
-    // eslint-disable-next-line
-  }, [jobId, setLoading]);
+  }, [slug, setLoading]);
 
   if (loading || !jobData) {
     return (
@@ -64,7 +60,7 @@ const JobDetails = ({ slug }) => {
     setIsModalOpen(false); // Close the modal
   };
 
-  const jobTitle = jobData.jobTitle
+  const jobTitle = jobData.jobTitle;
 
   return (
     <div className="job-details-container">

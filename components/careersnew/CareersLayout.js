@@ -4,7 +4,11 @@ import './CareersLayout.css';
 import { db } from '../../lib/firebase'; // Ensure you have Firebase configured and exported in firebase.js
 import { collection, getDocs, query, where } from 'firebase/firestore';
 
+
 const CareersLayout = ({ children }) => {
+
+    
+ 
     const [jobAreas, setJobAreas] = useState([]);
     const [jobTypes, setJobTypes] = useState([]);
     const [experiences, setExperiences] = useState([]);
@@ -22,6 +26,7 @@ const CareersLayout = ({ children }) => {
     const [searchQuery, setSearchQuery] = useState(''); // New state for search query
 
     const fetchJobs = async () => {
+
         const jobsRef = collection(db, 'jobs'); 
         const approvedJobsQuery = query(jobsRef, where("approved", "==", true));
         const jobSnapshot = await getDocs(approvedJobsQuery);
@@ -48,7 +53,7 @@ const CareersLayout = ({ children }) => {
     };
 
     useEffect(() => {
-        fetchJobs(); // Fetch jobs when the component mounts
+        fetchJobs();
     }, []);
 
     // Filter jobs based on selected filters
@@ -138,7 +143,6 @@ const CareersLayout = ({ children }) => {
                     </div>
                 </div>
             </div>
-            {/* Pass filteredJobs to children */}
             {React.Children.map(children, child =>
                 React.cloneElement(child, { filteredJobs })
             )}

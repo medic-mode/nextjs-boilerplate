@@ -1,6 +1,6 @@
-
 import Careers from "@/components/careers/Careers";
 import CareersLayout from "@/components/careersnew/CareersLayout";
+
 
 export const metadata = {
 	title: "Medic Mode - Careers",
@@ -25,7 +25,7 @@ export const metadata = {
 export default function Page () {
 	return (
 		<CareersLayout>
-			<Careers /> 
-		</CareersLayout>
+			<Careers />
+			</CareersLayout>
 	)
 }

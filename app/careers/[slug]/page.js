@@ -4,7 +4,6 @@ import JobDetails from '@/components/careersnew/JobDetails';
 import CareersLayout from '@/components/careersnew/CareersLayout';
 
 export async function generateMetadata({ params }) {
-
     
     
     const jobId = params.slug;
@@ -28,8 +27,8 @@ export async function generateMetadata({ params }) {
 
 export default function Page({ params }) {
     return (
-	<CareersLayout>
-	    <JobDetails slug={params.slug} />
-	</CareersLayout>
+        <CareersLayout>
+        <JobDetails slug={params.slug} />
+        </CareersLayout>
 	)
 }

@@ -3,12 +3,14 @@
 import './Careers.css';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import Link from 'next/link';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../AuthContext';
 
-const Careers = ({filteredJobs}) => {
+const Careers = ({ filteredJobs  }) => {
 
-    
+    const router = useRouter()
+
+    const {setLoading } = useAuth()
 
     const formatDate = (createdAt) => {
         if (!createdAt) return 'Unknown date'; 
@@ -36,6 +38,11 @@ const Careers = ({filteredJobs}) => {
           .join(' ');
       }
 
+      const viewJobs = (id) => {
+        setLoading(true);
+        router.push(`/careers/${id}`)
+      }
+
     return (
         <div className="job-list-container">
             <h1>Our Current <span style={{ color: 'var(--orange)' }}>Openings</span></h1>
@@ -49,9 +56,9 @@ const Careers = ({filteredJobs}) => {
                             {toTitleCase(`${job.city}, ${job.state}, ${job.country}`)}
                         </p>
                         <p className='job-type'><AccessTimeIcon style={{fontSize:'14px'}}/>{toTitleCase(job.jobType)}</p>
-                        <Link href={`/careers/${job.id}`}>
-                            <button className='job-details-btn'>Apply</button>
-                        </Link>
+                        <div  style={{cursor:'pointer'}}>
+                            <button className='job-details-btn' onClick={() => viewJobs(job.id)}>Apply</button>
+                        </div>
                     </div>
                 ))}
             </div>

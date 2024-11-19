@@ -12,13 +12,15 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import Rating from '@mui/material/Rating';
 import { db } from '../../lib/firebase';
 import { collection, getDocs, orderBy, query, where, doc, updateDoc } from 'firebase/firestore';
-import Link from 'next/link';
 import { GridLoader } from 'react-spinners';
 import { toast } from 'sonner';
 import { useAuth } from '../AuthContext';
 import { LazyLoadImage } from 'react-lazy-load-image-component'; 
+import { useRouter } from 'next/navigation';
 
 const Courses = () => {
+
+  const navigate = useRouter()
 
   const {logged} = useAuth()
 
@@ -134,6 +136,11 @@ const Courses = () => {
     'Manoj'
   ];
 
+  const viewCourse = (id) => {
+    setLoading(true)
+    navigate.push(`/courses/${id}`)
+  }
+
   return (
     <div style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
     <div className='course-container'>
@@ -181,7 +188,7 @@ const Courses = () => {
           <div className="course-list-wrapper">
             {filteredCourses.slice(0, visibleCourses).map((course) => (
               <div className="course-list" key={course.id} data-aos="fade-up">
-                <Link href={`/courses/${course.id}`} >
+                <div onClick={() => viewCourse(course.id)} >
                 <LazyLoadImage
                                 src={course.thumbnail}
                                 alt={course.courseTitle}
@@ -197,7 +204,7 @@ const Courses = () => {
                       {`${course.duration.hours}:${course.duration.minutes} h`}
                     </p>
                   </div>
-                </Link>
+                  </div>
                 {logged ? (
                   <Rating
                     name="simple-controlled"
