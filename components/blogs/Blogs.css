@@ -84,6 +84,8 @@
     border-radius: 20px 0 ;
 }
 
+
+
 .primary {
     display: grid;
     grid-template-columns: 3fr 1fr;
@@ -186,7 +188,6 @@
     color: var(--light-green) !important;
     padding: 10px 20px !important;
     font-size: 13px;
-    font-weight: 600;
     margin-top: 10px !important;
     border: none;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; /* Default shadow */
