@@ -41,7 +41,10 @@ const Footer = () => {
             </div>
             
         </div>
-        <p style={{textAlign: 'center', paddingBottom: '20px', fontSize:'13px'}}>© 2024 Medic Mode. All rights reserved.</p>
+        <div className="copyrights">
+            <p>© 2024 Medic Mode. All rights reserved.</p>
+            <p>Designed by <a href="https://www.instagram.com/kingz_digital_solutions/">Kingz Digital Solutions</a></p>
+        </div>
     </div>
   )
 }

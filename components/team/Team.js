@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase'; // Adjust the import based on your Firebase configuration
 import './Team.css';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css'; // Import Swiper styles
+import { Autoplay } from 'swiper/modules';
 
 const Team = () => {
     // eslint-disable-next-line
@@ -74,7 +77,6 @@ const Team = () => {
                 </div>
             )}
 
-            {/* Render Group 2 with Marquee */}
             {groupedFaculties.group2.length > 0 && (
                 <div className="group group2">
                         {groupedFaculties.group2.map((member) => (
@@ -86,6 +88,7 @@ const Team = () => {
                         ))}
                 </div>
             )}
+
 
             {/* Render Group 3 */}
             {groupedFaculties.group3.length > 0 && (
