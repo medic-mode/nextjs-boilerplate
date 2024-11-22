@@ -39,6 +39,12 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 
 	e.preventDefault();
 
+	if (!phone) {
+		setError('Phone number is required')
+		return;
+	  }
+  
+
     try {
       // Query Firestore to check if email or phone already exists
       const usersRef = collection(db, "users");
@@ -361,7 +367,6 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 			value={phone}
 			onChange={setPhone}
 			inputStyle={{ width: '100%' }}
-			required
 			/>
 		</div>
 	</div>
