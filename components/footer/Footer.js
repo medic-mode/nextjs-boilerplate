@@ -21,6 +21,8 @@ const Footer = () => {
                         <li><Link href="/careers">Careers</Link></li>
                         <li><Link href="/contact">Contact Us</Link></li>
                         <li><Link href="/policies">Privacy Policy</Link></li>
+                        <li><Link href="/terms-and-conditions">Terms and conditions</Link></li>
+                        <li><Link href="/cancellation-refund">Refund and Cancellation Policy</Link></li>
                         
                     </ul>
             </div>
