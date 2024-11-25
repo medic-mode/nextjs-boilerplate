@@ -193,6 +193,39 @@ margin: 20px 0;
     color: var(--dark-green);
 }
 
+.view-course-button{
+    display: block; 
+    font-size: 12px;
+    margin: 10px auto;
+    background-color: var(--dark-green) !important;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    color: var(--light-green) !important;
+    padding: 10px !important;
+    border-radius: 25px !important;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease; /* Added transition for shadow and transform */
+    cursor: pointer;
+}
+
+.view-course-button:hover {
+    background-color: var(--orange) !important; 
+    box-shadow: rgba(0, 0, 0, 0.25) 2px 2px 3px; /* Enhance shadow on hover */
+}
+
+.show-more-button{
+    display: block; 
+    margin: 20px auto;
+    background-color: var(--dark-green) !important;
+    color: var(--light-green) !important;
+    padding: 10px 20px !important;
+    font-size: 13px;
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    border-radius: 25px !important;
+    cursor: pointer;
+    font-weight: 600;
+}
+
 @media (max-width: 768px) {
 
     .course-heading h1{
@@ -238,19 +271,7 @@ margin: 20px 0;
 }
 
 
-.show-more-button{
-    display: block; 
-    margin: 20px auto;
-    background-color: var(--dark-green) !important;
-    color: var(--light-green) !important;
-    padding: 10px 20px !important;
-    font-size: 13px;
-    border: none;
-    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-    border-radius: 25px !important;
-    cursor: pointer;
-    font-weight: 600;
-}
+
 
 @media (max-width: 768px){
 

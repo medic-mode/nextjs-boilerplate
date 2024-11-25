@@ -1,0 +1,63 @@
+.refund-cancellation{
+    padding: 50px 80px;
+    color: var(--dark-green);
+}
+
+.refund-cancellation h1{
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 35px;
+}
+
+.refund-cancellation h3{
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.refund-cancellation h2{
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.refund-cancellation p{
+    margin-bottom: 10px;
+    line-height: 25px;
+    font-size: 16px;
+    hyphens: auto;
+    text-align: justify;
+}
+
+
+.refund-cancellation ul{
+    list-style:circle;
+    margin-left: 30px;
+}
+
+.refund-cancellation ul li{
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .refund-cancellation{
+        padding: 30px 20px;
+    }
+
+    .refund-cancellation h2{
+        font-size: 22px !important;
+    }
+
+    .refund-cancellation h1{
+        font-size: 30px;
+    }
+
+    .refund-cancellation ul li{
+        font-size: 14px !important;
+        line-height: 24px !important;
+        margin-bottom: 10px;
+    }
+
+    .refund-cancellation p{
+        font-size: 14px !important;
+        line-height: 24px !important;
+    }
+}

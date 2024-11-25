@@ -20,9 +20,6 @@ const Footer = () => {
                         <li><Link href="/courses">Courses</Link></li>
                         <li><Link href="/careers">Careers</Link></li>
                         <li><Link href="/contact">Contact Us</Link></li>
-                        <li><Link href="/policies">Privacy Policy</Link></li>
-                        <li><Link href="/terms-and-conditions">Terms and conditions</Link></li>
-                        <li><Link href="/cancellation-refund">Refund and Cancellation Policy</Link></li>
                         
                     </ul>
             </div>
@@ -32,6 +29,15 @@ const Footer = () => {
                         <li><Link href="/courses/rjgImlEWz8M6XC5YFBBA">CPR, AED, and First Aid Course</Link></li>
                         <li><Link href="/courses/XeUaPbTF3tDhGyGwWGGF">DCAS Exam Preparatory Crash Course</Link></li>
                         <li><Link href="/courses/z0sGkATVpmoOfu3wg50S">Essentials of ECG - Crash Course</Link></li>
+                    </ul>
+            </div>
+            <div className="policies">
+                <h3>POLICIES</h3>
+                    <ul>
+                        <li><Link href="/privacy-policy">Privacy Policy</Link></li>
+                        <li><Link href="/terms-and-conditions">Terms and conditions</Link></li>
+                        <li><Link href="/refund-cancellation">Refund and Cancellation Policy</Link></li>
+                        
                     </ul>
             </div>
             <div className="address">

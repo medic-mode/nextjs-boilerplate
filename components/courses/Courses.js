@@ -205,6 +205,8 @@ const Courses = () => {
                     </p>
                   </div>
                   </div>
+                  <div className="view-course-container" style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+                    <div>
                 {logged ? (
                   <Rating
                     name="simple-controlled"
@@ -226,6 +228,13 @@ const Courses = () => {
                     onClick={() => toast.info("Please log in to rate our course.")}
                   />
                 )}
+                </div>
+                <div>
+                    <button onClick={() => viewCourse(course.id)} className="view-course-button">
+                    View Course
+                  </button>
+                </div>
+                </div>
               </div>
             ))}
           </div>

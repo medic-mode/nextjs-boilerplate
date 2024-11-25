@@ -55,6 +55,7 @@
 .footer-address p{
     display: flex;
     margin-bottom: 8px;
+    align-items: center;
 }
 
 .footer-address a{
@@ -113,5 +114,10 @@
     .copyrights{
         flex-direction: column;
         gap: 5px;
+    }
+
+    .quick-links h3, .footer-courses h3, .policies h3, .address h3{
+        text-align: center;
+        margin: 20px 0 10px 0;
     }
 }
