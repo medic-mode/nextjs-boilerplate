@@ -237,30 +237,48 @@ export default function Home() {
 
 {/* ***************** events *********************/}
 
-	{events.map((event) => (
+<div className="events-container">
+  <h2>
+    Upcoming <span style={{ color: 'var(--orange)' }}>Events</span>
+  </h2>
+  <VerticalTimeline>
+    {events.map(
+      (event) =>
         event.approved && (
-          <div className="events-container" key={event.id}> 
-            <h2>Upcoming <span style={{ color: 'var(--orange)' }}>Events</span></h2>
-            <VerticalTimeline>
-              <VerticalTimelineElement
-                key={event.id} 
-                date={event.date}
-                iconStyle={{ background: "#0A4044", color: "#fff" }}
-                contentStyle={{ background: "var(--light-green)", borderRadius:'20px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}}
-                icon={<FaCalendarAlt />}
-              >
-                <h3 className="vertical-timeline-element-title" style={{ fontSize: '23px', marginBottom: '8px' }}>
-                  {event.title}
-                </h3>
-                <h4 className="vertical-timeline-element-subtitle" style={{ color: 'var(--orange)', display: 'flex', alignItems: 'center' }}>
-                  <LocationOnIcon /> {event.location}
-                </h4>
-                <p>{event.description}</p>
-              </VerticalTimelineElement>
-              </VerticalTimeline>
-          </div>
+          <VerticalTimelineElement
+            key={event.id}
+            date={event.date}
+            iconStyle={{ background: "#0A4044", color: "#fff" }}
+            contentStyle={{
+              background: "var(--light-green)",
+              borderRadius: "20px",
+              boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+            }}
+            icon={<FaCalendarAlt />}
+          >
+            <h3
+              className="vertical-timeline-element-title"
+              style={{ fontSize: "23px", marginBottom: "8px" }}
+            >
+              {event.title}
+            </h3>
+            <h4
+              className="vertical-timeline-element-subtitle"
+              style={{
+                color: "var(--orange)",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <LocationOnIcon /> {event.location}
+            </h4>
+            <p>{event.description}</p>
+          </VerticalTimelineElement>
         )
-      ))}
+    )}
+  </VerticalTimeline>
+</div>
+
 
 {/* ***************** Testimony *********************/}
 
