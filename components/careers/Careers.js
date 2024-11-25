@@ -4,13 +4,14 @@ import './Careers.css';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../AuthContext';
+import { GridLoader } from 'react-spinners';
+import { useState } from 'react';
 
 const Careers = ({ filteredJobs  }) => {
 
     const router = useRouter()
 
-    const {setLoading } = useAuth()
+    const [loading, setLoading] = useState(false);
 
     const formatDate = (createdAt) => {
         if (!createdAt) return 'Unknown date'; 
@@ -40,28 +41,53 @@ const Careers = ({ filteredJobs  }) => {
 
       const viewJobs = (id) => {
         setLoading(true);
-        router.push(`/careers/${id}`)
-      }
+        setTimeout(() => {
+            router.push(`/careers/${id}`);
+        }, 500); 
+    };
+
+
+      
+    
 
     return (
         <div className="job-list-container">
-            <h1>Our Current <span style={{ color: 'var(--orange)' }}>Openings</span></h1>
-            <div className="job-list">
-                {filteredJobs.map((job) => (
-                    <div className="jobs" key={job.id}>
-                        <h2>{toTitleCase(job.jobTitle)}</h2>
-                        <p className='job-posted'>{formatDate(job.createdAt)}</p>
-                        <p className='job-location'>
-                            <LocationOnIcon style={{ fontSize: '18px' }} /> 
-                            {toTitleCase(`${job.city}, ${job.state}, ${job.country}`)}
-                        </p>
-                        <p className='job-type'><AccessTimeIcon style={{fontSize:'14px'}}/>{toTitleCase(job.jobType)}</p>
-                        <div  style={{cursor:'pointer'}}>
-                            <button className='job-details-btn' onClick={() => viewJobs(job.id)}>Apply</button>
-                        </div>
+            {loading && (
+                <div className="loading-container">
+                    <GridLoader color={'#0A4044'} loading={loading} size={10} />
+                </div>
+            )}
+            {!loading && (
+                <>
+                    <h1>
+                        Our Current <span style={{ color: 'var(--orange)' }}>Openings</span>
+                    </h1>
+                    <div className="job-list">
+                        {filteredJobs.map((job) => (
+                            <div className="jobs" key={job.id}>
+                                <h2>{toTitleCase(job.jobTitle)}</h2>
+                                <p className="job-posted">{formatDate(job.createdAt)}</p>
+                                <p className="job-location">
+                                    <LocationOnIcon style={{ fontSize: '18px' }} />
+                                    {toTitleCase(`${job.city}, ${job.state}, ${job.country}`)}
+                                </p>
+                                <p className="job-type">
+                                    <AccessTimeIcon style={{ fontSize: '14px' }} />
+                                    {toTitleCase(job.jobType)}
+                                </p>
+                                <div style={{ cursor: 'pointer' }}>
+                                    <button
+                                        className="job-details-btn"
+                                        onClick={() => viewJobs(job.id)}
+                                    >
+                                        Apply
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
+                </>
+            )}
         </div>
     );
 };
