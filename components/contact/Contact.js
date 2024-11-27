@@ -78,7 +78,7 @@ const Contact = () => {
                 <Image src='/assets/contact/serviceIcon.png' alt="Service Icon" width={50} height={50} className='addr-image' />
                 <p>Services available in <br />Chennai, Bangalore, Hyderabad, Mangalore, Coimbatore & Trichy</p>
                 <div className='contact-icon' style={{marginTop:'8px'}}>
-                  <PhoneIcon />
+                <MailOutlineIcon />
                   <p>For Support and Enquiry: <a href="mailto:contact@medicmode.com">contact@medicmode.com</a></p>
                 </div>
               </div>

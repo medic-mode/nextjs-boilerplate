@@ -300,15 +300,27 @@ const EditCourse = () => {
                         </div>
 
                         <div style={{ display: 'flex', gap: '10px'}}>
+                          <input
+                              type="checkbox"
+                              id="free"
+                              name="priceDetail"
+                              value={priceDetail}
+                              checked={priceDetail === 'Free'}
+                              onChange={() => handlePriceDetailChange('Free')}
+                          />
+                          <label htmlFor="free" style={{margin: '10px 0 20px 0'}}>Free</label>
+                          </div>
+                        <div style={{ display: 'flex', gap: '10px'}}>
                         <input
                             type="checkbox"
-                            id="free"
+                            id="contact-us"
                             name="priceDetail"
-                            value={priceDetail}
-                            checked={priceDetail === 'Free'}
-                            onChange={() => handlePriceDetailChange('Free')}
+                            value="Contact Us"
+                            checked={priceDetail === 'Contact Us'}
+                            onChange={() => handlePriceDetailChange('Contact Us')}
                         />
-                        <label htmlFor="free" style={{margin: '10px 0 20px 0'}}>Free</label>
+                        <label htmlFor="contact-us" style={{margin: '10px 0 20px 0'}}>Contact Us</label>
+                        
                         </div>
                     </div>
                     {priceDetail === 'Paid' && (

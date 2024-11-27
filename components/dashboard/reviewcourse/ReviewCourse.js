@@ -149,7 +149,7 @@ if (loading) {
                   <td>{course.mode}</td>
                   <td>{course.audience.join(', ')}</td>
                   <td>{course.priceDetail}</td>
-                  <td>{course.price === 0 ? '-' : `Rs. ${course.price}`}</td>
+                  <td>{course.priceDetail === 'Free' || course.priceDetail === 'Contact Us' ? '-' : `Rs. ${course.price}`}</td>
                   <td>
                     <Link href={`/courses/${course.id}`} >
                       View course
