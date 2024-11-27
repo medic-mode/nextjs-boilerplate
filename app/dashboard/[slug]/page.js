@@ -11,6 +11,7 @@ import ReviewEvent from '@/components/dashboard/reviewevent/ReviewEvent';
 import ReviewJob from '@/components/dashboard/reviewjob/ReviewJob';
 import ReviewPost from '@/components/dashboard/reviewpost/ReviewPost';
 import UserTable from '@/components/dashboard/users/UserTable';
+import PaymentHistory from '@/components/paymenthistory/PaymentHistory';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';

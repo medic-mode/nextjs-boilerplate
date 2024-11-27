@@ -1,6 +1,4 @@
 import nodemailer from 'nodemailer';
-import fs from 'fs';
-import path from 'path';
 
 export async function POST(request) {
   const formData = await request.formData();

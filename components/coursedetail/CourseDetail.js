@@ -10,6 +10,7 @@ import { GridLoader } from 'react-spinners';
 
 import Image from 'next/image';
 import { useAuth } from '../AuthContext';
+import BuyCourse from '../buycourse/BuyCourse';
 
 const CourseDetail = ({slug}) => {
 
@@ -193,11 +194,22 @@ const CourseDetail = ({slug}) => {
                 <Image src="/assets/courses/price.svg" alt='price-icon' className="svg-icon" width={70} height={70} style={{marginRight: '-5px'}}/>
                   <div className='course-icon-para'>
                   <p style={{color:'var(--orange)', fontWeight: 600}}>Price</p>
-                    <p>{course.priceDetail}</p>
+                    <p style={{fontWeight:600}}>
+						{course.price === 0 ? (
+							<>
+							{course.priceDetail}
+							</>
+						): (
+							<>
+							₹ {course.price}
+							</>
+						)}
+                    </p>
                   </div>
                 </div>
+                
               </div>
-              
+			  {course.priceDetail === 'Paid' && <BuyCourse id={courseId} price={course.price} title={course.courseTitle}/>}
             </div>
             <div className="course-col2">
               <img src={course.thumbnail} alt="thumbnai" />
@@ -234,6 +246,7 @@ const CourseDetail = ({slug}) => {
             </ul>
             </div>
             )}
+            
           </main>
           <main>
           <div className="course-enquiry">

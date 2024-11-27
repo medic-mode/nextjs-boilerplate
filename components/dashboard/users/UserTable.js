@@ -5,6 +5,7 @@ import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore'; // Fir
 import './UserTable.css'; 
 import { useAuth } from '@/components/AuthContext';
 import { GridLoader } from 'react-spinners';
+import Link from 'next/link';
 
 const UserTable = () => {
 
@@ -82,9 +83,10 @@ const UserTable = () => {
               <th>Phone Number</th>
               <th>Designation / Education</th>
               <th>Organization / Institution</th>
+              <th>Purchase History</th>
               <th>Password</th>
               <th>Account Created</th>
-              <th>Delete</th> {/* New Delete column */}
+              <th>Delete</th> 
             </tr>
           </thead>
           <tbody>
@@ -97,6 +99,23 @@ const UserTable = () => {
                 <td>{user.phone}</td> 
                 <td>{user.jobTitle}</td>
                 <td>{user.organization}</td>
+                {user.purchaseHistory ? (
+                  <td>
+                <Link
+                  href={{
+                    pathname: '/dashboard/users/payment-history',
+                    query: {
+                      id: user.id
+                    }
+                  }}
+                >
+                  View
+                </Link>      
+                </td>
+                ): (
+                  <td>-</td>
+                )}
+                
                 <td>{user.password}</td> 
                 <td style={{  whiteSpace: 'nowrap'}}>{formatDate(user.createdAt)}</td> 
                 <td>
