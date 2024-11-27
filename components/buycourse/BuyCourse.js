@@ -52,84 +52,70 @@ const BuyCourse = ({ id, price, title }) => {
       handleOpen();
       return;
     }
-
+  
     if (!userDetails) {
-        toast.alert('User details are not loaded yet. Please try again.', {
-            duration: 3000 
-          });
+      toast.alert('User details are not loaded yet. Please try again.', {
+        duration: 3000,
+      });
       return;
     }
-
+  
+    // Initialize purchaseDetails
+    const purchaseDetails = {
+      courseId: id,
+      courseTitle: title,
+      purchaseDate: new Date().toISOString(),
+      paymentId: null, // Will be updated upon payment success
+      paymentStatus: null, // Will be updated to 'Success' or 'Failed'
+      paymentAmount: price,
+      failureReason: null, // Will be updated if the payment fails
+    };
+  
     const options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, 
-      amount: price * 100, 
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      amount: price * 100,
       currency: 'INR',
       name: 'Medicmode',
       description: `Payment for ${title}`,
       handler: async (response) => {
-        alert(`Payment Successful! Razorpay Payment ID: ${response.razorpay_payment_id}`);
-    
-        toast.success('Payment Successful!', {
-            duration: 3000 
-        });
-    
-        // Create purchaseDetails object
-        const purchaseDetails = {
-            courseId: id,
-            courseTitle: title,
-            purchaseDate: new Date().toISOString(),
-            paymentId: response.razorpay_payment_id,
-            paymentStatus: 'Success',
-            paymentAmount: price,
-        };
-    
+        // Update payment details on success
+        purchaseDetails.paymentId = response.razorpay_payment_id;
+        purchaseDetails.paymentStatus = 'Success';
+  
+        alert(`Payment Successful! Razorpay Payment ID: ${response.razorpay_payment_id}. Our Team will contact you soon.`);
+        toast.success('Payment Successful!', { duration: 3000 });
+  
         try {
-            // Fetch the user document based on the email
-            const userDocRef = query(collection(db, 'users'), where('email', '==', userEmail));
-    
-            const querySnapshot = await getDocs(userDocRef);
-    
-            if (!querySnapshot.empty) {
-                // Get the document reference from the first document in the query snapshot
-                const userDoc = querySnapshot.docs[0];
-                const userDocRef = userDoc.ref; // Correctly accessing the document reference
-    
-                // Update the user document with the new purchase details array
-                await updateDoc(userDocRef, {
-                    purchaseHistory: arrayUnion(purchaseDetails), // Using arrayUnion to add to the array
-                });
-    
-                // Send purchase details and user details to the API
-                try {
-                    await fetch('/api/sendPurchaseDetails', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ 
-                            userDetails: userDetails, 
-                            purchaseDetails: purchaseDetails 
-                        }),
-                    });
-                } catch (error) {
-                    toast.alert('Failed to send purchase details. Please contact support.', { duration: 3000 });
-                }
-    
-            } else {
-                toast.alert('User not found. Please try again.', {
-                    duration: 3000 
-                });
-            }
-        } catch (error) {
-            toast.alert('Failed to save purchase details. Please contact support.', {
-                duration: 3000 
+          const userDocRef = query(collection(db, 'users'), where('email', '==', userEmail));
+          const querySnapshot = await getDocs(userDocRef);
+  
+          if (!querySnapshot.empty) {
+            const userDoc = querySnapshot.docs[0];
+            const userDocRef = userDoc.ref;
+  
+            // Update the user's purchase history
+            await updateDoc(userDocRef, {
+              purchaseHistory: arrayUnion(purchaseDetails),
             });
+  
+            // Send purchase details to the API
+            await fetch('/api/sendPurchaseDetails', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ userDetails, purchaseDetails }),
+            });
+          } else {
+            toast.alert('User not found. Please try again.', { duration: 3000 });
+          }
+        } catch (error) {
+          toast.alert('Failed to save purchase details. Please contact support.', { duration: 3000 });
         }
-    },
-    
+      },
       prefill: {
-        name: userDetails.firstName, // Fetched name or fallback
-        email: userDetails.email || userEmail, // Fetched email or fallback
+        name: userDetails.firstName,
+        email: userDetails.email || userEmail,
         contact: userDetails.phone ? userDetails.phone.toString().slice(-10) : '',
       },
       notes: {
@@ -139,16 +125,40 @@ const BuyCourse = ({ id, price, title }) => {
         color: '#3399cc',
       },
     };
-
+  
     const rzp = new window.Razorpay(options);
     rzp.open();
-
-    rzp.on('payment.failed', function (response) {
-        toast.alert('Payment Failed: ' + response.error.description, {
-            duration: 3000 
+  
+    rzp.on('payment.failed', async function (response) {
+      // Update purchaseDetails for failure
+      purchaseDetails.paymentId = response.error.metadata.payment_id || 'N/A';
+      purchaseDetails.paymentStatus = 'Failed';
+      purchaseDetails.failureReason = response.error.description;
+  
+      alert('Payment failed. Please try again.');
+      toast.alert('Payment Failed: ' + response.error.description, { duration: 3000 });
+  
+      try {
+        const userDocRef = query(collection(db, 'users'), where('email', '==', userEmail));
+        const querySnapshot = await getDocs(userDocRef);
+  
+        if (!querySnapshot.empty) {
+          const userDoc = querySnapshot.docs[0];
+          const userDocRef = userDoc.ref;
+  
+          // Update the user's purchase history
+          await updateDoc(userDocRef, {
+            purchaseHistory: arrayUnion(purchaseDetails),
           });
+        } else {
+          toast.alert('User not found. Please try again.', { duration: 3000 });
+        }
+      } catch (error) {
+        toast.alert('Failed to save failed payment details. Please contact support.', { duration: 3000 });
+      }
     });
   };
+  
 
   return (
     <div>
