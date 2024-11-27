@@ -198,7 +198,7 @@ const Courses = () => {
                             />
                   <h3>{course.courseTitle}</h3>
                   <div className="course-category">
-                    <p>{capitalizeFirstLetter(course.mode)} | {course.priceDetail}</p>
+                    <p>{capitalizeFirstLetter(course.mode)} | {course.priceDetail === 'Contact Us' ? 'Paid' : course.priceDetail }</p>
                     <p className="duration">
                       <AccessTimeIcon style={{ fontSize: '15px', marginRight: '5px' }} />
                       {`${course.duration.hours}:${course.duration.minutes} h`}
