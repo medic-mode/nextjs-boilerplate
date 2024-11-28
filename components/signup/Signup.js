@@ -124,20 +124,20 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 
   };
 
-  useEffect(() => {
-    const fetchCountries = async () => {
-      try {
-        const response = await fetch('https://restcountries.com/v3.1/all');
-        const data = await response.json();
-        const countryNames = data.map((country) => country.name.common).sort();
-        setCountries(countryNames);
-      } catch (error) {
-        console.error('Error fetching country data:', error);
-      }
-    };
+//   useEffect(() => {
+//     const fetchCountries = async () => {
+//       try {
+//         const response = await fetch('https://restcountries.com/v3.1/all');
+//         const data = await response.json();
+//         const countryNames = data.map((country) => country.name.common).sort();
+//         setCountries(countryNames);
+//       } catch (error) {
+//         console.error('Error fetching country data:', error);
+//       }
+//     };
 
-    fetchCountries();
-  }, []);
+//     fetchCountries();
+//   }, []);
 
 
   /**************Email validation************************/
@@ -252,7 +252,7 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 				</select>
 				</div>
 
-				<div className="item">
+				{/* <div className="item">
 				<label htmlFor="nationality">Nationality</label>
 				<select
 				id="nationality"
@@ -267,7 +267,7 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 					</option>
 				))}
 				</select>
-			</div>
+				</div> */}
 			</div>
 		</div>
 
