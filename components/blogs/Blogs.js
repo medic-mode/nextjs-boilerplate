@@ -2,8 +2,6 @@
 import { useEffect, useState } from 'react';
 import AOS from 'aos'
 import 'aos/dist/aos.css'
-import { collection, getDocs, query, orderBy, setDoc, doc, getDoc, deleteDoc, where } from 'firebase/firestore'; 
-import { db } from '../../lib/firebase'; 
 import './Blogs.css';
 import CategoryIcon from '@mui/icons-material/Category';
 import ArchiveIcon from '@mui/icons-material/Archive';
@@ -18,181 +16,33 @@ import { RWebShare } from "react-web-share";
 import { Button } from '@mui/material';
 import { GridLoader } from 'react-spinners';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useAuth } from "../AuthContext";
 import { useRouter } from 'next/navigation';
+import { useBlog } from '../BlogContext';
 
 
 const Blogs = () => {
 
-  const { logged, handleOpen, userEmail } = useAuth();
+  const { logged, userEmail, handleOpen } = useAuth();
 
-  const [blogPosts, setBlogPosts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [years, setYears] = useState([]);
-  const [months, setMonths] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('show-all');
-  const [selectedYear, setSelectedYear] = useState('');
-  const [selectedMonth, setSelectedMonth] = useState('');
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [likedPosts, setLikedPosts] = useState(new Set());
-  const [loading, setLoading] = useState(true);
+  const { blogPosts, showBlogOptions, closeBlogOptions, selectedCategory, categories, months, years, likedPosts, handleLike, recentBlog, otherBlogs, setSelectedCategory, selectedYear, setSelectedYear, selectedMonth, setSelectedMonth, setIsDrawerOpen, isDrawerOpen} = useBlog()
+  
   const router = useRouter()
 
-  useEffect(() => {
-    const fetchBlogs = async () => {
-
-      try {
-        const blogCollection = collection(db, 'blogPosts');
-        const querySnapshot = await getDocs(
-          query(
-            blogCollection,
-            where('approved', '==', 'yes'),
-            orderBy('dateCreated', 'desc')
-          )
-        );
-
-        
-        const blogs = await Promise.all(
-          querySnapshot.docs.map(async (doc) => {
-            const blogData = doc.data();
-            
-            // Fetch likes and comments count for each blog post
-            const likesCollection = collection(doc.ref, 'likes');
-            const commentsCollection = collection(doc.ref, 'comments');
-            
-            const likesSnapshot = await getDocs(likesCollection);
-            const commentsSnapshot = await getDocs(commentsCollection);
-            
-            return {
-              id: doc.id,
-              ...blogData,
-              likesCount: likesSnapshot.size,
-              commentsCount: commentsSnapshot.size,
-            };
-          })
-        );
-        
-
-        
-        // console.log('Fetched blogs:', blogs);
-        setBlogPosts(blogs);
   
-        // Extract unique categories, years, and months for filters
-        const categories = [...new Set(blogs.map(blog => blog.category))];
-        setCategories(categories);
-  
-        const years = [...new Set(blogs.map(blog => new Date(blog.dateCreated).getFullYear()))];
-        setYears(years);
-  
-        const months = [...new Set(blogs.map(blog => new Date(blog.dateCreated).getMonth() + 1))];
-        setMonths(months);
-      } catch (error) {
-        console.error("Error fetching blogs: ", error);
-      }
-     finally {
-      setLoading(false); 
-    }
-    };
-
-  
-    fetchBlogs();
-  }, [setLoading]); 
-
-
-
-  
-  // Separate useEffect for checking likes
-  useEffect(() => {
-    const checkLikes = async () => {
-      if (!userEmail) return; // If user is not logged in, exit early
-  
-      const newLikedPosts = new Set(); // Create a new Set for liked posts
-      const likesPromises = blogPosts.map(async (blog) => {
-        const userDocRef = doc(collection(db, `blogPosts/${blog.id}/likes`), userEmail);
-        const userLikeDoc = await getDoc(userDocRef);
-        if (userLikeDoc.exists()) {
-          newLikedPosts.add(blog.id); // Add blog ID to the set of liked posts
-        }
-      });
-      await Promise.all(likesPromises);
-      setLikedPosts(newLikedPosts); // Update the state with the new Set
-    };
-  
-    checkLikes();
-  }, [userEmail, blogPosts]); 
-
-
-  
-
-
-  const filteredBlogs = blogPosts.filter(blog => {
-    const matchesCategory = selectedCategory === 'show-all' || blog.category === selectedCategory;
-    const matchesYear = !selectedYear || new Date(blog.dateCreated).getFullYear().toString() === selectedYear;
-    const matchesMonth = !selectedMonth || (new Date(blog.dateCreated).getMonth() + 1).toString() === selectedMonth;
-
-    return matchesCategory && matchesYear && matchesMonth;
-  });
-
-  const recentBlog = filteredBlogs.length > 0 ? filteredBlogs[0] : null;
-  const otherBlogs = filteredBlogs.length > 1 ? filteredBlogs.slice(1) : [];
-
-  const showBlogOptions = () => setIsDrawerOpen(true);
-  const closeBlogOptions = () => setIsDrawerOpen(false);
-
-  
-  
-  const handleLike = async (blogId) => {
-
-    if (!logged) {
-      toast.info('Please login to like a post!', {
-        duration: 3000 
-      }); 
-      handleOpen();
-      return; 
-    }
-  
-    const likeRef = collection(db, `blogPosts/${blogId}/likes`);
-    const userDocRef = doc(likeRef, userEmail);
-  
-    const userLikeDoc = await getDoc(userDocRef);
-    
-    let updatedBlogs = [...blogPosts]; // Create a copy of the current blog posts
-    const blogIndex = updatedBlogs.findIndex(blog => blog.id === blogId);
-  
-    if (userLikeDoc.exists()) {
-      // User has liked, so remove their like
-      await deleteDoc(userDocRef);
-      likedPosts.delete(blogId); // Remove from liked posts
-  
-      // Decrement the like count in the local state
-      updatedBlogs[blogIndex].likesCount = updatedBlogs[blogIndex].likesCount - 1;
-    } else {
-      // User has not liked, so add their like
-      await setDoc(userDocRef, { email: userEmail });
-      likedPosts.add(blogId); // Add to liked posts
-  
-      // Increment the like count in the local state
-      updatedBlogs[blogIndex].likesCount = updatedBlogs[blogIndex].likesCount + 1;
-    }
-  
-    // Update the local state to reflect the new likes count
-    setBlogPosts(updatedBlogs);
-    setLikedPosts(new Set(likedPosts)); // Re-render to show liked status immediately
-  };
+  const [loading, setLoading] = useState(false)
 
 
 
   const handlePost = (path, e) => {
-    if (!logged) {
-      
+    e.preventDefault();
+    
+    if (!logged) {   
       toast.info('Please login to create a blog!', {
         duration: 3000 
       });
-      e.preventDefault();
       handleOpen(); 
     } else {
-     
       router.push(path);
     }
   };
@@ -215,10 +65,21 @@ const Blogs = () => {
     router.push(`/blogs/${id}?focusOnComments=true`, undefined, { shallow: true });
   };
 
+  const handleLikeClick = (id) => {
+    if (id && handleLike) {
+      handleLike(id);  
+    }
+  };
+
   const viewBlogs = (id) => {
     setLoading(true);
     router.push(`/blogs/${id}`)
   }
+
+ 
+
+ 
+
 
   return (
     <div style={{display:'flex', justifyContent:'center', }}>
@@ -238,11 +99,11 @@ const Blogs = () => {
             <p>Search</p>
             <SearchIcon style={{marginLeft: '5px'}}/>  
           </div>
-              {userEmail ===  'admin@medicmode.com' ? (
-                <p className='create-user-blog-btn create-user-blog' onClick={(e) => handlePost('/dashboard/create-post', e)}>Create Blog</p>
+              {userEmail !==  'admin@medicmode.com' ? (
+                <p className='create-user-blog-btn create-user-blog'  onClick={(e) => handlePost('/blogs/create-post', e)} >Create Blog</p>
               )
               :
-              (<p className='create-user-blog-btn create-user-blog'  onClick={(e) => handlePost('/blog/create-post', e)} >Create Blog</p>
+              (<p className='create-user-blog-btn create-user-blog' onClick={(e) => handlePost('/dashboard/create-post', e)}>Create Blog</p>
               )
               }
         </div>
@@ -252,7 +113,7 @@ const Blogs = () => {
       <div className="primary">
         {recentBlog ? (
           
-          <div className="primary-blog" data-aos='fade-up'>
+          <div className="primary-blog" >
             <div className="blog-image-container">
               <div onClick={() => viewBlogs(recentBlog.id)} style={{cursor:'pointer'}}>
                 <img src={recentBlog.thumbnail} alt={recentBlog.title} />
@@ -276,7 +137,7 @@ const Blogs = () => {
             <div className="likes">
 			{likedPosts.has(recentBlog.id) ? (
 					<FavoriteIcon 
-						onClick={() => handleLike(recentBlog.id)} 
+          onClick={() => handleLikeClick(recentBlog.id)}
 						style={{ 
 							background: 'none', 
 							border: 'none',
@@ -288,7 +149,7 @@ const Blogs = () => {
 					/> 
 				) : (
 					<FavoriteBorderIcon 
-						onClick={() => handleLike(recentBlog.id)} 
+          onClick={() => handleLikeClick(recentBlog.id)}
 						sx={{ 
               background: 'none', 
               border: 'none',
@@ -376,11 +237,12 @@ const Blogs = () => {
           <div className="user-create-blog">
               <h3>Thinking about blogging?</h3>
               <h3>Click to get started!</h3>
-              {userEmail ===  'admin@medicmode.com' ? (
-                <Button className='create-user-blog-btn' onClick={(e) => handlePost('/dashboard/create-post', e)}>Create Blog</Button>
+              {userEmail !==  'admin@medicmode.com' ? (
+                <Button className='create-user-blog-btn'  onClick={(e) => handlePost('/blogs/create-post', e)} >Create Blog</Button>
+                
               )
               :
-              (<Button className='create-user-blog-btn'  onClick={(e) => handlePost('/blogs/create-post', e)} >Create Blog</Button>
+              (<Button className='create-user-blog-btn' onClick={(e) => handlePost('/dashboard/create-post', e)}>Create Blog</Button>
               )
               }
             </div>
@@ -414,7 +276,7 @@ const Blogs = () => {
               <div className="likes">
 			  {likedPosts.has(blog.id) ? (
 					<FavoriteIcon 
-						onClick={() => handleLike(blog.id)} 
+          onClick={() => handleLikeClick(blog.id)}
 						style={{ 
 							background: 'none', 
 							border: 'none',
@@ -426,7 +288,7 @@ const Blogs = () => {
 					/>
 				) : (
 					<FavoriteBorderIcon 
-						onClick={() => handleLike(blog.id)} 
+          onClick={() => handleLikeClick(blog.id)} 
 						sx={{ 
               background: 'none', 
               border: 'none',

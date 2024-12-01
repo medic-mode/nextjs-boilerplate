@@ -1,4 +1,4 @@
-"use client"; 
+
 
 import CreatePost from '@/components/dashboard/createpost/CreatePost';
 

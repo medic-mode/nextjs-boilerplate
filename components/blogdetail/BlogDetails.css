@@ -104,14 +104,15 @@
     justify-content: center; 
     margin-top: 60px;
     flex-direction: column;
-    
-    
   }
 
-  .comment-section h3{
-    text-align: left;
-    color: var(--dark-green);
+
+  .like-comment-share{
+    display: flex;
+    align-items: center;
     margin-bottom: 10px;
+    gap: 50px;
+    color: var(--dark-green);
   }
   
   .input-wrapper {
@@ -130,6 +131,20 @@
     font-size: 15px;
     background-color: white;
     font-family: "Montserrat", sans-serif;
+  }
+
+  .input-wrapper svg{
+    transform: none !important;
+  }
+
+  .input-wrapper .send-icon{
+    position: absolute !important;
+    right: 18px !important;
+    top: 30% !important;
+    color: var(--dark-green);
+  }
+  .input-wrapper svg:hover{
+    color: var(--orange);
   }
 
   .input-wrapper textarea:focus{
@@ -244,6 +259,17 @@
       top: 70px !important;
     }
 
-   
+    .like-comment-share h3{
+      color: var(--dark-green);
+    }
+  
+    .like-comment-share{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 12px;
+      gap: 0 !important;
+    }
     
 }

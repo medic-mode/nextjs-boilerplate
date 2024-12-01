@@ -1,31 +1,45 @@
-import {  getDoc, doc } from 'firebase/firestore';
+import { getDoc, doc } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
 import BlogDetail from '@/components/blogdetail/BlogDetails';
+import { BlogProvider } from '../../../components/BlogContext';
 
 export async function generateMetadata({ params }) {
-    
     const postId = params.slug;
     const docRef = doc(db, 'blogPosts', postId);
-    const docSnap = await getDoc(docRef);
-    
-   
-    
-    const post = docSnap.data();
 
-    
+    try {
+        const docSnap = await getDoc(docRef);
 
-    return {
-        title: `Medic Mode - ${post.title}`,
-        description: post.description,
-        openGraph: {
-            title: post.title,
-            description: post.description,
-            images: post.thumbnail,
-            url: `https://medicmode.com/blogs/${postId}`,
-        },
-    };
+        if (!docSnap.exists()) {
+            throw new Error('Blog post not found');
+        }
+
+        const post = docSnap.data();
+
+        return {
+            title: `Medic Mode - ${post.title || 'Untitled'}`,
+            description: post.description || 'No description available',
+            openGraph: {
+                title: post.title || 'Untitled',
+                description: post.description || 'No description available',
+                images: post.thumbnail || '/default-thumbnail.jpg', // Provide a default thumbnail
+                url: `https://medicmode.com/blogs/${postId}`,
+            },
+        };
+    } catch (error) {
+        console.error('Error fetching blog metadata:', error);
+
+        return {
+            title: 'Medic Mode - Blog',
+            description: 'Discover insightful content on Medic Mode.',
+        };
+    }
 }
 
 export default function Page({ params }) {
-    return <BlogDetail slug={params.slug} />;
+    return (
+        <BlogProvider>
+            <BlogDetail slug={params.slug} />
+        </BlogProvider>
+    );
 }

@@ -1,4 +1,5 @@
 import Blogs from "../../components/blogs/Blogs";
+import {BlogProvider} from '../../components/BlogContext'
 
 export const metadata = {
 	title: "Medic Mode - Blogs",
@@ -21,5 +22,10 @@ export const metadata = {
   
 
 export default function Page () {
-	return <Blogs />
+	return (
+		<BlogProvider>
+		<Blogs />
+		</BlogProvider>
+	)
+	
 }

@@ -33,11 +33,10 @@ const CreatePost = () => {
 
   const navigate = useRouter();
 
-  console.log(logged)
+ 
 
   useEffect(() => {
     if (logged === false) {
-      // Redirect after a short delay to allow the toast to show briefly
       const timeout = setTimeout(() => {
         navigate.push('/blogs');
       }, 500);

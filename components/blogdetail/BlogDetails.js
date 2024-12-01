@@ -9,14 +9,27 @@ import { toast, Toaster } from 'sonner';
 import YouTube from 'react-youtube';
 import { GridLoader } from 'react-spinners';
 import { useSearchParams } from 'next/navigation';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { useAuth } from '../AuthContext';
+import { useBlog } from '../BlogContext';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import ShareIcon from '@mui/icons-material/Share';
+import { RWebShare } from "react-web-share";
+
 
 var getYouTubeID = require('get-youtube-id');
 
-const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }) => {
+const BlogDetail = ({ loading, slug}) => {
+
+    const { handleOpen , userEmail, logged } = useAuth()
+    
+    const {blogPosts, likedPosts, handleLike } = useBlog()
 
     const searchParams = useSearchParams();
     
     const postId = slug
+
 
     const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
@@ -105,6 +118,12 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }
         fetchComments();
     }, [postId]);
 
+    const handleLikeClick = (id) => {
+        if (id && handleLike) {
+          handleLike(id);  
+        }
+      };
+
     // Handle comment submission
     const handleCommentSubmit = async () => {
         if (!userEmail || !logged) {
@@ -192,8 +211,6 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }
       }
 
 
-      
-
     return (
         <div className='blog-detail-container'>
              <div
@@ -268,11 +285,66 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }
                     </div>
                 )}
                 
-
-
+               
                 {/* Comment Section */}
                 <div className="comment-section" id='comment-section' ref={commentSectionRef}>
-                    <h3>COMMENTS</h3>
+
+                    <div className="like-comment-share">
+                        <div  style={{display:'flex', alignItems:'center'}} >
+                        {likedPosts.has(postId) ? (
+                            <FavoriteIcon 
+                                onClick={() => handleLikeClick(postId)}
+                                style={{ 
+                                    background: 'none', 
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    padding: '0',
+                                    marginRight:'5px'
+                                }} 
+                                sx={{ color: 'red'}} // Change color for liked state
+                            /> 
+                        ) : (
+                            <FavoriteBorderIcon 
+                                onClick={() => handleLikeClick(postId)}
+                                sx={{ 
+                                background: 'none', 
+                                border: 'none',
+                                cursor: 'pointer',
+                                padding: '0',
+                                transition: 'transform 0.2s ease', 
+                                marginRight:'5px',
+                                '&:hover': {
+                                    transform: 'scale(1.1)', // Zoom effect on hover
+                                },
+                                color: 'var(--dark-green)' // Adjust color if necessary
+                                }} // Change color for unliked state
+                            />
+                            )} 
+                        <h3><span>{blogPosts.find((post) => post.id === postId)?.likesCount > 0 
+                            ? `${blogPosts.find((post) => post.id === postId).likesCount} LIKES` 
+                            : 'LIKE'}</span></h3>
+                            </div>
+                            <div  style={{display:'flex', alignItems:'center', gap:'8px'}}>
+                            <ChatBubbleOutlineIcon/>
+                            <h3>COMMENTS</h3>
+                            </div>
+                            <div  style={{display:'flex', alignItems:'center', gap:'8px'}}>
+                            <RWebShare
+                                data={{
+                                    text: "Medic Mode - A Gazette for Emergency Medical Professionals",
+                                    url: `https://medicmode.com/blogs/${postId}`,
+                                    title: "Medic Mode",
+
+                                }}
+                                onClick={() => toast.success('Shared successfully!', {
+                                    duration: 3000 
+                                })}
+                                >
+                            <ShareIcon style={{cursor:'pointer'}}/>
+                            </RWebShare>
+                            <h3>SHARE</h3>
+                            </div>
+                    </div>
                     <hr className='separator'/>
 
                     {/* Input for adding a comment */}
@@ -284,7 +356,7 @@ const BlogDetail = ({ userEmail, handleOpen, logged, loading, setLoading, slug }
                             value={commentText}
                             onChange={(e) => setCommentText(e.target.value)}
                         />
-                        <SendIcon onClick={handleCommentSubmit} style={{ cursor: 'pointer' }} />
+                        <SendIcon onClick={handleCommentSubmit} className='send-icon' style={{ cursor: 'pointer' }} />
                     </div>
 
                     {/* Display comments */}
