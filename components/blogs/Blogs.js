@@ -25,7 +25,7 @@ const Blogs = () => {
 
   const { logged, userEmail, handleOpen } = useAuth();
 
-  const { blogPosts, showBlogOptions, closeBlogOptions, selectedCategory, categories, months, years, likedPosts, handleLike, recentBlog, otherBlogs, setSelectedCategory, selectedYear, setSelectedYear, selectedMonth, setSelectedMonth, setIsDrawerOpen, isDrawerOpen} = useBlog()
+  const { blogPosts, showBlogOptions, closeBlogOptions, selectedCategory, categories, months, years, likedPosts, handleLike, recentBlog, otherBlogs, setSelectedCategory, selectedYear, setSelectedYear, selectedMonth, setSelectedMonth, setIsDrawerOpen, isDrawerOpen} = useBlog();
   
   const router = useRouter()
 
@@ -75,8 +75,6 @@ const Blogs = () => {
     setLoading(true);
     router.push(`/blogs/${id}`)
   }
-
- 
 
  
 
@@ -180,7 +178,7 @@ const Blogs = () => {
                     duration: 3000 
                 })}
                 >
-                   <ShareIcon style={{ cursor: 'pointer', marginLeft: '20px' }} />
+                   <ShareIcon style={{ cursor: 'pointer', marginLeft: '20px' }} /> Share
                 </RWebShare>
              
             </div>

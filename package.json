@@ -22,7 +22,7 @@
     "formidable": "^3.5.2",
     "get-youtube-id": "^1.0.1",
     "hamburger-react": "^2.5.1",
-    "next": "15.0.2",
+    "next": "^15.0.3",
     "next-sitemap": "^4.2.3",
     "nodemailer": "^6.9.16",
     "primeicons": "^7.0.0",

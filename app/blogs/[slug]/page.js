@@ -1,6 +1,6 @@
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
-import BlogDetail from '@/components/blogdetail/BlogDetails';
+import BlogDetail from '../../../components/blogdetail/BlogDetails';
 import { BlogProvider } from '../../../components/BlogContext';
 
 export async function generateMetadata({ params }) {
