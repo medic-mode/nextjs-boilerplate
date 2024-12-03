@@ -21,8 +21,14 @@ const ReviewCourse = () => {
           try {
             const querySnapshot = await getDocs(collection(db, 'courses'));
             const courses = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-            setCourses(courses);
-    
+
+
+            courses.sort((a, b) => {
+              const dateA = new Date(a.dateCreated); // Convert to Date object
+              const dateB = new Date(b.dateCreated); // Convert to Date object
+              return dateB - dateA; // Descending order
+            });
+
             // Initialize approval status and approved posts
             const initialApprovalStatus = {};
             const approvedList = []; // Temporary array to hold approved posts
@@ -33,7 +39,8 @@ const ReviewCourse = () => {
                 approvedList.push(course); // Add to approved list if already approved
               }
             });
-    
+
+            setCourses(courses);
             setApprovalStatus(initialApprovalStatus);
             setApprovedCourses(approvedList);
           } catch (error) {

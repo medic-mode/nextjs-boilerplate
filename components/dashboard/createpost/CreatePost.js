@@ -16,7 +16,8 @@ import { GridLoader } from 'react-spinners';
 const CreatePost = () => {
 
   const {userEmail, logged, loading} = useAuth()
-
+  const [authorImg, setAuthorImg] = useState(null);
+  const [authorImgPreview, setAuthorImgPreview] = useState(null);
   const [author, setAuthor] = useState('');
   const [coAuthor, setCoAuthor] = useState('');
   const [title, setTitle] = useState('');
@@ -58,6 +59,7 @@ const CreatePost = () => {
     
     try {
       let thumbnailURL = '';
+      let authorImgURL = '';
       const slideImageURLs = [];
 
       // If a thumbnail is uploaded, upload it to Firebase Storage
@@ -65,6 +67,12 @@ const CreatePost = () => {
         const storageRef = ref(storage, `thumbnails/${thumbnail.name}`);
         const uploadSnapshot = await uploadBytes(storageRef, thumbnail);
         thumbnailURL = await getDownloadURL(uploadSnapshot.ref); // Get the URL of the uploaded thumbnail
+      }
+
+      if (authorImg) {
+        const storageRef = ref(storage, `authorImg/${authorImg.name}`);
+        const uploadSnapshot = await uploadBytes(storageRef, authorImg);
+        authorImgURL = await getDownloadURL(uploadSnapshot.ref); // Get the URL of the uploaded author image
       }
 
       for (const slide of slideImages) {
@@ -77,6 +85,7 @@ const CreatePost = () => {
       // Add the post data to Firestore, including the thumbnail URL
       const docRef = await addDoc(collection(db, 'blogPosts'), {
         author,
+        authorImg: authorImgURL,
         coAuthor,
         title,
         category,
@@ -93,6 +102,8 @@ const CreatePost = () => {
 
       // Reset the form after submission
       setAuthor('');
+      setAuthorImg(null);
+      setAuthorImgPreview(null);
       setCoAuthor('');
       setTitle('');
       setCategory('');
@@ -112,7 +123,7 @@ const CreatePost = () => {
         toast.success('Blog saved successfully.', {
           duration: 3000 
         });
-        window.scrollTo(0, 0);
+        navigate.push('/dashboard/review-post');
       }
 
     } catch (e) {
@@ -130,6 +141,23 @@ const CreatePost = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleAuthorImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAuthorImg(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAuthorImgPreview(reader.result); // Create a preview of the image
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAuthorRemoveImage = () => {
+    setAuthorImg(null);
+    setAuthorImgPreview(null);
   };
 
   const handleRemoveImage = () => {
@@ -170,6 +198,48 @@ const CreatePost = () => {
             onChange={(e) => setAuthor(e.target.value)}
             required
           />
+        </div>
+
+        <div className="p-field">
+          <label htmlFor="authorImg">Upload Author Image</label>
+          {!authorImgPreview && (
+            <input
+              type="file"
+              id="authorImg"
+              accept="image/*"
+              onChange={handleAuthorImageUpload}
+              required
+            />
+          )}
+
+          {authorImgPreview && (
+            <div className="thumbnail-preview" style={{ marginTop: '10px', position: 'relative' }}>
+              <img
+                src={authorImgPreview}
+                alt="authorImg Preview"
+                style={{ width: 'auto', height: '150px', objectFit: 'cover' }}
+              />
+              <button
+                type="button"
+                onClick={handleAuthorRemoveImage}
+                style={{
+                  position: 'absolute',
+                  top: '5px',
+                  right: '5px',
+                  color: 'gray',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '30px',
+                  height: '30px',
+                  cursor: 'pointer',
+                  fontSize: '20px',
+                  boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
+                }}
+              >
+                &times;
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="p-field">

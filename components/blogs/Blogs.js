@@ -23,26 +23,27 @@ import { useBlog } from '../BlogContext';
 
 const Blogs = () => {
 
-  const { logged, userEmail, handleOpen } = useAuth();
+  const { logged, handleOpen, userEmail } = useAuth();
 
-  const { blogPosts, showBlogOptions, closeBlogOptions, selectedCategory, categories, months, years, likedPosts, handleLike, recentBlog, otherBlogs, setSelectedCategory, selectedYear, setSelectedYear, selectedMonth, setSelectedMonth, setIsDrawerOpen, isDrawerOpen} = useBlog();
+  const { blogPosts, categories, years, months, selectedCategory, setSelectedCategory, likedPosts, handleLike, showBlogOptions, recentBlog, closeBlogOptions, otherBlogs, selectedYear, setSelectedYear, selectedMonth, setSelectedMonth, isDrawerOpen, setIsDrawerOpen} = useBlog()
+
+  const [loading, setLoading] = useState(false);
+  
   
   const router = useRouter()
 
-  
-  const [loading, setLoading] = useState(false)
-
-
 
   const handlePost = (path, e) => {
-    e.preventDefault();
-    
-    if (!logged) {   
+    setLoading(true)
+    if (!logged) {
+      
       toast.info('Please login to create a blog!', {
         duration: 3000 
       });
+      e.preventDefault();
       handleOpen(); 
     } else {
+     
       router.push(path);
     }
   };
@@ -64,19 +65,12 @@ const Blogs = () => {
     setLoading(true)
     router.push(`/blogs/${id}?focusOnComments=true`, undefined, { shallow: true });
   };
-
-  const handleLikeClick = (id) => {
-    if (id && handleLike) {
-      handleLike(id);  
-    }
-  };
-
+  
   const viewBlogs = (id) => {
     setLoading(true);
     router.push(`/blogs/${id}`)
   }
 
- 
 
 
   return (
@@ -97,11 +91,11 @@ const Blogs = () => {
             <p>Search</p>
             <SearchIcon style={{marginLeft: '5px'}}/>  
           </div>
-              {userEmail !==  'admin@medicmode.com' ? (
-                <p className='create-user-blog-btn create-user-blog'  onClick={(e) => handlePost('/blogs/create-post', e)} >Create Blog</p>
+              {userEmail ===  'admin@medicmode.com' ? (
+                <p className='create-user-blog-btn create-user-blog' onClick={(e) => handlePost('/dashboard/create-post', e)}>Create Blog</p>
               )
               :
-              (<p className='create-user-blog-btn create-user-blog' onClick={(e) => handlePost('/dashboard/create-post', e)}>Create Blog</p>
+              (<p className='create-user-blog-btn create-user-blog'  onClick={(e) => handlePost('/blogs/create-post', e)} >Create Blog</p>
               )
               }
         </div>
@@ -111,7 +105,7 @@ const Blogs = () => {
       <div className="primary">
         {recentBlog ? (
           
-          <div className="primary-blog" >
+          <div className="primary-blog" data-aos='fade-up'>
             <div className="blog-image-container">
               <div onClick={() => viewBlogs(recentBlog.id)} style={{cursor:'pointer'}}>
                 <img src={recentBlog.thumbnail} alt={recentBlog.title} />
@@ -135,7 +129,7 @@ const Blogs = () => {
             <div className="likes">
 			{likedPosts.has(recentBlog.id) ? (
 					<FavoriteIcon 
-          onClick={() => handleLikeClick(recentBlog.id)}
+						onClick={() => handleLike(recentBlog.id)} 
 						style={{ 
 							background: 'none', 
 							border: 'none',
@@ -147,7 +141,7 @@ const Blogs = () => {
 					/> 
 				) : (
 					<FavoriteBorderIcon 
-          onClick={() => handleLikeClick(recentBlog.id)}
+						onClick={() => handleLike(recentBlog.id)} 
 						sx={{ 
               background: 'none', 
               border: 'none',
@@ -178,7 +172,7 @@ const Blogs = () => {
                     duration: 3000 
                 })}
                 >
-                   <ShareIcon style={{ cursor: 'pointer', marginLeft: '20px' }} /> Share
+                   <ShareIcon style={{ cursor: 'pointer', marginLeft: '20px' }} />
                 </RWebShare>
              
             </div>
@@ -235,12 +229,11 @@ const Blogs = () => {
           <div className="user-create-blog">
               <h3>Thinking about blogging?</h3>
               <h3>Click to get started!</h3>
-              {userEmail !==  'admin@medicmode.com' ? (
-                <Button className='create-user-blog-btn'  onClick={(e) => handlePost('/blogs/create-post', e)} >Create Blog</Button>
-                
+              {userEmail ===  'admin@medicmode.com' ? (
+                <Button className='create-user-blog-btn' onClick={(e) => handlePost('/dashboard/create-post', e)}>Create Blog</Button>
               )
               :
-              (<Button className='create-user-blog-btn' onClick={(e) => handlePost('/dashboard/create-post', e)}>Create Blog</Button>
+              (<Button className='create-user-blog-btn'  onClick={(e) => handlePost('/blogs/create-post', e)} >Create Blog</Button>
               )
               }
             </div>
@@ -274,7 +267,7 @@ const Blogs = () => {
               <div className="likes">
 			  {likedPosts.has(blog.id) ? (
 					<FavoriteIcon 
-          onClick={() => handleLikeClick(blog.id)}
+						onClick={() => handleLike(blog.id)} 
 						style={{ 
 							background: 'none', 
 							border: 'none',
@@ -286,7 +279,7 @@ const Blogs = () => {
 					/>
 				) : (
 					<FavoriteBorderIcon 
-          onClick={() => handleLikeClick(blog.id)} 
+						onClick={() => handleLike(blog.id)} 
 						sx={{ 
               background: 'none', 
               border: 'none',

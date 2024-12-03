@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './BlogDetails.css';
 import { db } from '../../lib/firebase'; // Add your auth configuration
-import { doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, getDocs, where, deleteDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, getDocs, where, deleteDoc, updateDoc, increment } from 'firebase/firestore';
 import SendIcon from '@mui/icons-material/Send';
 import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
 import { toast, Toaster } from 'sonner';
@@ -16,6 +16,8 @@ import { useBlog } from '../BlogContext';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ShareIcon from '@mui/icons-material/Share';
 import { RWebShare } from "react-web-share";
+import Image from 'next/image';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 
 var getYouTubeID = require('get-youtube-id');
@@ -112,7 +114,7 @@ const BlogDetail = ({ loading, slug}) => {
                 setUserDetails(userDetailsMap);
             });
 
-            return unsubscribe; // Cleanup the listener on unmount
+            return unsubscribe;
         };
 
         fetchComments();
@@ -127,39 +129,44 @@ const BlogDetail = ({ loading, slug}) => {
     // Handle comment submission
     const handleCommentSubmit = async () => {
         if (!userEmail || !logged) {
-            toast.info('Please login to add a comment!', {
-                duration: 3000 
-            });
-            handleOpen();
-            return;
+          toast.info("Please login to add a comment!", {
+            duration: 3000,
+          });
+          handleOpen();
+          return;
         }
-
+    
         if (!commentText.trim()) {
-            toast.info('Please type a comment before clicking send.', {
-                duration: 3000 
-            });
-            return;
+          toast.info("Please type a comment before clicking send.", {
+            duration: 3000,
+          });
+          return;
         }
-
+    
         try {
-            const commentsRef = collection(db, 'blogPosts', postId, 'comments');
-            await addDoc(commentsRef, {
-                email: userEmail, // Use the logged-in user's email
-                commentText,
-                timestamp: new Date(),
-            });
-            setCommentText(''); // Clear the textarea after submitting
+          const commentsRef = collection(db, "blogPosts", postId, "comments");
+          await addDoc(commentsRef, {
+            email: userEmail,
+            commentText,
+            timestamp: new Date(),
+          });
+    
+          const blogPostRef = doc(db, "blogPosts", postId);
+          await updateDoc(blogPostRef, {
+            commentsCount: increment(1),
+          });
+    
+          setCommentText("");
         } catch (error) {
-            console.error('Error adding comment: ', error);
+          console.error("Error adding comment: ", error);
         }
-    };
+      };
 
     // Handle comment deletion
     const deleteComment = async (commentId) => {
         const commentRef = doc(db, 'blogPosts', postId, 'comments', commentId);
         try {
             await deleteDoc(commentRef);
-            console.log('Comment deleted successfully.');
         } catch (error) {
             console.error('Error deleting comment: ', error);
         }
@@ -223,46 +230,48 @@ const BlogDetail = ({ loading, slug}) => {
                     <h1>{post.title}</h1>
                 </div>
                 <div className="blog-detail-description">
-                    <div>
-                        <h3 style={{fontWeight: 800}}>Author</h3>
-                        <h3>{capitalizeNames(post.author)}</h3>
-                    </div>
-                    <div>
 
-                        {post.coAuthor && post.coAuthor.trim() && post.coAuthor !== 'None' && (
-                            <>
-                            <h3 style={{fontWeight: 800}}>Co-authors</h3>
-                            <h3>{capitalizeNames(post.coAuthor)}</h3>
-                            </>
+                    <div className="blog-detail-description-one">
+                        {post.authorImg ? (
+                            <Image src={post.authorImg} alt="Person" width={48} height={48} layout='responsive'/>
+                        ):(
+                            <Image src='/assets/home/person.png' alt="Person" width={48} height={48} layout='responsive'/>
                         )}
+                        <div className="blog-detail-description-text" >
+                            <h3>{capitalizeNames(post.author)}</h3>
+                            {post.coAuthor && post.coAuthor.trim() && post.coAuthor !== 'None' && (
+                                <>
+                            <span style={{display:'flex', fontSize:'14px', gap:'10px'}}><p>with</p><h4> {capitalizeNames(post.coAuthor)}</h4></span> 
+                                </>
+                            )}
+                        </div>
                     </div>
-                    <div>
-                        <h3 style={{fontWeight: 800}}>Category</h3>
-                        <h3>{post.category}</h3>
+
+                    <div className="blog-detail-description-two">
+                        <p className="blog-detail-description-two-p">{post.category}</p>
+                        <div style={{display:'flex', alignItems:'center', gap:'5px'}}>
+                                <CalendarTodayIcon style={{fontSize:'15px'}}/>
+                                {post.updatedDate ? (
+                                    <p>{new Date(post.updatedDate).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                    })}</p>
+                                ):(
+                                    <p>{new Date(post.dateCreated).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                    })}</p>
+                                )}
+                                
+                        </div>
                     </div>
-                    <div>
-                        
-                        {post.updatedDate?.trim() ? (
-                            <>
-                            <h3 style={{fontWeight: 800}}>Updated on</h3>
-                            <h3>{new Date(post.updatedDate).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                            })}</h3>
-                            </>
-                        ) : (
-                            <>
-                            <h3 style={{fontWeight: 800}}>Published on</h3>
-                            <h3>{new Date(post.dateCreated).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                            })}</h3>
-                            </>
-                        )}
-                    </div>
-                </div>
+
+                            
+                        </div>
+                
+               
                 <hr className='separator'/>
                 <div className="blog-detail-content">
                 {post.slideImages && post.slideImages.length > 0 && (

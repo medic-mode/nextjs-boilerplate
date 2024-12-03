@@ -22,6 +22,11 @@ const UserTable = () => {
           id: doc.id,
           ...doc.data(),
         }));
+        usersList.sort((a, b) => {
+          const dateA = a.createdAt?.seconds || 0; // Ensure we have a valid date
+          const dateB = b.createdAt?.seconds || 0;
+          return dateB - dateA; // Descending order
+        });
         setUsers(usersList);
       } catch (error) {
         console.error('Error fetching users: ', error);

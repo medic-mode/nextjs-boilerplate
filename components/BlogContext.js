@@ -1,5 +1,5 @@
 'use client'
-
+import React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
 import { collection, getDocs, query, orderBy, setDoc, doc, getDoc, deleteDoc, where } from 'firebase/firestore'; 
@@ -59,7 +59,7 @@ export const BlogProvider = ({ children }) => {
             })
           );
           
-  
+          
           
           // console.log('Fetched blogs:', blogs);
           setBlogPosts(blogs);
@@ -81,14 +81,11 @@ export const BlogProvider = ({ children }) => {
       }
       };
   
-    
       fetchBlogs();
     }, [setLoading]); 
 
 
     
-
-
 
     useEffect(() => {
         const checkLikes = async () => {
@@ -150,6 +147,7 @@ export const BlogProvider = ({ children }) => {
         setLikedPosts(new Set(likedPosts)); 
       };
 
+      
       const filteredBlogs = blogPosts.filter(blog => {
         const matchesCategory = selectedCategory === 'show-all' || blog.category === selectedCategory;
         const matchesYear = !selectedYear || new Date(blog.dateCreated).getFullYear().toString() === selectedYear;
@@ -165,7 +163,7 @@ export const BlogProvider = ({ children }) => {
       const closeBlogOptions = () => setIsDrawerOpen(false);
 
     return(
-        <BlogContext.Provider value={{selectedCategory, setSelectedCategory, likedPosts, handleLike, showBlogOptions, recentBlog, otherBlogs, closeBlogOptions, blogPosts, categories, months, years, selectedYear, setSelectedYear, selectedMonth, setSelectedMonth, setIsDrawerOpen, isDrawerOpen }}>
+        <BlogContext.Provider value={{blogPosts, categories, years, months, selectedCategory, setSelectedCategory, likedPosts, handleLike, showBlogOptions, recentBlog, closeBlogOptions, otherBlogs, selectedYear, setSelectedYear, selectedMonth, setSelectedMonth, isDrawerOpen, setIsDrawerOpen}}>
             { children }
         </BlogContext.Provider>
     )

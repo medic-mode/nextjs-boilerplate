@@ -19,7 +19,13 @@ const ReviewPost = () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'blogPosts'));
         const posts = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        setBlogPosts(posts);
+
+        posts.sort((a, b) => {
+          const dateA = new Date(a.dateCreated); // Convert to Date object
+          const dateB = new Date(b.dateCreated); // Convert to Date object
+          return dateB - dateA; // Descending order
+        });
+  
 
         // Initialize approval status and approved posts
         const initialApprovalStatus = {};
@@ -32,6 +38,7 @@ const ReviewPost = () => {
           }
         });
 
+        setBlogPosts(posts);
         setApprovalStatus(initialApprovalStatus);
         setApprovedPosts(approvedList);
       } catch (error) {

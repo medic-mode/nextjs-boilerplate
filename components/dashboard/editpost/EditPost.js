@@ -16,6 +16,8 @@ const EditPost = () => {
 
 
   const [author, setAuthor] = useState('');
+  const [authorImg, setAuthorImg] = useState(null);
+  const [authorImgPreview, setAuthorImgPreview] = useState(null);
   const [coAuthor, setCoAuthor] = useState('');
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
@@ -39,6 +41,8 @@ const EditPost = () => {
         const postData = docSnap.data();
 
         setAuthor(postData.author || '');
+        setAuthorImg(postData.authorImg || null);
+        setAuthorImgPreview(postData.authorImg || null);
         setCoAuthor(postData.coAuthor || '');
         setTitle(postData.title || '');
         setCategory(postData.category || '');
@@ -76,6 +80,23 @@ const EditPost = () => {
         });
     }
   };
+
+  const handleAuthorImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const storageRef = ref(storage, `authorImg/${file.name}`);
+      uploadBytes(storageRef, file)
+        .then(() => getDownloadURL(storageRef))
+        .then((url) => {
+          setAuthorImg(url); // Set the thumbnail URL
+          setAuthorImgPreview(url); // Set the preview URL (if needed)
+        })
+        .catch((error) => {
+          toast.error('Error uploading image');
+          console.error('Error uploading image:', error);
+        });
+    }
+  };
   
   // Handle form submission
   const handleSubmit = async (event) => {
@@ -83,6 +104,8 @@ const EditPost = () => {
     try {
       await updateDoc(doc(db, 'blogPosts', postId), {
         author,
+        authorImg,
+        authorImgPreview,
         coAuthor,
         title,
         category,
@@ -96,7 +119,7 @@ const EditPost = () => {
         updatedDate: new Date().toISOString()
       });
       toast.success('Post updated successfully');
-      navigate.push('/dashboard');
+      navigate.push('/dashboard/review-post');
     } catch (error) {
       toast.error('Error updating post');
       console.error('Error updating post:', error);
@@ -141,6 +164,51 @@ const EditPost = () => {
             onChange={(e) => setAuthor(e.target.value)}
             required
           />
+        </div>
+
+        <div className="p-field">
+          <label htmlFor="authorImg">Upload Author Image</label>
+          {!authorImgPreview && (
+            <input
+              type="file"
+              id="authorImg"
+              accept="image/*"
+              onChange={handleAuthorImageUpload}
+              required
+            />
+          )}
+
+          {authorImgPreview && (
+            <div className="thumbnail-preview" style={{ marginTop: '10px', position: 'relative' }}>
+              <img
+                src={authorImgPreview}
+                alt="authorImg Preview"
+                style={{ width: 'auto', height: '150px', objectFit: 'cover' }}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  setAuthorImgPreview(null);
+                  setAuthorImg(null);
+                }}
+                style={{
+                  position: 'absolute',
+                  top: '5px',
+                  right: '5px',
+                  color: 'gray',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '30px',
+                  height: '30px',
+                  cursor: 'pointer',
+                  fontSize: '20px',
+                  boxShadow: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
+                }}
+              >
+                &times;
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="p-field">

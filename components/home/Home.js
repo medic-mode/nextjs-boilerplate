@@ -72,6 +72,12 @@ export default function Home() {
 			  })
 			  // Filter for approved events only
 			  .filter(event => event.approved === true); // Assuming approved is a string
+
+        eventList.sort((a, b) => {
+          const dateA = new Date(a.date); // Convert to Date object
+          const dateB = new Date(b.date); // Convert to Date object
+          return dateA - dateB; // Descending order
+        });
 	
 			setEvents(eventList);
 		  } catch (error) {

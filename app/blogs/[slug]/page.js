@@ -1,7 +1,6 @@
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
 import BlogDetail from '../../../components/blogdetail/BlogDetails';
-import { BlogProvider } from '../../../components/BlogContext';
 
 export async function generateMetadata({ params }) {
     const postId = params.slug;
@@ -38,8 +37,8 @@ export async function generateMetadata({ params }) {
 
 export default function Page({ params }) {
     return (
-        <BlogProvider>
+       
             <BlogDetail slug={params.slug} />
-        </BlogProvider>
+        
     );
 }

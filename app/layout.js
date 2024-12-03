@@ -4,14 +4,17 @@ import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
 import GoogleAnalytics from "@/components/GoogleAnalytics"; // Import the updated component
 import "./globals.css";
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import Script from 'next/script';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import { BlogProvider } from "@/components/BlogContext";
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
   const isDashboard = pathname.startsWith('/dashboard');
+
+
 
   return (
     <html lang="en">
@@ -38,6 +41,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <AuthProvider>
+          <BlogProvider>
           <GoogleAnalytics gaId="G-KV23NQK3GB" />
           <div className="next-app">
             <div className="content-header">
@@ -48,7 +52,7 @@ export default function RootLayout({ children }) {
             ) : (
               <div className="content-wrapper">
                 {children}
-                <div className="float">
+                <div className="float" >
                     <a href="https://wa.me/919008761372" className="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">
                         <WhatsAppIcon style={{ fontSize: '25px', color: 'white' }} />
                     </a>
@@ -59,6 +63,7 @@ export default function RootLayout({ children }) {
               <Footer />
             </div>
           </div> 
+          </BlogProvider>
         </AuthProvider>
       </body>
     </html>

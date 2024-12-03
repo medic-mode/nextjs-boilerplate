@@ -92,12 +92,13 @@ html {
   align-items: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  z-index: 1000;
-  transition: transform 0.2s ease; /* Optional hover effect */
+  z-index: 9000;
+  transition: transform 0.2s ease;
+  pointer-events: none;
 }
 
 .float:hover {
-  transform: scale(1.1); /* Optional hover effect */
+  transform: scale(1.1);
 }
 
 .float a{

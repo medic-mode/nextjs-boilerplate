@@ -20,6 +20,15 @@ const ReviewEvent = () => {
         sNo: index + 1,
         ...doc.data(),
       }));
+
+      eventsData.sort((a, b) => {
+        const dateA = new Date(a.date); // Convert to Date object
+        const dateB = new Date(b.date); // Convert to Date object
+        return dateB - dateA; // Descending order
+      });
+      
+
+
       setEvents(eventsData);
 
       // Set initial approval status

@@ -1,12 +1,12 @@
 import Blogs from "../../components/blogs/Blogs";
-import { BlogProvider } from '../../components/BlogContext'
+import { BlogProvider } from "../../components/BlogContext"
 
 export const metadata = {
 	title: "Medic Mode - Blogs",
-	description: "Medicmode LLP’s blog provides expert insights, training tips, and industry updates to help paramedics and healthcare professionals stay informed and enhance care standards.",
+	description: "Medicmode LLPs blog provides expert insights, training tips, and industry updates to help paramedics and healthcare professionals stay informed and enhance care standards.",
 	openGraph: {
 	  title: "Medic Mode - Blogs",
-	  description: "Medicmode LLP’s blog provides expert insights, training tips, and industry updates to help paramedics and healthcare professionals stay informed and enhance care standards.",
+	  description: "Medicmode LLPs blog provides expert insights, training tips, and industry updates to help paramedics and healthcare professionals stay informed and enhance care standards.",
 	  url: "https://medicmode.com/blogs", 
 	  images: [
 		{
@@ -19,13 +19,13 @@ export const metadata = {
 	  site_name: "Medic Mode"
 	}
   };
-  
+ 
 
 export default function Page () {
 	return (
-		<BlogProvider>
+		
 			<Blogs />
-		</BlogProvider>
+		
 	)
 	
 }

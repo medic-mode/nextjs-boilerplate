@@ -19,6 +19,14 @@ const ReviewJob = () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'jobs'));
         const jobs = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        
+        jobs.sort((a, b) => {
+          const dateA = a.createdAt instanceof Date ? a.createdAt : a.createdAt.toDate(); 
+          const dateB = b.createdAt instanceof Date ? b.createdAt : b.createdAt.toDate(); 
+          return dateB - dateA; // Sort in descending order
+        });
+        
+
         setJobs(jobs);
 
         const initialApprovalStatus = {};
