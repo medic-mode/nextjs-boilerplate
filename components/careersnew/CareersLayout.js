@@ -34,6 +34,12 @@ const CareersLayout = ({ children }) => {
                 id: doc.id,
             }));
 
+            jobList.sort((a, b) => {
+                const dateA = a.createdAt instanceof Date ? a.createdAt : a.createdAt.toDate(); 
+                const dateB = b.createdAt instanceof Date ? b.createdAt : b.createdAt.toDate(); 
+                return dateB - dateA; // Sort in descending order
+              });
+
             setAllJobs(jobList);
             setFilteredJobs(jobList);
 
