@@ -166,6 +166,9 @@ const PaymentHistory = () => {
                       {(status === 'failed' || status === 'cancelled') && (
                         <p style={{ color: 'red' }}>{formatStatus(status)}</p>
                       )}
+                      {!(status === 'Fetching status...' || status === 'authorized' || status === 'pending' || status === 'captured' || status === 'capturing' || status === 'refunded' || status === 'failed' || status === 'cancelled') && (
+                        <p>{formatStatus(status)}</p>
+                      )}
                     </div>
                   </div>
                 </div>
