@@ -1,39 +1,38 @@
 import Razorpay from 'razorpay';
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
-  }
-
-  const { amount, currency = 'INR' } = req.body;
-
+export async function POST(req) {
   try {
+    const { amount, currency = 'INR' } = await req.json();
+
     // Initialize Razorpay instance
     const razorpay = new Razorpay({
-      key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Public key
-      key_secret: process.env.NEXT_PUBLIC_RAZORPAY_KEY_SECRET,    // Secret key
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
     });
 
-    // Create an order with the specified amount
+    // Create an order
     const options = {
-      amount: amount * 100, // Razorpay requires the amount in the smallest currency unit (paise for INR)
+      amount: amount * 100, // Amount in paise
       currency: currency,
-      receipt: `receipt_${Date.now()}`, // Unique receipt ID
-      payment_capture: 1, // Auto-capture payments
+      receipt: `receipt_${Date.now()}`,
+      payment_capture: 1,
     };
 
     const order = await razorpay.orders.create(options);
 
-    res.status(200).json({
+    return Response.json({
       success: true,
       order,
     });
   } catch (error) {
     console.error('Error creating Razorpay order:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to create order',
-      error: error.message,
-    });
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: 'Failed to create order',
+        error: error.message,
+      }),
+      { status: 500 }
+    );
   }
 }

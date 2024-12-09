@@ -131,12 +131,12 @@ const BuyCourse = ({ id, price, title }) => {
                 body: JSON.stringify({ userDetails, purchaseDetails }),
               });
             } else {
-              toast.alert('User not found. Please try again.', {
+              toast.error('User not found. Please try again.', {
                 duration: 3000,
               });
             }
           } catch (error) {
-            toast.alert(
+            toast.error(
               'Failed to save purchase details. Please contact support.',
               { duration: 3000 }
             );
@@ -168,7 +168,7 @@ const BuyCourse = ({ id, price, title }) => {
         purchaseDetails.failureReason = response.error.description;
   
         alert('Payment failed. Please try again.');
-        toast.alert('Payment Failed: ' + response.error.description, {
+        toast.error('Payment Failed: ' + response.error.description, {
           duration: 3000,
         });
   
@@ -188,19 +188,19 @@ const BuyCourse = ({ id, price, title }) => {
               purchaseHistory: arrayUnion(purchaseDetails),
             });
           } else {
-            toast.alert('User not found. Please try again.', {
+            toast.error('User not found. Please try again.', {
               duration: 3000,
             });
           }
         } catch (error) {
-          toast.alert(
+          toast.error(
             'Failed to save failed payment details. Please contact support.',
             { duration: 3000 }
           );
         }
       });
     } catch (error) {
-      toast.alert('Failed to initiate payment. Please try again.', {
+      toast.error('Failed to initiate payment. Please try again.', {
         duration: 3000,
       });
     }
