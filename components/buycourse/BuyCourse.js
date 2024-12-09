@@ -59,6 +59,24 @@ const BuyCourse = ({ id, price, title }) => {
       });
       return;
     }
+
+    try {
+      // Call the API to create an order
+      const response = await fetch('/api/createOrder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ amount: price }),
+      });
+  
+      const data = await response.json();
+  
+      if (!data.success) {
+        throw new Error('Order creation failed');
+      }
+  
+      const { id: orderId } = data.order;
   
     // Initialize purchaseDetails
     const purchaseDetails = {
@@ -77,6 +95,7 @@ const BuyCourse = ({ id, price, title }) => {
       currency: 'INR',
       name: 'Medicmode',
       description: `Payment for ${title}`,
+      order_id: orderId,
       handler: async (response) => {
         // Update payment details on success
         purchaseDetails.paymentId = response.razorpay_payment_id;

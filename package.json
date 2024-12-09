@@ -2,6 +2,7 @@
   "name": "medicmode-latest",
   "version": "0.1.0",
   "private": true,
+  
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -17,6 +18,7 @@
     "@mui/material": "^6.1.6",
     "@mui/styled-engine-sc": "^6.1.6",
     "aos": "^2.3.4",
+    "axios": "^1.7.9",
     "emailjs-com": "^3.2.0",
     "firebase": "^11.0.1",
     "formidable": "^3.5.2",
