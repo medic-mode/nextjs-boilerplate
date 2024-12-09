@@ -39,10 +39,11 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 
 	e.preventDefault();
 
-	if (!phone) {
-		setError('Phone number is required')
+	if (!phone || phone === '91' || !/^\d{2}\d{10}$/.test(phone)) {
+		setError('Phone number is required and should contain country code followed by 10 digits');
 		return;
 	  }
+	  
   
 
     try {
