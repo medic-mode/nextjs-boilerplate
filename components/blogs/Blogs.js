@@ -28,7 +28,7 @@ const Blogs = () => {
   const { blogPosts, categories, years, months, selectedCategory, setSelectedCategory, likedPosts, handleLike, showBlogOptions, recentBlog, closeBlogOptions, otherBlogs, selectedYear, setSelectedYear, selectedMonth, setSelectedMonth, isDrawerOpen, setIsDrawerOpen} = useBlog()
 
   const [loading, setLoading] = useState(false);
-  
+  const [pendingPath, setPendingPath] = useState(null);
   
   const router = useRouter()
 
@@ -36,11 +36,11 @@ const Blogs = () => {
   const handlePost = (path, e) => {
     setLoading(true)
     if (!logged) {
-      
       toast.info('Please login to create a blog!', {
         duration: 3000 
       });
       e.preventDefault();
+      setPendingPath(path);
       handleOpen(); 
     } else {
      
@@ -51,6 +51,13 @@ const Blogs = () => {
   useEffect(() => {
     AOS.init({duration: 1000})
   }, [])
+
+  useEffect(() => {
+    if (logged && pendingPath) {
+      router.push(pendingPath); // Navigate to saved path
+      setPendingPath(null); // Reset the pending path
+    }
+  }, [logged, pendingPath, router]);
 
   if (loading || !blogPosts) {
     return (
