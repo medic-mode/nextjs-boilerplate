@@ -9,6 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useRouter } from 'next/navigation';
 
 const BuyCourse = ({ id, price, title }) => {
 
@@ -16,12 +17,15 @@ const BuyCourse = ({ id, price, title }) => {
   //Alert
   const [open, setOpen] = React.useState(false);
 
+  const navigate = useRouter()
+
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    navigate.push('/contact')
   };
 
 
