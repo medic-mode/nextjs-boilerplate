@@ -231,7 +231,7 @@ const BuyCourse = ({ id, price, title }) => {
   // };
 
   return (
-    <div>
+    <div className='buy-course'>
         <Toaster position="top-center" richColors /> 
       <button onClick={handleClickOpen} className="buy-course-btn">
         Buy Course
