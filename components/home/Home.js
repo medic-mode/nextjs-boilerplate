@@ -27,7 +27,7 @@ import {
   import "react-vertical-timeline-component/style.min.css";
   import { FaCalendarAlt } from "react-icons/fa";
   import { db } from '../../lib/firebase'; 
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
 
 
 
@@ -40,53 +40,57 @@ export default function Home() {
 
 	  const [events, setEvents] = useState([]);
 
-	  useEffect(() => {
-		const fetchEvents = async () => {
-
-		  try {
-			const eventsCollection = collection(db, 'events');
-			const eventSnapshot = await getDocs(eventsCollection);
-			
-			const eventList = eventSnapshot.docs
-			  .map(doc => {
-				const eventData = doc.data();
-				
-				// Format date based on the data type
-				const formattedDate = typeof eventData.date === 'string' 
-				  ? new Date(eventData.date).toLocaleDateString('en-US', {
-					  year: 'numeric',
-					  month: 'long',
-					  day: 'numeric'
-					})
-				  : eventData.date.toDate().toLocaleDateString('en-US', {
-					  year: 'numeric',
-					  month: 'long',
-					  day: 'numeric'
-					});
-	
-				return {
-				  id: doc.id,
-				  ...eventData,
-				  date: formattedDate,
-				};
-			  })
-			  // Filter for approved events only
-			  .filter(event => event.approved === true); // Assuming approved is a string
-
-        eventList.sort((a, b) => {
-          const dateA = new Date(a.date); // Convert to Date object
-          const dateB = new Date(b.date); // Convert to Date object
-          return dateA - dateB; // Descending order
-        });
-	
-			setEvents(eventList);
-		  } catch (error) {
-			console.error('Error fetching events:', error);
-		  }
-		};
-	
-		fetchEvents();
-	  }, []);
+    useEffect(() => {
+      const fetchEvents = async () => {
+        try {
+          const eventsCollection = collection(db, 'events');
+          const eventSnapshot = await getDocs(eventsCollection);
+    
+          const currentDate = new Date(); // Get the current date
+          const updatedEventList = [];
+    
+          for (const docSnap of eventSnapshot.docs) {
+            const eventData = docSnap.data();
+    
+            // Parse the event date
+            const eventDate =
+              typeof eventData.date === 'string'
+                ? new Date(eventData.date)
+                : eventData.date.toDate();
+    
+            // Check if the event is approved and in the future
+            if (eventData.approved === true && eventDate >= currentDate) {
+              // Format the event date
+              const formattedDate = eventDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              });
+    
+              updatedEventList.push({
+                id: docSnap.id,
+                ...eventData,
+                date: formattedDate,
+              });
+            } else if (eventData.approved === true && eventDate < currentDate) {
+              // Set event to unapproved if in the past
+              await updateDoc(doc(db, 'events', docSnap.id), {
+                approved: false,
+              });
+            }
+          }
+    
+          // Sort events by date in ascending order
+          updatedEventList.sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+          setEvents(updatedEventList);
+        } catch (error) {
+          console.error('Error fetching events:', error);
+        }
+      };
+    
+      fetchEvents();
+    }, []);
 
   return (
     <div className="home-container">
@@ -243,6 +247,7 @@ export default function Home() {
 
 {/* ***************** events *********************/}
 
+{events.length > 0 && (
 <div className="events-container">
   <h2>
     Upcoming <span style={{ color: 'var(--orange)' }}>Events</span>
@@ -284,7 +289,7 @@ export default function Home() {
     )}
   </VerticalTimeline>
 </div>
-
+)}
 
 {/* ***************** Testimony *********************/}
 
