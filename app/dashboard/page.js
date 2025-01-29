@@ -10,20 +10,21 @@ import { GridLoader } from "react-spinners";
 
  const Page = () => {
 
-	const {loading, logged, setLoading} = useAuth()
+	const {loading, logged, setLoading, userEmail} = useAuth()
   	
 	const router = useRouter();
 
+  console.log(userEmail)
 
   useEffect(() => {
     setLoading(false)
 
     // Only redirect if not logged and loading is false
-    if (!loading && !logged) {
+    if (!loading && (!logged || userEmail !== 'admin@medicmode.com')) {
       console.log("Redirecting to homepage");
       router.push('/');
     }
-  }, [loading, logged, router]);
+  }, [loading, logged, userEmail, router]);
 
   if (loading) {
     // Show the loader if loading is true
@@ -38,7 +39,7 @@ import { GridLoader } from "react-spinners";
 
 	return (
 		<>
-		{logged ? (
+		{(loading || userEmail === 'admin@medicmode.com') ? (
       <UserTable />
     ) :(
 			<div className="loading-container">

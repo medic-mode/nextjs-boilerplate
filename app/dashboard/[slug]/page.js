@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import { GridLoader } from 'react-spinners';
 
 const DashboardPage = () => {
-  const { loading, logged, setLoading } = useAuth();  // Check your useAuth logic to ensure this returns the correct value
+  const { loading, logged, setLoading, userEmail } = useAuth();  // Check your useAuth logic to ensure this returns the correct value
   const router = useRouter();
   const { slug } = useParams();
 
@@ -42,7 +42,7 @@ const DashboardPage = () => {
     setLoading(false)
 
     // Only redirect if not logged and loading is false
-    if (!loading && !logged) {
+    if (!loading && (!logged || userEmail !== 'admin@medicmode.com')) {
       router.push('/');
     }
   }, [loading, logged, router]);
