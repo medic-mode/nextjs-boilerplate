@@ -1,15 +1,18 @@
-import { toast } from 'sonner';
+'use client'
+import { toast, Toaster } from 'sonner';
 import CloseIcon from '@mui/icons-material/Close';
 import { useRef, useState } from 'react';
 import './ApplyForm.css'
+import { PulseLoader } from 'react-spinners';
 
 const ApplyForm = ({ isOpen, onClose, jobTitle }) => {
 
-  
+  const [mailSent, setMailSent] = useState(false)
+
   const formRef = useRef();
 
   const [formData, setFormData] = useState({
-    jobTitle,
+    jobTitle: jobTitle,
     fullName: '',
     email: '',
     contact: '',
@@ -25,11 +28,24 @@ const ApplyForm = ({ isOpen, onClose, jobTitle }) => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    if (file) {
+      // Check file type (e.g., PDF) and size (e.g., max 5MB)
+      if (file.type !== 'application/pdf') {
+        toast.error('Please upload a valid PDF resume.');
+        return;
+      }
+      // if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      //   toast.error('Resume file size should not exceed 5MB.');
+      //   return;
+      // }
+    }
     setFormData((prevData) => ({ ...prevData, resume: file }));
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+
+    setMailSent(true)
   
     const { fullName, email, contact, experience, presentOrganization, resume, jobTitle } = formData;
   
@@ -57,6 +73,7 @@ const ApplyForm = ({ isOpen, onClose, jobTitle }) => {
       const result = await response.json();
   
       if (response.ok) {
+        setMailSent(false)
         toast.success(result.message);
         setFormData({
           jobTitle,
@@ -82,6 +99,7 @@ const ApplyForm = ({ isOpen, onClose, jobTitle }) => {
 
   return (
     <div className="modal-overlay">
+      <Toaster position="top-center" richColors />
       <div className="modal-content">
         <button className="close-btn" onClick={onClose}><CloseIcon /></button>
         <h2>Apply for the Job</h2>
@@ -115,8 +133,10 @@ const ApplyForm = ({ isOpen, onClose, jobTitle }) => {
             <label htmlFor="resume">Upload Resume</label>
             <input type="file" id="resume" name="resume" onChange={handleFileChange} required />
           </div>
-          <div>
-            <button type="submit">Submit Application</button>
+          <div style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+            {mailSent ? (<PulseLoader color={"#0A4044"} mailSent={mailSent} size={6}/>) : (
+              <button type="submit">Submit Application</button>
+            )}
           </div>
         </form>
       </div>

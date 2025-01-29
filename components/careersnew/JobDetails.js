@@ -5,13 +5,16 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { db } from '../../lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
-import { useAuth } from '../AuthContext';
 import ApplyForm from './ApplyForm';
 import { Toaster } from 'sonner';
+import { GridLoader } from 'react-spinners';
+import { useAuth } from '../AuthContext';
 
 const JobDetails = ({ slug }) => {
   const [jobData, setJobData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { loading } = useAuth()
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -32,13 +35,6 @@ const JobDetails = ({ slug }) => {
     fetchJob();
   }, [slug]);
 
-  function toTitleCase(str) {
-    return str
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
-  }
-
   const handleApplyClick = () => {
     setIsModalOpen(true); // Open the modal when the button is clicked
   };
@@ -47,22 +43,23 @@ const JobDetails = ({ slug }) => {
     setIsModalOpen(false); // Close the modal
   };
 
-  const jobTitle = jobData?.jobTitle; // Use optional chaining to handle null jobData
+  // Ensure the jobTitle is available before rendering ApplyForm
+  const jobTitle = jobData?.jobTitle;
 
   return (
     <div className="job-details-container">
       <Toaster position="top-center" richColors />
       {jobData ? (
         <div className="job-details">
-          <h2>{toTitleCase(jobData.jobTitle)}</h2>
+          <h2>{jobTitle}</h2>
           <div className="job-short-details">
             <p>
               <LocationOnIcon style={{ fontSize: '17px' }} />
-              {toTitleCase(`${jobData.city}, ${jobData.state}, ${jobData.country}`)}
+              {jobData.city}, {jobData.state}, {jobData.country}
             </p>
             <p>
               <AccessTimeIcon style={{ fontSize: '15px' }} />
-              {toTitleCase(jobData.jobType)}
+              {jobData.jobType}
             </p>
           </div>
           <div className="job-descriptions">
@@ -76,9 +73,13 @@ const JobDetails = ({ slug }) => {
           </button>
         </div>
       ) : (
-        <p>Loading job details...</p>
+        <div className="loading-container">
+          <GridLoader color={"#0A4044"} loading={loading} size={10} />
+        </div>
       )}
-      <ApplyForm isOpen={isModalOpen} onClose={handleCloseModal} jobTitle={jobTitle} />
+
+      {/* Pass jobTitle only after jobData is loaded */}
+      {jobData && <ApplyForm isOpen={isModalOpen} onClose={handleCloseModal} jobTitle={jobTitle} />}
     </div>
   );
 };

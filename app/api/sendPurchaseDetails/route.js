@@ -12,7 +12,7 @@ export async function POST(request) {
 
   // Nodemailer setup for Zoho Mail SMTP
   const transporter = nodemailer.createTransport({
-    host: "smtppro.zoho.in",
+    host: "smtp.zoho.in",
     secure: true,
     port: 465,
     auth: {

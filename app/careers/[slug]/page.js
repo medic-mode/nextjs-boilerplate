@@ -14,7 +14,6 @@ export async function generateMetadata({ params }) {
     
     const job = docSnap.data();
 
-    
 
     return {
         title: `Medic Mode - ${job.jobTitle}`,

@@ -11,6 +11,8 @@ export async function POST(request) {
   const resume = formData.get('resume');  // This is a File object
   const jobTitle = formData.get('jobTitle');
 
+  
+
   // Validation
   if (!fullName || !email || !contact || !resume) {
     return new Response(JSON.stringify({ message: "Please fill all required fields and upload a resume." }), { status: 400 });
@@ -22,12 +24,12 @@ export async function POST(request) {
 
   // Nodemailer setup
   const transporter = nodemailer.createTransport({
-    host: "smtppro.zoho.in",
+    host: "smtp.zoho.in",
     secure: true,
     port: 465,
     auth: {
       user: process.env.ZOHO_USER,
-      pass: process.env.ZOHO_PASS,
+      pass: process.env.ZOHO_PASS
     },
   });
 
