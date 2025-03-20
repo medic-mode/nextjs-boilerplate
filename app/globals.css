@@ -22,12 +22,13 @@ body {
 .next-app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Make the container take up at least the full viewport height */
+  min-height: 100vh; 
 }
 
 .content-wrapper {
   flex-grow: 1; /* This allows the content to take up all remaining space */
   padding-top: 80px; /* Adjust for header height */
+  
 }
 
 .content-footer {
@@ -78,7 +79,7 @@ html {
   background: #F8F8FF
 }
 
-.float {
+.next-app .whatsapp-float {
   position: fixed;
   bottom: 30px;
   right: 30px;
@@ -91,16 +92,16 @@ html {
   align-items: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  z-index: 9000;
   transition: transform 0.2s ease;
-  pointer-events: none;
+  z-index: 999;
 }
 
-.float:hover {
+
+.next-app .whatsapp-float:hover  {
   transform: scale(1.1);
 }
 
-.float a{
+.next-app .whatsapp-float a{
   width: 100%; /* Make the anchor take full width */
   height: 100%; /* Make the anchor take full height */
   display: flex; /* Flex to center the icon */

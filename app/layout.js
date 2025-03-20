@@ -9,12 +9,13 @@ import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import Script from 'next/script';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { BlogProvider } from "@/components/BlogContext";
+import ScrollToTop from "@/components/scrolltotop/ScrollToTop";
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
   const isDashboard = pathname.startsWith('/dashboard');
 
-
+	
 
   return (
     <html lang="en">
@@ -52,16 +53,21 @@ export default function RootLayout({ children }) {
             ) : (
               <div className="content-wrapper">
                 {children}
-                <div className="float" >
-                    <a href="https://wa.me/919008761372" className="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">
-                        <WhatsAppIcon style={{ fontSize: '25px', color: 'white' }} />
-                    </a>
-                </div>
               </div> 
             )}
             <div className="content-footer">
               <Footer />
             </div>
+			<div className="float">
+				<div className="scroll-to-top">
+					<ScrollToTop />
+				</div>
+				<div className="whatsapp-float">
+					<a href="https://wa.me/919008761372" target="_blank" rel="noopener noreferrer" aria-label="Chat with us on WhatsApp">
+						<WhatsAppIcon style={{ fontSize: '25px', color: 'white', cursor:'pointer' }} />
+					</a>
+				</div>
+			</div>
           </div> 
           </BlogProvider>
         </AuthProvider>
