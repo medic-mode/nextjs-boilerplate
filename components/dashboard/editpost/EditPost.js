@@ -10,6 +10,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { toast, Toaster } from 'sonner';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
+import 'primeicons/primeicons.css';
 
 const EditPost = () => {
   const searchParams = useSearchParams();  // This will fetch query parameters
@@ -30,6 +31,8 @@ const EditPost = () => {
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [slideImages, setSlideImages] = useState([]);
   const [slidePreviews, setSlidePreviews] = useState([]);
+
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     async function fetchPostData() {
@@ -102,6 +105,7 @@ const EditPost = () => {
   // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setSubmitted(true)
     try {
       await updateDoc(doc(db, 'blogPosts', postId), {
         author,
@@ -124,6 +128,8 @@ const EditPost = () => {
     } catch (error) {
       toast.error('Error updating post');
       console.error('Error updating post:', error);
+    } finally {
+      setSubmitted(false); 
     }
   };
   
@@ -175,7 +181,6 @@ const EditPost = () => {
               id="authorImg"
               accept="image/*"
               onChange={handleAuthorImageUpload}
-              required
             />
           )}
 
@@ -381,7 +386,12 @@ const EditPost = () => {
               />
         </div>
 
-        <Button className="create-post-btn" type="submit" label="Update Post" />
+                <Button 
+                    className="create-post-btn" 
+                    type="submit" 
+                    label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "Update Blog"} 
+                    disabled={submitted} 
+                  />
       </form>
     </div>
   );

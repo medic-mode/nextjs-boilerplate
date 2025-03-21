@@ -9,7 +9,7 @@ import { db, storage } from '../../../lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; 
 import { useRouter } from 'next/navigation';
-
+import 'primeicons/primeicons.css';
 
 const CreateCourse = () => {
 
@@ -25,12 +25,15 @@ const CreateCourse = () => {
     const [priceDetail, setPriceDetail] = useState('')
     const [price, setPrice] = useState(0)
     const [highlights, setHighlights] = useState('')
+    const [submitted, setSubmitted] = useState(false);
+
     const ratingValue = 3.5
 
     const navigate = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setSubmitted(true)
         
         try {
           let thumbnailURL = '';
@@ -87,7 +90,9 @@ const CreateCourse = () => {
           toast.error(('Course not saved', e), {
             duration: 3000 
           });
-        }
+        } finally {
+            setSubmitted(false); 
+          }
       };
 
     const handleImageUpload = (e) => {
@@ -127,7 +132,7 @@ const CreateCourse = () => {
         <h1>Create Course</h1>
         <form onSubmit={handleSubmit}>
             <div className="p-field">
-                <label htmlFor="courseTitle">Course Title</label>
+                <label htmlFor="courseTitle">Course Title*</label>
                 <InputText
                     id="courseTitle"
                     value={courseTitle}
@@ -136,15 +141,16 @@ const CreateCourse = () => {
                 />
             </div>
             <div className="p-field">
-                <label htmlFor="courseTitle">Trainer Name</label>
+                <label htmlFor="courseTitle">Trainer Name*</label>
                 <InputText
                     id="trainer"
                     value={trainer}
                     onChange={(e) => setTrainer(e.target.value)}
+                    required
                 />
             </div>
             <div className="p-field">
-                <label htmlFor="minutes">Duration</label>
+                <label htmlFor="minutes">Duration*</label>
                 <div style={{ display: 'flex', gap: '10px' }}>
                     <InputText
                         type="number"
@@ -199,7 +205,7 @@ const CreateCourse = () => {
                     </div>
 
             <div className="p-field">
-                <label htmlFor="audience">Target Audience (Separate by comma)</label>
+                <label htmlFor="audience">Target Audience (Separate by comma)*</label>
                 <InputText
                     id="audience"
                     value={audience}
@@ -208,7 +214,7 @@ const CreateCourse = () => {
                 />
             </div>
             <div className="p-field">
-                <label htmlFor="thumbnail">Upload Thumbnail Image</label>
+                <label htmlFor="thumbnail">Upload Thumbnail Image*</label>
                 {!preview && (
                     <input
                     type="file"
@@ -249,7 +255,7 @@ const CreateCourse = () => {
                  )}
                 </div>
             <div className="p-field">
-                <label htmlFor="courseDescription">Course Description</label>
+                <label htmlFor="courseDescription">Course Description*</label>
                 <Editor
                     className="content-editor"
                     id="courseDescription"
@@ -260,7 +266,7 @@ const CreateCourse = () => {
                 />
             </div>
             <div className="p-field">
-                <label htmlFor="topics">Topics Covered</label>
+                <label htmlFor="topics">Topics Covered*</label>
                 <Editor
                     className="content-editor"
                     id="topics"
@@ -271,7 +277,7 @@ const CreateCourse = () => {
                 />
             </div>
             <div className="p-field">
-                <label htmlFor="topics">Highlights</label>
+                <label htmlFor="topics">Highlights*</label>
                 <Editor
                     className="content-editor"
                     id="highlights"
@@ -331,7 +337,13 @@ const CreateCourse = () => {
                       </div>
                     )}
                 </div>
-            <Button className="create-course-btn" type="submit" label="Create Course" />
+                <p>*Required fields</p>
+                <Button 
+                    className="create-course-btn" 
+                    type="submit" 
+                    label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "Create course"} 
+                    disabled={submitted} 
+                />
         </form>
     </div>
   )

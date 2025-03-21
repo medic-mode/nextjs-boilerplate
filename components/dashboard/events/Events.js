@@ -5,15 +5,19 @@ import { Toaster, toast } from 'sonner';
 import { db } from '../../../lib/firebase'; // import the Firestore database
 import { collection, addDoc } from 'firebase/firestore'; // import Firestore methods
 import './Events.css';
+import 'primeicons/primeicons.css';
+import { Button } from 'primereact/button';
 
 const Events = () => {
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitted(true)
 
     try {
       await addDoc(collection(db, 'events'), {
@@ -32,6 +36,8 @@ const Events = () => {
     } catch (error) {
       toast.error('Failed to create event. Please try again.');
       console.error("Error adding document: ", error);
+    }finally {
+      setSubmitted(false); 
     }
   };
 
@@ -41,7 +47,7 @@ const Events = () => {
       <h1>Create an Event</h1>
       <form onSubmit={handleSubmit}>
         <div className="p-field">
-          <label htmlFor="title">Event Title</label>
+          <label htmlFor="title">Event Title*</label>
           <InputText
             id="title"
             value={title}
@@ -50,7 +56,7 @@ const Events = () => {
           />
         </div>
         <div className="p-field">
-          <label htmlFor="location">Event Location</label>
+          <label htmlFor="location">Event Location*</label>
           <InputText
             id="location"
             value={location}
@@ -59,7 +65,7 @@ const Events = () => {
           />
         </div>
         <div className="p-field">
-          <label htmlFor="date">Event Date</label>
+          <label htmlFor="date">Event Date*</label>
           <input
             type="date"
             id="date"
@@ -69,7 +75,7 @@ const Events = () => {
           />
         </div>
         <div className="p-field">
-          <label htmlFor="description">Description</label>
+          <label htmlFor="description">Description*</label>
           <textarea
             rows="3"
             style={{ resize: 'vertical', width: 'auto' }}
@@ -78,7 +84,13 @@ const Events = () => {
             required
           />
         </div>
-        <button className='create-events-btn' type="submit">Create Event</button>
+        <p>*Required fields</p>
+        <Button
+            className="create-events-btn" 
+            type="submit" 
+            label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "Create Event"} 
+            disabled={submitted} 
+          />
       </form>
     </div>
   );

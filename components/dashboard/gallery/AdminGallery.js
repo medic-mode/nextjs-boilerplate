@@ -7,12 +7,15 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../../lib/firebase'; 
 import { toast, Toaster } from 'sonner';
 import { GridLoader } from 'react-spinners';
+import 'primeicons/primeicons.css';
+import { Button } from 'primereact/button';
 
 const AdminGallery = () => {
   const [thumbnail, setThumbnail] = useState(null);
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const [caption, setCaption] = useState('');
   const [carouselImages, setCarouselImages] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
 
   // Handle thumbnail image upload
   const handleThumbnailUpload = (e) => {
@@ -59,6 +62,7 @@ const AdminGallery = () => {
 
   // Handle uploading gallery data to Firestore
   const handleUploadGallery = async () => {
+    setSubmitted(true)
     if (!thumbnail || !caption || carouselImages.length === 0) {
       alert("Please upload a thumbnail, caption, and at least one carousel image.");
       return;
@@ -97,6 +101,8 @@ const AdminGallery = () => {
       toast.error('Failed to upload gallery. Please try again.', {
         duration: 3000 
       });
+    }finally {
+      setSubmitted(false); 
     }
   };
 
@@ -257,7 +263,13 @@ const AdminGallery = () => {
           </div>
         ))}
       </div>
-      <button className='upload-gallery-btn' onClick={handleUploadGallery}>Upload</button>
+      <Button 
+            className="upload-gallery-btn" 
+            type="submit" 
+            label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "Upload"} 
+            disabled={submitted} 
+            onClick={handleUploadGallery}
+          />
 
         <hr style={{border:'1px solid var(--dark-green)', margin: '20px 0'}}/>
         <div className="admin-gallery-view">

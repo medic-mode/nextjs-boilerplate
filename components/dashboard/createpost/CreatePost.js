@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthContext';
 import { GridLoader } from 'react-spinners';
 import { v4 as uuidv4 } from 'uuid';
-
+import 'primeicons/primeicons.css';
 
 const CreatePost = () => {
 
@@ -32,10 +32,12 @@ const CreatePost = () => {
   const [slideImages, setSlideImages] = useState([]);
   const [slidePreviews, setSlidePreviews] = useState([]);
 
+  const [submitted, setSubmitted] = useState(false);
+
 
   const navigate = useRouter();
 
- 
+  
 
   useEffect(() => {
     if (logged === false) {
@@ -57,7 +59,7 @@ const CreatePost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    setSubmitted(true)
     try {
       let thumbnailURL = '';
       let authorImgURL = '';
@@ -129,6 +131,8 @@ const CreatePost = () => {
 
     } catch (e) {
       console.error('Error adding document: ', e);
+    } finally {
+      setSubmitted(false); 
     }
   };
 
@@ -192,7 +196,7 @@ const CreatePost = () => {
       <h1>Create Blog</h1>
       <form onSubmit={handleSubmit}>
         <div className="p-field">
-          <label htmlFor="author">Author Full Name</label>
+          <label htmlFor="author">Author Full Name*</label>
           <InputText
             id="author"
             value={author}
@@ -209,7 +213,7 @@ const CreatePost = () => {
               id="authorImg"
               accept="image/*"
               onChange={handleAuthorImageUpload}
-              required
+              
             />
           )}
 
@@ -253,7 +257,7 @@ const CreatePost = () => {
         </div>
 
         <div className="p-field">
-          <label htmlFor="title">Title of the Blog</label>
+          <label htmlFor="title">Title of the Blog*</label>
           <InputText
             id="title"
             value={title}
@@ -263,7 +267,7 @@ const CreatePost = () => {
         </div>
 
         <div className="p-field">
-          <label htmlFor="category">Category</label>
+          <label htmlFor="category">Category*</label>
           <select
             id="category"
             value={category}
@@ -304,7 +308,7 @@ const CreatePost = () => {
         </div>
 
         <div className="p-field">
-          <label htmlFor="thumbnail">Upload Thumbnail Image</label>
+          <label htmlFor="thumbnail">Upload Thumbnail Image*</label>
           {!preview && (
             <input
               type="file"
@@ -373,7 +377,7 @@ const CreatePost = () => {
         </div>
 
         <div className="p-field">
-          <label htmlFor="content">Content</label>
+          <label htmlFor="content">Content*</label>
           <Editor
             className="content-editor"
             id="content"
@@ -393,8 +397,14 @@ const CreatePost = () => {
               />
             </div>
           )}
-        
-        <Button className="create-post-btn" type="submit" label="Create Post" />
+          <p>*Required fields</p>
+        <Button 
+            className="create-post-btn" 
+            type="submit" 
+            label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "Create Blog"} 
+            disabled={submitted} 
+          />
+        {/* <Button className="create-post-btn" type="submit" label="Create Post" /> */}
       </form>
     </div>
   );

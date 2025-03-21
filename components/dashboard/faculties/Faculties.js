@@ -4,8 +4,13 @@ import { collection, addDoc, getDocs, updateDoc, doc } from 'firebase/firestore'
 import { db } from '../../../lib/firebase'; 
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import './Faculties.css';
+import { Button } from 'primereact/button';
+import 'primeicons/primeicons.css';
 
 const Faculties = () => {
+
+    const [submitted, setSubmitted] = useState(false);
+
     const [formData, setFormData] = useState({
         name: '',
         designation: '',
@@ -43,6 +48,7 @@ const Faculties = () => {
     };
 
     const handleUpload = async () => {
+        setSubmitted(true)
         try {
             const { name, designation, contact, email, image } = formData;
 
@@ -91,7 +97,9 @@ const Faculties = () => {
         } catch (error) {
             console.error('Error adding/updating document: ', error);
             alert('Error adding/updating faculty member');
-        }
+        }finally {
+            setSubmitted(false); 
+          }
     };
 
     const handleEdit = (faculty) => {
@@ -110,7 +118,7 @@ const Faculties = () => {
             <h2>{editingId ? 'Edit Faculty Member' : 'Add Faculty Member'}</h2>
             <div className="faculty-inputs">
                 <div className='faculty-item'>
-                    <label>Name:</label>
+                    <label>Name</label>
                     <input
                         type="text"
                         name="name"
@@ -120,7 +128,7 @@ const Faculties = () => {
                     />
                 </div>
                 <div className='faculty-item'>
-                    <label>Designation:</label>
+                    <label>Designation</label>
                     <input
                         type="text"
                         name="designation"
@@ -130,7 +138,7 @@ const Faculties = () => {
                     />
                 </div>
                 <div className='faculty-item'>
-                    <label>Contact:</label>
+                    <label>Contact</label>
                     <input
                         type="text"
                         name="contact"
@@ -157,9 +165,13 @@ const Faculties = () => {
                     />
                 </div>
                 <div className='faculty-item'>
-                    <button className='faculty-btn' onClick={handleUpload}>
-                        {editingId ? 'Update' : 'Upload'}
-                    </button>
+                <Button 
+                    className="faculty-btn" 
+                    type="submit" 
+                    label={submitted ? <i className="pi pi-spin pi-spinner"></i> : (editingId ? 'Update' : 'Upload')} 
+                    disabled={submitted} 
+                    onClick={handleUpload}
+                    />
                 </div>
             </div>
 

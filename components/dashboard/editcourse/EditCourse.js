@@ -1,5 +1,6 @@
 "use client"
 import React, {  useEffect, useState } from 'react';
+import './EditCourse.css'
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Editor } from 'primereact/editor';
@@ -8,6 +9,7 @@ import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; 
 import { toast, Toaster } from 'sonner';
 import { useRouter, useSearchParams } from 'next/navigation';
+import 'primeicons/primeicons.css';
 
 const EditCourse = () => {
 
@@ -28,6 +30,7 @@ const EditCourse = () => {
   const [price, setPrice] = useState(0);
   const [highlights, setHighlights] = useState('');
   const [ratingValue, setRatingValue] = useState(3.5);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     async function fetchCourseData() {
@@ -81,6 +84,7 @@ const EditCourse = () => {
     // Handle form submission
     const handleSubmit = async (event) => {
       event.preventDefault();
+      setSubmitted(true)
       try {
         await updateDoc(doc(db, 'courses', courseId), {
           courseTitle,
@@ -105,6 +109,8 @@ const EditCourse = () => {
       } catch (error) {
         toast.error('Error updating course');
 
+      }finally {
+        setSubmitted(false); 
       }
     };
 
@@ -335,7 +341,12 @@ const EditCourse = () => {
                       </div>
                     )}
                 </div>
-            <Button className="create-course-btn" type="submit" label="Update Course" />
+                <Button 
+                  className="create-course-btn" 
+                  type="submit" 
+                  label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "Update Course"} 
+                  disabled={submitted} 
+                />
         </form>
     </div>
   )

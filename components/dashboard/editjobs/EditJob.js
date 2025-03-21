@@ -10,12 +10,14 @@ import { toast, Toaster } from 'sonner';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { InputText } from 'primereact/inputtext';
 import { useAuth } from '@/components/AuthContext';
+import 'primeicons/primeicons.css';
 
 
 const EditJob = () => {
 
     const searchParams = useSearchParams();  
     const jobId = searchParams.get('id');
+    const [submitted, setSubmitted] = useState(false);
 
     const {setLoading} = useAuth()
 
@@ -67,7 +69,7 @@ const EditJob = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setSubmitted(true)
     try {
       // Save the data to Firestore
       await updateDoc(doc(db, 'jobs', jobId), {
@@ -89,6 +91,8 @@ const EditJob = () => {
       navigate.push('/dashboard'); 
     } catch (error) {
       toast.error("Error updating document:");
+    }finally {
+      setSubmitted(false); 
     }
   };
 
@@ -208,7 +212,12 @@ const EditJob = () => {
           />
         </div>
 
-        <Button className="create-job-btn" type="submit" label="Update Job" />
+        <Button 
+            className="create-job-btn" 
+            type="submit" 
+            label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "Update Job"} 
+            disabled={submitted} 
+          />
       </form>
     </div>
   );

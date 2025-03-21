@@ -8,6 +8,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { InputText } from 'primereact/inputtext';
 import { toast, Toaster } from 'sonner';
 import { useRouter } from 'next/navigation';
+import 'primeicons/primeicons.css';
 
 
 const CreateJobs = () => {
@@ -19,13 +20,14 @@ const CreateJobs = () => {
   const [jobType, setJobType] = useState('');
   const [content, setContent] = useState('');
   const [jobArea, setjobArea] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
 
   const navigate = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setSubmitted(true)
     try {
       // Save the data to Firestore
       const docRef = await addDoc(collection(db, 'jobs'), {
@@ -57,6 +59,8 @@ const CreateJobs = () => {
       window.scrollTo(0, 0);
     } catch (error) {
       console.error("Error adding document: ", error);
+    }finally {
+      setSubmitted(false); 
     }
   };
 
@@ -66,7 +70,7 @@ const CreateJobs = () => {
       <Toaster position="top-center" richColors/>
       <form onSubmit={handleSubmit}>
         <div className="p-field">
-          <label htmlFor="jobTitle">Job Title</label>
+          <label htmlFor="jobTitle">Job Title*</label>
           <InputText
             type="text"
             id="jobTitle"
@@ -79,7 +83,7 @@ const CreateJobs = () => {
         </div>
 
         <div className="p-field">
-          <label htmlFor="city">City</label>
+          <label htmlFor="city">City*</label>
           <InputText
             type="text"
             id="city"
@@ -92,7 +96,7 @@ const CreateJobs = () => {
         </div>
 
         <div className="p-field">
-          <label htmlFor="state">State</label>
+          <label htmlFor="state">State*</label>
           <InputText
             type="text"
             id="state"
@@ -105,7 +109,7 @@ const CreateJobs = () => {
         </div>
 
         <div className="p-field">
-          <label htmlFor="country">Country</label>
+          <label htmlFor="country">Country*</label>
           <InputText
             type="text"
             id="country"
@@ -136,7 +140,7 @@ const CreateJobs = () => {
         </div>
 
         <div className="p-field">
-          <label htmlFor="jobType">Job Type</label>
+          <label htmlFor="jobType">Job Type*</label>
           <select
             id="jobType"
             name="jobType"
@@ -152,7 +156,7 @@ const CreateJobs = () => {
         </div>
 
         <div className="p-field">
-          <label htmlFor="jobArea">Job Area</label>
+          <label htmlFor="jobArea">Job Area*</label>
           <InputText
             type="text"
             id="jobArea"
@@ -165,7 +169,7 @@ const CreateJobs = () => {
         </div>
 
         <div className="p-field">
-          <label htmlFor="content">Content</label>
+          <label htmlFor="content">Content*</label>
           <Editor
             className="content-editor"
             id="content"
@@ -176,7 +180,13 @@ const CreateJobs = () => {
           />
         </div>
 
-        <Button className="create-job-btn" type="submit" label="Create Job" />
+        <p>*Required fields</p>
+        <Button 
+            className="create-job-btn" 
+            type="submit" 
+            label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "Create Job"} 
+            disabled={submitted} 
+          />
       </form>
     </div>
   );

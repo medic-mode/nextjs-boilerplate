@@ -6,6 +6,8 @@ import { InputText } from 'primereact/inputtext';
 import { db } from '../../../lib/firebase'; 
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { useRouter, useSearchParams } from 'next/navigation';
+import 'primeicons/primeicons.css';
+import { Button } from 'primereact/button';
 
 const EditEvent = () => {
 
@@ -18,6 +20,7 @@ const EditEvent = () => {
   const [location, setLocation] = useState('');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
+    const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     async function fetchEventData() {
@@ -44,6 +47,7 @@ const EditEvent = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setSubmitted(true)
     try {
       await updateDoc(doc(db, 'events', eventId), {
         date,
@@ -57,6 +61,8 @@ const EditEvent = () => {
     } catch (error) {
       toast.error('Error updating course');
       console.error('Error updating course:', error);
+    }finally {
+      setSubmitted(false); 
     }
   };
 
@@ -103,7 +109,12 @@ const EditEvent = () => {
             required
           />
         </div>
-        <button className='create-events-btn' type="submit">Update Event</button>
+        <Button
+                    className="create-events-btn" 
+                    type="submit" 
+                    label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "Update Event"} 
+                    disabled={submitted} 
+                  />
       </form>
     </div>
   )

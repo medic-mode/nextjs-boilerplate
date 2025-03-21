@@ -8,6 +8,7 @@ export async function POST() {
     const { data, error } = await resend.emails.send({
       from: 'Medicmode <admin@medicmode.com>',
       to: ['medicmode.official@gmail.com'],
+      replyTo: 'contact@medicmode.com',
       subject: 'Welcome to Medicmode!',
       react: EmailTemplate({ firstName: 'Jabez' }),
     });
