@@ -6,6 +6,8 @@ import { query, where, getDocs, collection, doc, updateDoc } from "firebase/fire
 import { db } from '../../lib/firebase';
 import { toast, Toaster } from 'sonner';
 import Image from 'next/image';
+import { Button } from 'primereact/button';
+import 'primeicons/primeicons.css';
 
 const Login = ({ setIsSignUp, handleClose, setLogged, error, setError, setUserEmail }) => {
   const [checked, setChecked] = useState(false);
@@ -15,12 +17,15 @@ const Login = ({ setIsSignUp, handleClose, setLogged, error, setError, setUserEm
   const [confirmPassword, setConfirmPassword] = useState('');
    // eslint-disable-next-line 
   const [currentUserId, setCurrentUserId] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
   const handleCheck = () => {
     setChecked((prev) => !prev);
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+	  setSubmitted(true)
     try {
         const userQuery = query(collection(db, "users"), where("email", "==", email));
         const querySnapshot = await getDocs(userQuery);
@@ -38,7 +43,7 @@ const Login = ({ setIsSignUp, handleClose, setLogged, error, setError, setUserEm
               });
 
                 handleClose();
-                setUserEmail(email); // Set the user's email
+                setUserEmail(email); 
 
                
                 setEmail('');
@@ -50,7 +55,9 @@ const Login = ({ setIsSignUp, handleClose, setLogged, error, setError, setUserEm
         }
     } catch (error) {
         setError("Error logging in.");
-    }
+    }finally {
+      setSubmitted(false); 
+      }
 };
 
   const handleForgotPasswordMode = () => {
@@ -200,11 +207,11 @@ const Login = ({ setIsSignUp, handleClose, setLogged, error, setError, setUserEm
                   onClick={handleForgotPasswordMode}>Forgot password?</p>
               </div>
 
-              <button className='login-btn'
-                onClick={handleLogin}>
-                LOGIN
-              </button>
-
+              <Button 
+                          className="login-btn" 
+                          label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "LOGIN"} 
+                          disabled={submitted} 
+                          onClick={handleLogin}/>  
               <p style={{fontSize:'13px'}}>Don&apos;t have an account? <span style={{ fontWeight: 'bolder', cursor: 'pointer' }}
                   onClick={() => { setIsSignUp(true); setError(''); }}>Sign up</span></p>
             </>

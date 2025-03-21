@@ -28,36 +28,47 @@ const Blogs = () => {
   const { blogPosts, categories, years, months, selectedCategory, setSelectedCategory, likedPosts, handleLike, showBlogOptions, recentBlog, closeBlogOptions, otherBlogs, selectedYear, setSelectedYear, selectedMonth, setSelectedMonth, isDrawerOpen, setIsDrawerOpen} = useBlog()
 
   const [loading, setLoading] = useState(false);
-  const [pendingPath, setPendingPath] = useState(null);
   
   const router = useRouter()
 
 
-  const handlePost = (path, e) => {
-    setLoading(true)
+  const [pendingPath, setPendingPath] = useState(null);
+
+  const handlePost = (e) => {
+    e.preventDefault();  
     if (!logged) {
-      toast.info('Please login to create a blog!', {
-        duration: 3000 
-      });
-      e.preventDefault();
-      setPendingPath(path);
+      toast.info('Please login to create a blog!', { duration: 3000 });
+      setPendingPath(true); 
       handleOpen(); 
-    } else {
-     
-      router.push(path);
+      return;
     }
+  
+    setLoading(true);
+  
+    const path = userEmail?.trim() === "admin@medicmode.com" 
+      ? '/dashboard/create-post' 
+      : '/blogs/create-post';
+    router.push(path);
   };
+  
+  useEffect(() => {
+    if (logged && pendingPath) {
+      const path = userEmail?.trim() === "admin@medicmode.com" 
+        ? '/dashboard/create-post' 
+        : '/blogs/create-post';
+      router.push(path);
+      
+      setPendingPath(null); // Reset pendingPath after navigation
+    }
+  }, [logged, userEmail, pendingPath, router]);
+  
+
+  
 
   useEffect(() => {
     AOS.init({duration: 1000})
   }, [])
 
-  useEffect(() => {
-    if (logged && pendingPath) {
-      router.push(pendingPath); // Navigate to saved path
-      setPendingPath(null); // Reset the pending path
-    }
-  }, [logged, pendingPath, router]);
 
   if (loading || !blogPosts) {
     return (
@@ -98,13 +109,7 @@ const Blogs = () => {
             <p>Search</p>
             <SearchIcon style={{marginLeft: '5px'}}/>  
           </div>
-              {userEmail ===  'admin@medicmode.com' ? (
-                <p className='create-user-blog-btn create-user-blog' onClick={(e) => handlePost('/dashboard/create-post', e)}>Create Blog</p>
-              )
-              :
-              (<p className='create-user-blog-btn create-user-blog'  onClick={(e) => handlePost('/blogs/create-post', e)} >Create Blog</p>
-              )
-              }
+                <p className='create-user-blog-btn create-user-blog' onClick={handlePost}>Create Blog</p>
         </div>
         
       </div>
@@ -236,13 +241,7 @@ const Blogs = () => {
           <div className="user-create-blog">
               <h3>Thinking about blogging?</h3>
               <h3>Click to get started!</h3>
-              {userEmail ===  'admin@medicmode.com' ? (
-                <Button className='create-user-blog-btn' onClick={(e) => handlePost('/dashboard/create-post', e)}>Create Blog</Button>
-              )
-              :
-              (<Button className='create-user-blog-btn'  onClick={(e) => handlePost('/blogs/create-post', e)} >Create Blog</Button>
-              )
-              }
+              <Button className='create-user-blog-btn' onClick={handlePost}>Create Blog</Button>
             </div>
         </div>
       </div>

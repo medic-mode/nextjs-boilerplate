@@ -7,6 +7,8 @@ import { db } from '../../lib/firebase'; // Firebase config
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { toast, Toaster } from 'sonner';
+import { Button } from 'primereact/button';
+import 'primeicons/primeicons.css';
 
 const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 	const [firstName, setFirstName] = useState('');
@@ -32,12 +34,15 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 	const [countries, setCountries] = useState([])
 	const [otherStatus, setOtherStatus] = useState('');
 	const [otherReferral, setOtherReferral] = useState(''); 
+	const [submitted, setSubmitted] = useState(false);
 
 
 
   const handleSignup = async (e) => {
 
 	e.preventDefault();
+	setSubmitted(true)
+
 
 	if (!phone || phone === '91' || !/^\d{2}\d{10}$/.test(phone)) {
 		setError('Phone number is required and should contain country code followed by 10 digits');
@@ -91,6 +96,13 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 		password:password
       });
 	  
+	  await fetch('/api/resend/welcome-email', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ firstName, email })
+	  });
+	  
+	  
 	  	setFirstName(''); 
         setLastName(''); 
         setDob(''); 
@@ -121,7 +133,9 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 	  toast.error('An error occurred. Please try again later.', {
 		duration: 3000 
 		}); 
-    }
+    }finally {
+		setSubmitted(false); 
+	  }
 
   };
 
@@ -501,8 +515,12 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 		</div>
 	</div> 
 	{error && <p className='incorrect'>{error}</p>}
-          
-          <button type='submit' className='signup-btn'>SIGN UP</button> 
+			<Button 
+            className="signup-btn" 
+            type="submit" 
+            label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "SIGN UP"} 
+            disabled={submitted} 
+          />
 </form>
         
         
