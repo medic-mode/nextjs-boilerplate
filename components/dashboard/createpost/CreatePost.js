@@ -11,6 +11,7 @@ import { toast, Toaster } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthContext';
 import { GridLoader } from 'react-spinners';
+import { v4 as uuidv4 } from 'uuid';
 
 
 const CreatePost = () => {
@@ -64,19 +65,19 @@ const CreatePost = () => {
 
       // If a thumbnail is uploaded, upload it to Firebase Storage
       if (thumbnail) {
-        const storageRef = ref(storage, `thumbnails/${thumbnail.name}`);
+        const storageRef = ref(storage, `thumbnails/${Date.now()}-${thumbnail.name}`);
         const uploadSnapshot = await uploadBytes(storageRef, thumbnail);
         thumbnailURL = await getDownloadURL(uploadSnapshot.ref); // Get the URL of the uploaded thumbnail
       }
 
       if (authorImg) {
-        const storageRef = ref(storage, `authorImg/${authorImg.name}`);
+        const storageRef = ref(storage, `authorImg/${Date.now()}-${authorImg.name}`);
         const uploadSnapshot = await uploadBytes(storageRef, authorImg);
         authorImgURL = await getDownloadURL(uploadSnapshot.ref); // Get the URL of the uploaded author image
       }
 
       for (const slide of slideImages) {
-        const slideRef = ref(storage, `slides/${slide.name}`);
+        const slideRef = ref(storage, `slides/${uuidv4()}-${slide.name}`);
         const uploadSnapshot = await uploadBytes(slideRef, slide);
         const slideURL = await getDownloadURL(uploadSnapshot.ref);
         slideImageURLs.push(slideURL); // Store each slide's URL

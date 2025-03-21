@@ -2,7 +2,6 @@
   "name": "medicmode-latest",
   "version": "0.1.0",
   "private": true,
-  
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -43,10 +42,12 @@
     "react-vertical-timeline-component": "^3.6.0",
     "react-web-share": "^2.0.2",
     "react-youtube": "^10.1.0",
+    "resend": "^4.1.2",
     "smtpjs": "^0.0.1",
     "sonner": "^1.7.0",
     "styled-components": "^6.1.13",
-    "swiper": "^11.1.14"
+    "swiper": "^11.1.14",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",

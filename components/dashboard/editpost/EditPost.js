@@ -9,6 +9,7 @@ import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; 
 import { toast, Toaster } from 'sonner';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { v4 as uuidv4 } from 'uuid';
 
 const EditPost = () => {
   const searchParams = useSearchParams();  // This will fetch query parameters
@@ -67,7 +68,7 @@ const EditPost = () => {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const storageRef = ref(storage, `thumbnails/${file.name}`);
+      const storageRef = ref(storage, `thumbnails/${Date.now()}-${file.name}`);;
       uploadBytes(storageRef, file)
         .then(() => getDownloadURL(storageRef))
         .then((url) => {
@@ -130,7 +131,7 @@ const EditPost = () => {
   const handleSlideUpload = async (event) => {
     const files = Array.from(event.target.files);
     const newSlideUrls = await Promise.all(files.map(async (file) => {
-      const slideStorageRef = ref(storage, `slideImages/${file.name}`);
+      const slideStorageRef = ref(storage, `slideImages/${uuidv4()}-${file.name}`);
       await uploadBytes(slideStorageRef, file); // Upload each file
       return await getDownloadURL(slideStorageRef); // Get the download URL
     }));
