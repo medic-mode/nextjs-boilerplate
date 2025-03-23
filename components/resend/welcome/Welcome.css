@@ -1,0 +1,101 @@
+.welcome-template {
+    font-family: "Montserrat", sans-serif;
+    color: var(--dark-green);
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 700px;
+    border-radius: 8px;
+    line-height: 1.6;
+  }
+  
+  .welcome-template .logo {
+    display: block;
+    max-width: 150px;
+    margin: 20px 0;
+  }
+  
+  .welcome-template .greeting {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .welcome-template .intro {
+    font-size: 16px;
+  }
+  
+  .welcome-template h4 {
+    margin-top: 30px;
+    font-size: 18px;
+    padding-bottom: 5px;
+    font-weight: 500;
+  }
+  
+  .welcome-template ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px ;
+  }
+  
+  .welcome-template ul li {
+    font-size: 16px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .welcome-template ul li::before {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+  
+  .welcome-template .motto {
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 15px;
+  }
+  
+  .welcome-template .best-wishes {
+    margin-top: 30px;
+  }
+  
+  .welcome-template .best-wishes {
+    font-size: 16px;
+  }
+
+  .welcome-template .best-wishes p:first-child{
+    margin-bottom: 10px;
+  }
+
+  
+  .welcome-template .best-wishes a {
+    color: var(--dark-green);
+    font-weight: 500;
+    font-size: 15px !important;
+    text-decoration: none;
+  }
+
+  .welcome-template a:hover{
+    text-decoration: underline;
+  }
+  
+  .welcome-template .social-icons{
+    border-top: 1px solid var(--dark-green);
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .welcome-template .social-icons p{
+    margin-top: 20px;
+  }
+
+  .welcome-template .social-icons .social-links{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  }

@@ -165,7 +165,7 @@
     border: none;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     border-radius: 8px;
-    width: auto;
+    width: 160px;
     align-self: center;
     cursor: pointer;
     transition: all 0.2s ease; /* Smooth transition for effects */

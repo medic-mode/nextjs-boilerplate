@@ -3,45 +3,46 @@ import { useState } from 'react';
 import Image from 'next/image'; // Use Next.js Image component
 import './Contact.css';
 import { toast, Toaster } from 'sonner';
-import emailjs from 'emailjs-com';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import PhoneIcon from '@mui/icons-material/Phone';
+import { PulseLoader } from 'react-spinners';
+import { Button } from 'primereact/button';
 
 const Contact = () => {
   const [fullName, setFullName] = useState('');
   const [mobile, setMobile] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [submitted, setSubmitted] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const templateParams = {
-      fullName,
-      mobile,
-      email,
-      message,
-    };
-
-   
-    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-    const templateId = process.env.NEXT_PUBLIC_CONTACT_FORM_TEMPLATE;
-    const userId = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
-
-    emailjs.send(serviceId, templateId, templateParams, userId)
-      .then((response) => {
-        toast.success('Message sent successfully!', {
-          duration: 3000,
-        });
+    setSubmitted(true)
+    try {
+      const response = await fetch('/api/resend/contact-form', { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName, mobile, email, message  }) 
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        toast.success('Contact form submitted successfully!', { duration: 3000 });
+  
         // Reset form fields
         setFullName('');
         setMobile('');
         setEmail('');
         setMessage('');
-      }, (error) => {
-        toast.error('Failed to send enquiry. Please try again.', {
-          duration: 3000,
-        });
-      });
+      } else {
+        throw new Error(data.error || 'Failed to send enquiry');
+      }
+    } catch (error) {
+      toast.error('Failed to send enquiry. Please try again.', { duration: 3000 });
+    } finally {
+      setSubmitted(false);
+    }
   };
 
   const contacts = [
@@ -128,7 +129,12 @@ const Contact = () => {
                   onChange={(e) => setMessage(e.target.value)}
                   required
                 />
-                <button className='enquiry-btn' type="submit">Submit</button>
+                <Button 
+                        className="enquiry-btn" 
+                        type="submit" 
+                        label={submitted ? <PulseLoader color={"var(--light-green)"} submitted={submitted} size={6}/> : "Submit"} 
+                        disabled={submitted} 
+                      />
               </form>
             </div>
           </div>

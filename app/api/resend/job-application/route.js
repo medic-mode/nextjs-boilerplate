@@ -1,22 +1,27 @@
-import WelcomeTemplate from '@/components/resend/welcome/Welcome'; // Adjust path if needed
 import { Resend } from 'resend';
+import JobApplication from '@/components/resend/job/JobApplication';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req) {
   try {
-    const body = await req.json(); // Parse request body
-    const { firstName, email } = body;
+    const { fullName, email, contact, experience, presentOrganization, jobTitle, resume } = await req.json();
 
-    if (!firstName || !email) {
+    if (!fullName || !email || !contact || !resume) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
     }
 
     const { data, error } = await resend.emails.send({
       from: 'Medicmode <noreply@medicmode.com>',
-      to: [email],
-      subject: 'Welcome to Medicmode – Empowering Paramedics Like You!',
-      react: <WelcomeTemplate firstName={firstName} />
+      to: ['contact@medicmode.com'], 
+      subject: `Job Application Received`,
+      react: JobApplication({ fullName, email, contact, experience, presentOrganization, jobTitle }),
+      attachments: [
+        {
+          content: resume.content, 
+          filename: resume.filename, 
+        },
+      ],
     });
 
     if (error) {
@@ -24,7 +29,7 @@ export async function POST(req) {
       return new Response(JSON.stringify({ error: 'Failed to send email' }), { status: 500 });
     }
 
-    return new Response(JSON.stringify({ success: true, data }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, message: 'Application submitted successfully!' }), { status: 200 });
   } catch (error) {
     console.error('Server Error:', error);
     return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });

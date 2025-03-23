@@ -4,6 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useRef, useState } from 'react';
 import './ApplyForm.css'
 import { PulseLoader } from 'react-spinners';
+import { Button } from 'primereact/button';
 
 const ApplyForm = ({ isOpen, onClose, jobTitle }) => {
 
@@ -44,8 +45,7 @@ const ApplyForm = ({ isOpen, onClose, jobTitle }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
-    setMailSent(true)
+    setMailSent(true);
   
     const { fullName, email, contact, experience, presentOrganization, resume, jobTitle } = formData;
   
@@ -55,44 +55,58 @@ const ApplyForm = ({ isOpen, onClose, jobTitle }) => {
       return;
     }
   
-    const formDataToSend = new FormData();
-    formDataToSend.append('fullName', fullName);
-    formDataToSend.append('email', email);
-    formDataToSend.append('contact', contact);
-    formDataToSend.append('experience', experience);
-    formDataToSend.append('presentOrganization', presentOrganization);
-    formDataToSend.append('resume', resume); // Ensure the file is appended here
-    formDataToSend.append('jobTitle', jobTitle);
+    // Convert resume file to base64 for Resend attachments
+    const reader = new FileReader();
+    reader.readAsDataURL(resume);
+    reader.onload = async () => {
+      const base64Resume = reader.result.split(',')[1]; // Remove data prefix
   
-    try {
-      const response = await fetch('/api/sendApplication', {
-        method: 'POST',
-        body: formDataToSend,
-      });
+      const formDataToSend = {
+        fullName,
+        email,
+        contact,
+        experience,
+        presentOrganization,
+        jobTitle,
+        resume: {
+          content: base64Resume,
+          filename: resume.name,
+        },
+      };
   
-      const result = await response.json();
-  
-      if (response.ok) {
-        setMailSent(false)
-        toast.success(result.message);
-        setFormData({
-          jobTitle,
-          fullName: '',
-          email: '',
-          contact: '',
-          experience: 'Fresher',
-          presentOrganization: '',
-          resume: null,
+      try {
+        const response = await fetch('/api/resend/job-application', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formDataToSend),
         });
-        onClose();
-      } else {
-        toast.error(result.message);
+  
+        const result = await response.json();
+  
+        if (response.ok) {
+          toast.success(result.message);
+          setFormData({
+            jobTitle,
+            fullName: '',
+            email: '',
+            contact: '',
+            experience: 'Fresher',
+            presentOrganization: '',
+            resume: null,
+          });
+          onClose();
+        } else {
+          toast.error(result.message);
+        }
+      } catch (error) {
+        toast.error('There was an error submitting your application. Please try again.');
+        console.error('Error:', error);
+      }finally{
+        setMailSent(false);
       }
-    } catch (error) {
-      toast.error('There was an error submitting your application. Please try again.');
-      console.error('Error:', error);
-    }
+    };
   };
+  
   
 
   if (!isOpen) return null;
@@ -134,9 +148,12 @@ const ApplyForm = ({ isOpen, onClose, jobTitle }) => {
             <input type="file" id="resume" name="resume" onChange={handleFileChange} required />
           </div>
           <div style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-            {mailSent ? (<PulseLoader color={"#0A4044"} mailSent={mailSent} size={6}/>) : (
-              <button type="submit">Submit Application</button>
-            )}
+            <Button 
+                        className="create-post-btn" 
+                        type="submit" 
+                        label={mailSent ? <PulseLoader color={"var(--light-green)"} mailSent={mailSent} size={6}/> : "Submit"} 
+                        disabled={mailSent} 
+                      />
           </div>
         </form>
       </div>

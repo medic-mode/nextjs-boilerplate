@@ -102,8 +102,15 @@ const CreatePost = () => {
         youtubeUrl
       });
 
+      if (userEmail !== "admin@medicmode.com") {  
+        await fetch('/api/resend/blog-submission', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ author, title, userEmail })
+        });
+      }
+      
 
-      // Reset the form after submission
       setAuthor('');
       setAuthorImg(null);
       setAuthorImgPreview(null);

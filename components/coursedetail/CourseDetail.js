@@ -4,7 +4,6 @@ import { db } from '../../lib/firebase';
 import { doc, getDoc, updateDoc  } from 'firebase/firestore'; 
 import './CourseDetail.css';
 import { Rating } from '@mui/material';
-import emailjs from 'emailjs-com';
 import { toast, Toaster } from 'sonner';
 import { GridLoader } from 'react-spinners';
 
@@ -12,6 +11,8 @@ import Image from 'next/image';
 import { useAuth } from '../AuthContext';
 import BuyCourse from '../buycourse/BuyCourse';
 import Link from 'next/link';
+import 'primeicons/primeicons.css';
+import { Button } from 'primereact/button'; 
 
 const CourseDetail = ({slug}) => {
 
@@ -25,6 +26,7 @@ const CourseDetail = ({slug}) => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
+  const [submitted, setSubmitted] = useState(false);
 
   
 
@@ -50,7 +52,7 @@ const CourseDetail = ({slug}) => {
 // eslint-disable-next-line
   }, [courseId]); 
 
-  
+  const courseTitle = course?.courseTitle
 
   if (loading || !course) {
     return (
@@ -69,35 +71,38 @@ const CourseDetail = ({slug}) => {
     };
 
     const handleSubmit = async (e) => {
+      setSubmitted(true);
       e.preventDefault();
-      const templateParams = {
-        fullName,
-        mobile,
-        email,
-        message,
-      };
-  
-      // Replace these with your own EmailJS service ID, template ID, and user ID
-      const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-      const TEMPLATE_ID = process.env.NEXT_PUBLIC_COURSE_FORM_TEMPLATE;
-      const USER_ID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID;
-  
-      emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, USER_ID)
-        .then((response) => {
-          toast.success('Enquiry sent successfully!', {
-            duration: 3000 
-          });
+    
+      try {
+        const response = await fetch('/api/resend/course-enquiry', { 
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fullName, mobile, email, message , courseTitle }) 
+        });
+    
+        const data = await response.json();
+    
+        if (response.ok) {
+          
+          toast.success('Enquiry sent successfully!', { duration: 3000 });
+    
           // Reset form fields
           setFullName('');
           setMobile('');
           setEmail('');
           setMessage('');
-        }, (error) => {
-          toast.error('Failed to send enquiry. Please try again.', {
-            duration: 3000 
-          });
-        });
+        } else {
+          throw new Error(data.error || 'Failed to send enquiry');
+        }
+      } catch (error) {
+        console.error('Error sending enquiry:', error);
+        toast.error('Failed to send enquiry. Please try again.', { duration: 3000 });
+      } finally{
+        setSubmitted(false);
+      }
     };
+    
 
     const updateRating = async (courseId, newRating) => {
       try {
@@ -282,7 +287,12 @@ const CourseDetail = ({slug}) => {
               onChange={(e) => setMessage(e.target.value)}
               required
             />
-            <button className='enquiry-btn' type="submit">Enquire now</button>
+            <Button 
+                        className="enquiry-btn" 
+                        type="submit" 
+                        label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "Send Enquiry"} 
+                        disabled={submitted} 
+                      />
           </form>
           </div>
           </main>
