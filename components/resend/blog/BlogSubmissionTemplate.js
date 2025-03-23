@@ -4,7 +4,7 @@ const BlogSubmissionTemplate = ({ author, title }) => (
   <div style={{ fontFamily: 'Arial, sans-serif', color: '#333', lineHeight: '1.6' }}>
     <h1 style={{ color: '#0A4044' }}>Thank You for Your Submission, {author}!</h1>
     
-    <p>We have received your blog post titled <strong>"{title}"</strong>. 🎉</p>
+    <p>We have received your blog post titled <strong>&quot;{title}&quot;</strong>. 🎉</p>
     
     <p>Our team will review your submission shortly, ensuring it meets our content guidelines. Once approved, your blog will be published on our website.</p>
     
