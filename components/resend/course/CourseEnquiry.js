@@ -7,7 +7,7 @@ const CourseEnquiry = ({ fullName, mobile, email, message , courseTitle }) => (
     <p><strong>Name:</strong> {fullName}</p>
     <p><strong>Mobile No:</strong> {mobile}</p>
     <p><strong>Email Id:</strong> {email}</p>
-    <p><strong>Message</strong> {message}</p>
+    <p><strong>Message:</strong> {message}</p>
     <p style={{ marginTop: '20px' }}>Best Regards,</p>
     <p><strong>The Medicmode Team</strong></p>
   </div>
