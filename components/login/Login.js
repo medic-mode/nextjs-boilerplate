@@ -147,7 +147,7 @@ const Login = ({ setIsSignUp, handleClose, setLogged, error, setError, setUserEm
               />
 
               <p style={{ fontSize: '13px' }}>
-                Don't have an account? 
+                Don&apos;t have an account? 
                 <span 
                   style={{ fontWeight: 'bolder', cursor: 'pointer', marginLeft: '5px' }}
                   onClick={() => { setIsSignUp(true); setError(''); }}
@@ -160,7 +160,7 @@ const Login = ({ setIsSignUp, handleClose, setLogged, error, setError, setUserEm
             <>
               {/* Password Reset View */}
               <p style={{ fontSize: '12px', textAlign: 'center', color: 'grey' }}>
-                We'll send you a secure link to reset your password.
+                We&apos;ll send you a secure link to reset your password.
               </p>
 
               <Button 
