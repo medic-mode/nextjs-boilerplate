@@ -14,7 +14,7 @@ import { db } from '../../lib/firebase';
 import { collection, getDocs, orderBy, query, where, doc, updateDoc } from 'firebase/firestore';
 import { GridLoader } from 'react-spinners';
 import { toast } from 'sonner';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../../app/context/AuthContext';
 import { LazyLoadImage } from 'react-lazy-load-image-component'; 
 import { useRouter } from 'next/navigation';
 

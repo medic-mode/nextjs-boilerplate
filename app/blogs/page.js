@@ -1,5 +1,4 @@
 import Blogs from "../../components/blogs/Blogs";
-import { BlogProvider } from "../../components/BlogContext"
 
 export const metadata = {
 	title: "Medic Mode - Blogs",
