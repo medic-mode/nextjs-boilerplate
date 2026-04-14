@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './BuyCourse.css';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../../app/context/AuthContext';
 import { getFirestore, collection, query, where, getDocs, doc, updateDoc, arrayUnion } from 'firebase/firestore'; // Import arrayUnion
 import { toast, Toaster } from 'sonner';
 import Button from '@mui/material/Button';

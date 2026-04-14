@@ -16,9 +16,9 @@ import { RWebShare } from "react-web-share";
 import { Button } from '@mui/material';
 import { GridLoader } from 'react-spinners';
 import Image from 'next/image';
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../../app/context/AuthContext";
 import { useRouter } from 'next/navigation';
-import { useBlog } from '../BlogContext';
+import { useBlog } from '../../app/context/BlogContext';
 
 
 const Blogs = () => {

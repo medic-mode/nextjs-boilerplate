@@ -8,7 +8,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import ApplyForm from './ApplyForm';
 import { Toaster } from 'sonner';
 import { GridLoader } from 'react-spinners';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../../app/context/AuthContext';
 
 const JobDetails = ({ slug }) => {
   const [jobData, setJobData] = useState(null);

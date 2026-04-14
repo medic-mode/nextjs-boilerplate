@@ -8,7 +8,7 @@ import { toast, Toaster } from 'sonner';
 import { GridLoader } from 'react-spinners';
 
 import Image from 'next/image';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../../app/context/AuthContext';
 import BuyCourse from '../buycourse/BuyCourse';
 import Link from 'next/link';
 import 'primeicons/primeicons.css';
