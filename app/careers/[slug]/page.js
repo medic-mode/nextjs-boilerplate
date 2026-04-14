@@ -5,8 +5,8 @@ import CareersLayout from '@/components/careersnew/CareersLayout';
 
 export async function generateMetadata({ params }) {
     
-    
-    const jobId = params.slug;
+    const { slug } = await params;
+    const jobId = slug;
     const docRef = doc(db, 'jobs', jobId);
     const docSnap = await getDoc(docRef);
     
@@ -24,10 +24,11 @@ export async function generateMetadata({ params }) {
     };
 }
 
-export default function Page({ params }) {
+export default async function Page({ params }) {
+    const { slug } = await params;
     return (
         <CareersLayout>
-        <JobDetails slug={params.slug} />
+        <JobDetails slug={slug} />
         </CareersLayout>
 	)
 }

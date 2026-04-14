@@ -3,8 +3,13 @@ import { db } from '../../../lib/firebase';
 import BlogDetail from '../../../components/blogdetail/BlogDetails';
 
 export async function generateMetadata({ params }) {
-    const postId = params.slug;
+
+    const { slug } = await params;
+
+    const postId = slug;
     const docRef = doc(db, 'blogPosts', postId);
+
+    
 
     try {
         const docSnap = await getDoc(docRef);
@@ -35,10 +40,11 @@ export async function generateMetadata({ params }) {
     }
 }
 
-export default function Page({ params }) {
+export default async function Page({ params }) {
+    const { slug } = await params;
     return (
        
-            <BlogDetail slug={params.slug} />
+            <BlogDetail slug={slug} />
         
     );
 }

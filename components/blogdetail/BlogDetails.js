@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState, useRef } from 'react';
 import './BlogDetails.css';
-import { db } from '../../lib/firebase'; // Add your auth configuration
+import { db } from '../../lib/firebase'; 
 import { doc, getDoc, collection, addDoc, query, orderBy, onSnapshot, getDocs, where, deleteDoc, updateDoc, increment } from 'firebase/firestore';
 import SendIcon from '@mui/icons-material/Send';
 import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
@@ -56,12 +56,14 @@ const BlogDetail = ({ loading, slug}) => {
     }, []);
 
 
+
+
     // Fetch the blog post details
     useEffect(() => {
         
         const fetchPost = async () => {
             try {
-                const docRef = doc(db, 'blogPosts', postId); // Get the specific document by ID
+                const docRef = doc(db, 'blogPosts', postId); 
                 const docSnap = await getDoc(docRef);
         
                 if (docSnap.exists()) {

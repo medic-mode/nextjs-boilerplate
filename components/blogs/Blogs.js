@@ -114,9 +114,10 @@ const Blogs = () => {
         
       </div>
 
+
+
       <div className="primary">
         {recentBlog ? (
-          
           <div className="primary-blog" data-aos='fade-up'>
             <div className="blog-image-container">
               <div onClick={() => viewBlogs(recentBlog.id)} style={{cursor:'pointer'}}>

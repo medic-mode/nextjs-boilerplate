@@ -4,7 +4,8 @@ import { db } from '../../../lib/firebase';
 import CourseDetail from '@/components/coursedetail/CourseDetail';
 
 export async function generateMetadata({ params }) {
-    const courseId = params.slug;
+    const { slug } = await params;
+    const courseId = slug;
     const docRef = doc(db, 'courses', courseId);
     const docSnap = await getDoc(docRef);
     
@@ -26,6 +27,8 @@ export async function generateMetadata({ params }) {
     };
 }
 
-export default function Page({ params }) {
-    return <CourseDetail slug={params.slug} />;
+export default async function Page({ params }) {
+    const { slug } = await params;
+
+    return <CourseDetail slug={slug} />;
 }
