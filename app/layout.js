@@ -1,21 +1,30 @@
 "use client";
-import { AuthProvider } from "../components/AuthContext";
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
-import GoogleAnalytics from "@/components/GoogleAnalytics"; // Import the updated component
+import GoogleAnalytics from "@/components/GoogleAnalytics"; 
 import "./globals.css";
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import Script from 'next/script';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import { BlogProvider } from "@/components/BlogContext";
+import { BlogProvider } from "./context/BlogContext";
 import ScrollToTop from "@/components/scrolltotop/ScrollToTop";
+import { Montserrat } from 'next/font/google'
+import { Toaster } from 'sonner';
+import { AuthProvider } from "./context/AuthContext";
+
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['100','200','300','400','500','600','700','800','900'],
+  display: 'swap',
+  variable: '--font-montserrat'
+})
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
   const isDashboard = pathname.startsWith('/dashboard');
 
-	
 
   return (
     <html lang="en">
@@ -40,7 +49,8 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body>
+      <body className={montserrat.className}>
+      <Toaster position="top-center" richColors />
         <AuthProvider>
           <BlogProvider>
           <GoogleAnalytics gaId="G-KV23NQK3GB" />

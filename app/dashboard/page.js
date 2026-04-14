@@ -1,6 +1,6 @@
 "use client"
 
-import { useAuth } from "@/components/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import UserTable from "@/components/dashboard/users/UserTable";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -19,7 +19,6 @@ import { GridLoader } from "react-spinners";
   useEffect(() => {
     setLoading(false)
 
-    // Only redirect if not logged and loading is false
     if (!loading && (!logged || userEmail !== 'admin@medicmode.com')) {
       console.log("Redirecting to homepage");
       router.push('/');

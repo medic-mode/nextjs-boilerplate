@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { GridLoader } from 'react-spinners';
-import { useAuth } from '@/components/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 const Custom404 = () => {
 

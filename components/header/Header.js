@@ -11,7 +11,7 @@ import Link from "next/link";
 import { Box, Modal } from "@mui/material";
 import Login from "../login/Login";
 import Signup from "../signup/Signup";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../../app/context/AuthContext";
 
 const Header = () => {
   const { setUserEmail, logged, setLogged, handleLogout, userEmail, handleOpen, handleClose, isSignUp, setIsSignUp, error, setError, open} = useAuth();

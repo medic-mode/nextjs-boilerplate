@@ -9,7 +9,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { toast, Toaster } from 'sonner';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { InputText } from 'primereact/inputtext';
-import { useAuth } from '@/components/AuthContext';
+import { useAuth } from '../../../app/context/AuthContext';
 import 'primeicons/primeicons.css';
 
 

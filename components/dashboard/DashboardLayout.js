@@ -13,7 +13,6 @@ const DashboardLayout = ({ children }) => {
   };
 
   useEffect(() => {
-    // Check screen width on component mount
     if (window.innerWidth < 768) {
       setSidebarOpen(false);
     }

@@ -1,11 +1,20 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { db } from '../../../lib/firebase'; // Adjust the path as necessary
-import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore'; // Firestore functions
+import { db } from '../../../lib/firebase'; 
+import { collection, getDocs} from 'firebase/firestore'; 
 import './UserTable.css'; 
-import { useAuth } from '@/components/AuthContext';
+import { useAuth } from '../../../app/context/AuthContext';
 import { GridLoader } from 'react-spinners';
 import Link from 'next/link';
+import { 
+  Button, 
+  Dialog, 
+  DialogActions, 
+  DialogContent, 
+  DialogContentText, 
+  DialogTitle, 
+  CircularProgress 
+} from '@mui/material';
 
 const UserTable = () => {
 
@@ -14,16 +23,20 @@ const UserTable = () => {
 
   const [users, setUsers] = useState([]);
 
+  const [open, setOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'users')); // Fetch users from 'users' collection
+        const querySnapshot = await getDocs(collection(db, 'users')); 
         const usersList = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
         usersList.sort((a, b) => {
-          const dateA = a.createdAt?.seconds || 0; // Ensure we have a valid date
+          const dateA = a.createdAt?.seconds || 0; 
           const dateB = b.createdAt?.seconds || 0;
           return dateB - dateA; // Descending order
         });
@@ -39,23 +52,50 @@ const UserTable = () => {
     // eslint-disable-next-line
   }, []);
 
-  const handleDelete = async (userId) => {
-    const confirmDelete = window.confirm('Are you sure you want to delete this user?');
+  const handleClickOpen = (user) => {
+    setSelectedUser(user);
+    setOpen(true);
+  };
 
-    if(confirmDelete){
+  const handleConfirmDelete = async () => {
+  if (!selectedUser) return;
+
+  setIsDeleting(true);
+
     try {
-      await deleteDoc(doc(db, 'users', userId)); // Delete the user from Firestore
-      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId)); 
-      
+
+      const res = await fetch('/api/delete-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          userId: selectedUser.id, 
+          authUid: selectedUser.uid || null
+        }),
+      });
+
+      if (res.ok) {
+        setUsers((prevUsers) => {
+          const updatedList = prevUsers.filter((u) => u.id !== selectedUser.id);
+          return [...updatedList];
+        });
+        toast.success("User deleted successfully from Database and Auth.");
+        setOpen(false);
+      } else {
+        const data = await res.json();
+        toast.error(`Error: ${data.error}`);
+      }
     } catch (error) {
       console.error('Error deleting user: ', error);
-    }
+      toast.error("An error occurred while deleting the user.");
+    } finally {
+    setIsDeleting(false); 
   }
 };
 
+
   const formatDate = (timestamp) => {
     if (timestamp && timestamp.seconds) {
-      const date = new Date(timestamp.seconds * 1000); // Convert Firestore timestamp to JS Date
+      const date = new Date(timestamp.seconds * 1000); 
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear();
@@ -121,12 +161,21 @@ const UserTable = () => {
                   <td>-</td>
                 )}
                 
-                <td>{user.password}</td> 
+                <td>
+                  {user.password ? (
+                    user.password
+                  ) : (
+                    <span style={{ color: 'green', fontWeight: 'bold' }}>
+                      {user.migratedToAuth ? "✅ Migrated" : "Auth Only"}
+                    </span>
+                  )}
+                </td>
+                 
                 <td style={{  whiteSpace: 'nowrap'}}>{formatDate(user.createdAt)}</td> 
                 <td>
                   {user.name === 'admin'? '' : 
                   <button 
-                    onClick={() => handleDelete(user.id)} 
+                    onClick={() => handleClickOpen(user)} 
                     className="delete-btn"
                   >
                     Delete
@@ -140,6 +189,36 @@ const UserTable = () => {
       ) : (
         <div></div>
       )}
+
+      <Dialog
+          open={open}
+          onClose={() => !isDeleting && setOpen(false)} // Prevent closing while deleting
+        >
+          <DialogTitle>Confirm Delete</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete <b>{selectedUser?.firstName}</b>? 
+              This action cannot be undone.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button 
+              onClick={() => setOpen(false)} 
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleConfirmDelete} 
+              color="error" 
+              variant="contained"
+              disabled={isDeleting}
+              startIcon={isDeleting ? <CircularProgress size={20} color="inherit" /> : null}
+            >
+              {isDeleting ? 'Deleting...' : 'Delete'}
+            </Button>
+          </DialogActions>
+        </Dialog>
     </div>
   );
 };

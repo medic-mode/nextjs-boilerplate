@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from '@/components/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import CreateCourse from '@/components/dashboard/createcourse/CreateCourse';
 import CreateJobs from '@/components/dashboard/createjobs/CreateJobs';
 import CreatePost from '@/components/dashboard/createpost/CreatePost';
@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import { GridLoader } from 'react-spinners';
 
 const DashboardPage = () => {
-  const { loading, logged, setLoading, userEmail } = useAuth();  // Check your useAuth logic to ensure this returns the correct value
+  const { loading, logged, setLoading, userEmail } = useAuth(); 
   const router = useRouter();
   const { slug } = useParams();
 
@@ -30,31 +30,35 @@ const DashboardPage = () => {
     'review-event', 'gallery', 'faculties'
   ];
 
+  useEffect(() => {
+    if (!loading) {
+      if (!logged || userEmail !== 'admin@medicmode.com') {
+        router.push('/');
+      }
+    }
+  }, [loading, logged, userEmail, router]);
 
   useEffect(() => {
-     if (!slug || !validSlugs.includes(slug)) {
-      // Redirect to dashboard if slug is invalid
-      router.push('/dashboard');
+    if (!loading && logged && userEmail === 'admin@medicmode.com') {
+      if (!slug || !validSlugs.includes(slug)) {
+        router.push('/dashboard/users'); 
+      }
     }
-  }, [slug, router]);
-
-  useEffect(() => {
-    setLoading(false)
-
-    // Only redirect if not logged and loading is false
-    if (!loading && (!logged || userEmail !== 'admin@medicmode.com')) {
-      router.push('/');
-    }
-  }, [loading, logged, router]);
+  }, [slug, loading, logged, userEmail, router]);
 
   if (loading) {
-    // Show the loader if loading is true
     return (
       <div className="loading-container">
         <GridLoader color={"#0A4044"} loading={loading} size={10} />
       </div>
     );
   }
+
+
+  if (!logged || userEmail !== 'admin@medicmode.com') {
+    return null; 
+  }
+
 
 
   return (

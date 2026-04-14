@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react';
 import './Signup.css';
 import CloseIcon from '@mui/icons-material/Close';
 import { collection, query, where, getDocs, addDoc } from "firebase/firestore"; // Firestore functions
-import { db } from '../../lib/firebase'; // Firebase config
+import { auth, db } from '../../lib/firebase'; 
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { toast, Toaster } from 'sonner';
 import { Button } from 'primereact/button';
 import 'primeicons/primeicons.css';
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 	const [firstName, setFirstName] = useState('');
@@ -42,7 +43,7 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 
 	e.preventDefault();
 	setSubmitted(true)
-
+	setError('');
 
 	if (!phone || phone === '91' || !/^\d{2}\d{10}$/.test(phone)) {
 		setError('Phone number is required and should contain country code followed by 10 digits');
@@ -52,28 +53,22 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
   
 
     try {
-      // Query Firestore to check if email or phone already exists
       const usersRef = collection(db, "users");
-
-      // Check for existing email
-      const emailQuery = query(usersRef, where("email", "==", email));
-      const emailSnapshot = await getDocs(emailQuery);
-      if (!emailSnapshot.empty) {
-        setError('Email already exists.');
-        return;
-      }
 
       // Check for existing phone number
       const phoneQuery = query(usersRef, where("phone", "==", phone));
       const phoneSnapshot = await getDocs(phoneQuery);
       if (!phoneSnapshot.empty) {
         setError('Phone number already exists.');
+		setSubmitted(false);
         return;
       }
-      
+	  
+	  	const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    	const user = userCredential.user;
   
-      // If no existing email or phone, add new user to Firestore
       await addDoc(usersRef, {
+		uid: user.uid,
 		createdAt: new Date(),
         firstName: firstName,
 		lastName: lastName,
@@ -85,7 +80,7 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 		jobTitle: jobTitle,
         experience: experience,
 		organization: organization,
-		email: email,
+		email: email.toLowerCase(),
 		phone: phone,
 		city: city,
 		state: state,
@@ -93,7 +88,6 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 		postalCode: postalCode,
 		referral: referral,
 		otherReferral: otherReferral,
-		password:password
       });
 	  
 	  await fetch('/api/resend/welcome-email', {
@@ -102,8 +96,12 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
 		body: JSON.stringify({ firstName, email })
 	  });
 	  
-	  
-	  	setFirstName(''); 
+	  toast.success('Registration successful! Welcome!', {
+		duration: 3000 
+		}); 
+      handleClose();
+
+	  setFirstName(''); 
         setLastName(''); 
         setDob(''); 
         setGender(''); 
@@ -122,17 +120,17 @@ const Signup = ({ setIsSignUp, handleClose, error, setError }) => {
         setReferral(''); 
         setOtherReferral(''); 
         setPassword('');
-
-      setError('');  
-	  toast.success('Registration successful! Welcome!', {
-		duration: 3000 
-		}); 
-      handleClose();
+  
     } catch (error) {
       console.error("Error signing up:", error);
-	  toast.error('An error occurred. Please try again later.', {
-		duration: 3000 
-		}); 
+
+	  if (err.code === 'auth/email-already-in-use') {
+            setError('This email is already registered.');
+        } else if (err.code === 'auth/weak-password') {
+            setError('Password should be at least 6 characters.');
+        } else {
+            setError('An error occurred during signup. Please try again.');
+        } 
     }finally {
 		setSubmitted(false); 
 	  }

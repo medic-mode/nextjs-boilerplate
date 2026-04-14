@@ -1,5 +1,5 @@
 "use client" 
-import { useAuth } from '@/components/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import EditCourse from '@/components/dashboard/editcourse/EditCourse';
 import EditEvent from '@/components/dashboard/editevent/EditEvent';
 import EditJob from '@/components/dashboard/editjobs/EditJob';
@@ -24,7 +24,6 @@ const DashboardPage = () => {
     useEffect(() => {
      
       if (!slug || !validSlugs.includes(baseRoute)) {
-        // Redirect to dashboard if slug is invalid
         router.push('/dashboard');
       }
     }, [ slug, router]);

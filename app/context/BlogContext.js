@@ -3,7 +3,7 @@ import React from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
 import { collection, getDocs, query, orderBy, setDoc, doc, getDoc, deleteDoc, where } from 'firebase/firestore'; 
-import { db } from '../lib/firebase'; 
+import { db } from '@/lib/firebase'; 
 import { toast } from 'sonner';
 
 

@@ -9,7 +9,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; 
 import { toast, Toaster } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/AuthContext';
+import { useAuth } from '../../../app/context/AuthContext';
 import { GridLoader } from 'react-spinners';
 import { v4 as uuidv4 } from 'uuid';
 import 'primeicons/primeicons.css';

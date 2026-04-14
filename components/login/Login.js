@@ -2,21 +2,23 @@
 import { useState } from 'react';
 import './Login.css';
 import CloseIcon from '@mui/icons-material/Close';
-import { query, where, getDocs, collection, doc, updateDoc } from "firebase/firestore";
-import { db } from '../../lib/firebase';
-import { toast, Toaster } from 'sonner';
+import { query, where, getDocs, collection, doc, updateDoc, deleteField } from "firebase/firestore";
+import { db, auth } from '../../lib/firebase';
+import { toast } from 'sonner';
 import Image from 'next/image';
 import { Button } from 'primereact/button';
 import 'primeicons/primeicons.css';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword, sendPasswordResetEmail
+} from "firebase/auth";
+import { useRouter } from 'next/navigation';
 
 const Login = ({ setIsSignUp, handleClose, setLogged, error, setError, setUserEmail }) => {
   const [checked, setChecked] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [forgotPassword, setForgotPassword] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState('');
-   // eslint-disable-next-line 
-  const [currentUserId, setCurrentUserId] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const handleCheck = () => {
@@ -24,196 +26,157 @@ const Login = ({ setIsSignUp, handleClose, setLogged, error, setError, setUserEm
   };
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-	  setSubmitted(true)
-    try {
-        const userQuery = query(collection(db, "users"), where("email", "==", email));
-        const querySnapshot = await getDocs(userQuery);
+  e.preventDefault();
+  setSubmitted(true);
+  setError("");
 
-        if (!querySnapshot.empty) {
-            const userDoc = querySnapshot.docs[0];
-            const userData = userDoc.data();
+  const sanitizedEmail = email.trim().toLowerCase();
 
-            if (userData.password === password) {
-                setLogged(true);
-               
-                localStorage.setItem('loggedUser', email); 
-                toast.success('Login successful!', {
-                  duration: 2000 // Show toast for 2 seconds
-              });
+  try {
+    // 1. Try standard Firebase Auth login
+    await signInWithEmailAndPassword(auth, sanitizedEmail, password);
+  } catch (authError) {
+    // 2. If login fails, check if we need to migrate this user
+    // 'auth/invalid-credential' is the common error for missing users or wrong pwd in v10+
+    if (authError.code === "auth/user-not-found" || authError.code === "auth/invalid-credential") {
+      try {
+        const res = await fetch("/api/migrate-login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: sanitizedEmail, password }),
+        });
 
-                handleClose();
-                setUserEmail(email); 
+        const data = await res.json();
 
-               
-                setEmail('');
-            } else {
-                setError("Incorrect password.");
-            }
+        if (res.ok) {
+          // 3. Migration successful, try logging in again
+          await signInWithEmailAndPassword(auth, sanitizedEmail, password);
         } else {
-            setError("User not found.");
+          // Migration failed (e.g., wrong password in Firestore)
+          setError(data.error || "Invalid credentials");
+          setSubmitted(false);
+          return;
         }
-    } catch (error) {
-        setError("Error logging in.");
-    }finally {
-      setSubmitted(false); 
-      }
-};
-
-  const handleForgotPasswordMode = () => {
-    setForgotPassword(true);
-    setError('');
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
-  };
-
-  const handleUpdatePassword = async () => {
-    if (!password || !confirmPassword) {
-      setError('Please fill in both password fields.');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match. Please try again.');
-      return;
-    }
-
-    if (!email) {
-      setError('Please enter your email.');
-      return;
-    }
-
-    try {
-      // Query Firestore to find user ID based on the entered email
-      const usersRef = collection(db, "users");
-      const q = query(usersRef, where("email", "==", email));
-
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.empty) {
-        setError('No user found with this email. Please sign up first.');
+      } catch (migrationErr) {
+        setError("Login failed. Please try again.");
+        setSubmitted(false);
         return;
       }
+    } else {
+      setError("Invalid email or password.");
+      setSubmitted(false);
+      return;
+    }
+  }
 
-      // Assuming email is unique, take the first matching document
-      const userDoc = querySnapshot.docs[0];
-      const userId = userDoc.id; // Retrieve the userId from the document ID
+  // 4. Success logic
+  setLogged(true);
+  setUserEmail(sanitizedEmail);
+  toast.success('Login successful!');
+  handleClose();
+  setSubmitted(false);
+};
 
-      setCurrentUserId(userId); // Set the current userId
-
-      // Update Firestore with the new password using the userId
-      const userDocRef = doc(db, "users", userId); // Fetch the user document by userId
-      await updateDoc(userDocRef, {
-        password: password,  // Update the user's password field in Firestore
-        passwordUpdatedTimestamp: new Date()  // Record the password update timestamp
-      });
-      toast.success('Password updated successfully.', {
-        duration: 2000 // Show toast for 2 seconds
-      });
-      setForgotPassword(false);  // Switch back to login mode
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
-
-    } catch (error) {
-      
-      setError('An error occurred while updating the password. Please try again later.');
+  const handleResetRequest = async (e) => {
+    e.preventDefault();
+    if (!email) {
+      setError("Please enter your email to receive a reset link.");
+      return;
+    }
+    setSubmitted(true);
+    try {
+      await sendPasswordResetEmail(auth, email.trim().toLowerCase());
+      toast.success("Reset link sent to your email!");
+      setForgotPassword(false); 
+    } catch (err) {
+      setError("Failed to send reset email. Check if the email is correct.");
+    } finally {
+      setSubmitted(false);
     }
   };
 
   return (
-    <div className='login'>
-      <Toaster position="top-center" richColors/>
+    <div className='login' style={{ fontFamily: '"Montserrat", sans-serif' }}>
       <CloseIcon className='close-modal' onClick={handleClose} />
+      
       <div className="login-logo">
         <Image src='/assets/logos/medicmode-logo.png' alt="" width={100} height={45} />
       </div>
+
       <div className="login-form">
         <h1>{forgotPassword ? "Reset Password" : "Login"}</h1>
+        
         <div className="form">
           {error && <p className="incorrect">{error}</p>}
 
-          {/* Forgot Password Flow - Email and New Password Form */}
-          {forgotPassword ? (
-            <>
-              <input type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value.toLowerCase())}/>
-				{checked ? (
-                <>
-                  <input
-                    type="text"
-                    placeholder="New Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </>
-              ) : (
-                <>
-                  <input
-                    type="password"
-                    placeholder="New Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <input
-                    type="password"
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </>
-              )}
-              
-			  <div className='show-pwd'>
-                  <input type="checkbox" onClick={handleCheck} style={{minWidth: '20px !important'}}/>
-                  <p>Show Password</p>
-                </div>
-              <button className='login-btn' onClick={handleUpdatePassword}>
-                Update Password
-              </button>
-            </>
-          ) : (
-            <>
-              <input type="text"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)} />
+          <input 
+            type="text"
+            placeholder={forgotPassword ? "Enter your email id" : "Email"}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)} 
+          />
 
-              {checked ? <input type="text"
+          {!forgotPassword ? (
+            <>
+              {/* Login View */}
+              <input 
+                type={checked ? "text" : "password"}
                 placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)} /> :
-                <input 
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)} />}
+                onChange={(e) => setPassword(e.target.value)} 
+              />
 
               <div className="forget-pwd">
                 <div className='show-pwd'>
-                  <input type="checkbox" onClick={handleCheck} />
+                  <input type="checkbox" onChange={handleCheck} checked={checked} />
                   <p>Show Password</p>
                 </div>
-                <p style={{ cursor: 'pointer', color: 'grey' }}
-                  onClick={handleForgotPasswordMode}>Forgot password?</p>
+                <p 
+                  style={{ cursor: 'pointer', color: 'grey' }}
+                  onClick={() => { setForgotPassword(true); setError(''); }}
+                >
+                  Forgot password?
+                </p>
               </div>
 
               <Button 
-                          className="login-btn" 
-                          label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "LOGIN"} 
-                          disabled={submitted} 
-                          onClick={handleLogin}/>  
-              <p style={{fontSize:'13px'}}>Don&apos;t have an account? <span style={{ fontWeight: 'bolder', cursor: 'pointer' }}
-                  onClick={() => { setIsSignUp(true); setError(''); }}>Sign up</span></p>
+                className="login-btn" 
+                label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "LOGIN"} 
+                disabled={submitted} 
+                onClick={handleLogin}
+              />
+
+              <p style={{ fontSize: '13px' }}>
+                Don't have an account? 
+                <span 
+                  style={{ fontWeight: 'bolder', cursor: 'pointer', marginLeft: '5px' }}
+                  onClick={() => { setIsSignUp(true); setError(''); }}
+                >
+                  Sign up
+                </span>
+              </p>
+            </>
+          ) : (
+            <>
+              {/* Password Reset View */}
+              <p style={{ fontSize: '12px', textAlign: 'center', color: 'grey' }}>
+                We'll send you a secure link to reset your password.
+              </p>
+
+              <Button 
+                className="login-btn" 
+                label={submitted ? <i className="pi pi-spin pi-spinner"></i> : "SEND RESET LINK"} 
+                disabled={submitted} 
+                onClick={handleResetRequest}
+                style={{fontFamily:'inherit'}}
+              />
+
+              <p 
+                style={{ fontSize: '13px', cursor: 'pointer', fontWeight: 'bold' }}
+                onClick={() => { setForgotPassword(false); setError(''); }}
+              >
+                ← Back to Login
+              </p>
             </>
           )}
         </div>
