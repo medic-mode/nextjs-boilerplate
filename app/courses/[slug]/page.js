@@ -30,5 +30,5 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
     const { slug } = await params;
 
-    return <CourseDetail slug={slug} />;
+    return <CourseDetail slug={slug} />
 }
