@@ -3,6 +3,9 @@ const nextConfig = {
   images: {
     domains: ['firebasestorage.googleapis.com'],
   },
+  experimental: {
+    turbopack: {}, // Tells Next.js you've acknowledged the transition
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
@@ -10,7 +13,6 @@ const nextConfig = {
         {
           loader: '@svgr/webpack',
           options: {
-            // Optional settings, e.g., icon: true for optimizing as icons
           },
         },
       ],
