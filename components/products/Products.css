@@ -155,7 +155,7 @@
 
 	.product-item h2 {
 		bottom: 55px;
-		font-size: 16px;
+		font-size: 16px !important;
 	}
 
 	.product-item p {

@@ -6,25 +6,28 @@ const Products = () => {
   return (
     <div className="products-container">
         <div className="products-header">
+        <Link href='#products-list'>
             <img
                 className="desktop-banner"
                 src="/assets/products/product-banner.png"
                 alt="Products Banner"
             />
-
+        </Link>
+        <Link href='#products-list'>
             <img
                 className="mobile-banner"
                 src="/assets/products/product-banner-mobile.png"
                 alt="Products Mobile Banner"
             />
+        </Link>
         </div>
 
-		<div className="products">
+		<div className="products" id="products-list">
 			<h2 >Emergency Knowledge, <span style={{color:'var(--orange)'}}>Simplified</span></h2>
             <p>Pocket-sized guides for rapid response across medical emergencies.</p>
 		</div>
         
-        <div className="products-list">
+        <div className="products-list" >
             <div className="product-item">
                 <Link
                     href="/api/product-click?productId=first-aid-guide"
