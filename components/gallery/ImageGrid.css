@@ -1,3 +1,21 @@
+/* *********Gallery*********** */
+
+.gallery-container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 30px 20px;
+  margin-bottom: 50px;
+}
+
+.gallery-container h2{
+  font-size: 35px;
+  color: var(--dark-green);
+  margin-bottom: 40px;
+}
+
+
 .image-gallery {
   max-width: 1300px;
   width: 100%;

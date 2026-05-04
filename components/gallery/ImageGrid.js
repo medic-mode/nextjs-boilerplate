@@ -8,6 +8,8 @@ import { collection, getDocs } from 'firebase/firestore';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
+
+
 const ImageGrid = () => {
   const [images, setImages] = useState([]);
   const fancyboxInitialized = useRef(false); // Using useRef to avoid re-renders
@@ -41,6 +43,8 @@ const ImageGrid = () => {
   }, []);
 
   return (
+    <div className="gallery-container">
+        <h2>Gallery</h2>
     <div
       className="image-gallery"
       style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}
@@ -74,6 +78,7 @@ const ImageGrid = () => {
           ))}
         </div>
       ))}
+    </div>
     </div>
   );
 };

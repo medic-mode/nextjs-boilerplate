@@ -106,6 +106,16 @@ const Header = () => {
               </Link>
             </li>
             <li>
+              <Link href="/products" onClick={() => setIsMenuOpen(false)}>
+                PRODUCTS
+              </Link>
+            </li>
+            {/* <li>
+              <Link href="/gallery" onClick={() => setIsMenuOpen(false)}>
+                GALLERY
+              </Link>
+            </li> */}
+            <li>
               <Link href="/careers" onClick={() => setIsMenuOpen(false)}>
                 CAREERS
               </Link>
@@ -124,7 +134,8 @@ const Header = () => {
             }
           </ul>
         </div>
-        <div className="account">
+        <div>
+        <div style={{ marginRight: "10px"}}>
           {logged ? (
             <button className="login-register-btn" onClick={handleLogout} >
               LOGOUT
@@ -144,6 +155,7 @@ const Header = () => {
           hideOutline={false}
           size={25}
         />
+      </div>
       </div>
 
       <Modal

@@ -19,7 +19,6 @@ import CountUp from 'react-countup';
 import CoverFlow from '../testimony/CoverFlow';
 import ImageGrid from '../gallery/ImageGrid';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import Team from '../team/Team'
 import {
     VerticalTimeline,
     VerticalTimelineElement,
@@ -32,6 +31,16 @@ import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
 
 
 export default function Home() {
+
+  const [showPopup, setShowPopup] = useState(false);
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setShowPopup(true);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }, []);
 
 	
 	useEffect(() => {
@@ -94,6 +103,25 @@ export default function Home() {
 
   return (
     <div className="home-container">
+    {showPopup && (
+        <div className="product-popup-overlay">
+          <div className="product-popup-box">
+            <button
+              className="product-popup-close"
+              onClick={() => setShowPopup(false)}
+            >
+              ×
+            </button>
+            <Link href="/api/product-click?productId=first-aid-guide" target="_blank" rel="noopener noreferrer">
+              <img
+                src="/assets/home/product-popup.png"
+                alt="Product Popup"
+                className="product-popup-img"
+              />
+            </Link>
+          </div>
+        </div>
+      )}
       <div className='swiper'>
         <Swiper
           spaceBetween={0}
@@ -303,19 +331,8 @@ export default function Home() {
 {/* ***************** Gallery *********************/}
 
 <div className="gallery-container">
-        <h2>Gallery</h2>
           <ImageGrid />
       </div>
-
-{/* ***************** Team *********************/}
-
-      <div className="team-container">
-        <h2>Our <span style={{ color: 'var(--orange)' }}>Team</span></h2>
-        <Team />
-      </div>
-
-
-      
 
 
     </div>

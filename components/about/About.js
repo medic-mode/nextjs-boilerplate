@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import './About.css'
 import Aos from 'aos';
 import 'aos/dist/aos.css';
+import Team from '../team/Team';
 
 
 
@@ -153,6 +154,14 @@ const About = () => {
 				</div> 
 			</div> 
 		</div>
+
+		{/* ***************** Team *********************/}
+
+      <div className="team-container">
+        <h2>Our <span style={{ color: 'var(--orange)' }}>Team</span></h2>
+        <Team />
+      </div>
+
 		
 	</div>
   )

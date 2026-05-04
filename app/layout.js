@@ -1,8 +1,8 @@
 "use client";
+import "./globals.css";
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
 import GoogleAnalytics from "@/components/GoogleAnalytics"; 
-import "./globals.css";
 import { usePathname } from 'next/navigation';
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import Script from 'next/script';
@@ -49,7 +49,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className={montserrat.className}>
+      <body className={montserrat.className} id="app-root">
       <Toaster position="top-center" richColors />
         <AuthProvider>
           <BlogProvider>
