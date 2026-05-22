@@ -8,7 +8,7 @@ export async function GET(req) {
 	const { searchParams } = new URL(req.url);
 
 	const productId = searchParams.get("productId") || "first-aid-guide";
-	const redirectUrl = "https://thephclibrary.org/order/";
+	const redirectUrl = "https://forms.gle/kEmADePUFCKKKkQGA";
 
 	try {
 		const productRef = db.collection("productClicks").doc(productId);
