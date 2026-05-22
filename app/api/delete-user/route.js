@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
-import { adminAuth, db } from "@/lib/firebaseAdmin";
+import { getAdminAuth, getDb } from "@/lib/firebaseAdmin";
 
 export async function POST(req) {
   try {
+    const adminAuth = getAdminAuth();
+    const db = getDb();
     const { userId, authUid } = await req.json();
 
     console.log(userId, authUid)

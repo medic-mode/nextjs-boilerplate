@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
-import { adminAuth, db } from "@/lib/firebaseAdmin";
+import { getAdminAuth, getDb } from "@/lib/firebaseAdmin";
 import { FieldValue } from "firebase-admin/firestore";
 
 export async function POST(req) {
   try {
+    const adminAuth = getAdminAuth();
+    const db = getDb();
     const { email, password } = await req.json();
     const sanitizedEmail = email.trim().toLowerCase();
 

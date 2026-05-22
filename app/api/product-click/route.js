@@ -1,6 +1,6 @@
-import { db } from "@/lib/firebaseAdmin";
+import { getDb } from "@/lib/firebaseAdmin";
 import { NextResponse } from "next/server";
-import admin from "firebase-admin";
+import { FieldValue } from "firebase-admin/firestore";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -12,14 +12,15 @@ export async function GET(req) {
 	const redirectUrl = "https://forms.gle/kEmADePUFCKKKkQGA";
 
 	try {
+		const db = getDb();
 		const productRef = db.collection("productClicks").doc(productId);
 
 		await productRef.set(
 			{
 				productId,
 				redirectUrl,
-				clickedAt: admin.firestore.FieldValue.serverTimestamp(),
-				count: admin.firestore.FieldValue.increment(1),
+				clickedAt: FieldValue.serverTimestamp(),
+				count: FieldValue.increment(1),
 			},
 			{ merge: true }
 		);
