@@ -1,8 +1,9 @@
-// /app/api/product-click/route.js
-
 import { db } from "@/lib/firebaseAdmin";
 import { NextResponse } from "next/server";
 import admin from "firebase-admin";
+
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 export async function GET(req) {
 	const { searchParams } = new URL(req.url);
