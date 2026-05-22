@@ -1,6 +1,5 @@
 import React from 'react'
 import './Products.css'
-import Link from 'next/link'
 
 const Products = () => {
   return (
@@ -29,7 +28,7 @@ const Products = () => {
         
         <div className="products-list" >
             <div className="product-item">
-                <Link
+                <a
                     href="/api/product-click?productId=first-aid-guide"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -37,7 +36,7 @@ const Products = () => {
                     <img src="/assets/products/product1.png" alt="First Aid Guide" />
                     <h2>Order Now</h2>
                     <p>You will be redirected to an external site to place your order.</p>
-                </Link>
+                </a>
             </div>
         </div>
 	</div>
