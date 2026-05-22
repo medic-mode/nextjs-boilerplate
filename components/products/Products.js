@@ -1,5 +1,6 @@
 import React from 'react'
 import './Products.css'
+import Link from 'next/link'
 
 const Products = () => {
   return (
