@@ -271,3 +271,16 @@ html {
     @apply bg-background text-foreground;}
   html {
     @apply font-sans;}}
+
+html,
+body,
+body :not(.pi):not([class^="pi-"]):not([class*=" pi-"]) {
+  font-family: var(--font-montserrat), "Montserrat", sans-serif !important;
+}
+
+.pi,
+.pi::before,
+[class^="pi-"],
+[class*=" pi-"] {
+  font-family: primeicons !important;
+}
