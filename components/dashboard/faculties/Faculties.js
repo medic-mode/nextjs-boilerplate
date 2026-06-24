@@ -1,11 +1,13 @@
 "use client"
-import React, { useState, useEffect } from 'react';
-import { collection, addDoc, getDocs, updateDoc, doc } from 'firebase/firestore';
+import React, { useState } from 'react';
+import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
 import { db } from '../../../lib/firebase'; 
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import './Faculties.css';
 import { Button } from 'primereact/button';
 import 'primeicons/primeicons.css';
+import TablePaginationFooter from '../table-pagination/TablePaginationFooter';
+import { useFirestorePagination } from '@/hooks/useFirestorePagination';
 
 const Faculties = () => {
 
@@ -18,19 +20,49 @@ const Faculties = () => {
         email: '',
         image: null
     });
+    const [searchTerm, setSearchTerm] = useState('');
 
-    const [facultyList, setFacultyList] = useState([]);
+    const {
+        rows: facultyList,
+        allRows,
+        allRowsLoading,
+        fetchAllRows,
+        loading: tableLoading,
+        page,
+        pageSize,
+        setPageSize,
+        totalRows,
+        totalPages,
+        fetchFirstPage,
+        fetchLastPage,
+        fetchNextPage,
+        fetchPreviousPage,
+    } = useFirestorePagination({
+        collectionName: 'faculties',
+        orderDirection: 'asc',
+    });
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+    const searchableFacultyList = normalizedSearch ? allRows || [] : facultyList;
+    const visibleFacultyList = normalizedSearch
+        ? searchableFacultyList.filter((faculty) =>
+            [
+                faculty.name,
+                faculty.designation,
+                faculty.contact,
+                faculty.email,
+            ].some((value) => String(value || '').toLowerCase().includes(normalizedSearch))
+          )
+        : facultyList;
+    React.useEffect(() => {
+        if (normalizedSearch) {
+            fetchAllRows();
+        }
+    }, [normalizedSearch, fetchAllRows]);
     const [editingId, setEditingId] = useState(null); // State for tracking the faculty member being edited
 
     const fetchFacultyList = async () => {
-        const querySnapshot = await getDocs(collection(db, 'faculties'));
-        const facultyData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setFacultyList(facultyData);
+        await fetchFirstPage();
     };
-
-    useEffect(() => {
-        fetchFacultyList();
-    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -178,7 +210,16 @@ const Faculties = () => {
             <hr style={{ border: '1px solid var(--dark-green)', margin: '20px 0' }} />
 
             <div className="faculty-list">
-                <h3>Faculty List</h3>
+                <div className="dashboard-list-toolbar">
+                    <h3>Faculty List</h3>
+                    <input
+                        className="dashboard-list-search"
+                        type="search"
+                        placeholder="Search faculty..."
+                        value={searchTerm}
+                        onChange={(event) => setSearchTerm(event.target.value)}
+                    />
+                </div>
                 <table>
                     <thead>
                         <tr>
@@ -192,9 +233,18 @@ const Faculties = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {facultyList.map((faculty, index) => (
+                        {tableLoading || allRowsLoading ? (
+                            <tr>
+                                <td colSpan="7" className="dashboard-table-loading-cell">
+                                    <div className="dashboard-table-loading">
+                                        <i className="pi pi-spin pi-spinner" style={{ color: 'var(--dark-green)', fontSize: '28px' }}></i>
+                                    </div>
+                                </td>
+                            </tr>
+                        ) : visibleFacultyList.length > 0 ? (
+                        visibleFacultyList.map((faculty, index) => (
                             <tr key={faculty.id}>
-                                <td>{index + 1}</td>
+                                <td>{normalizedSearch ? index + 1 : (page - 1) * pageSize + index + 1}</td>
                                 <td>
                                     <img src={faculty.image} alt={faculty.name} style={{ width: '50px', height: '60px' }} />
                                 </td>
@@ -206,9 +256,28 @@ const Faculties = () => {
                                     <button className='faculty-btn' style={{margin:'0'}} onClick={() => handleEdit(faculty)}>Edit</button>
                                 </td>
                             </tr>
-                        ))}
+                        ))
+                        ) : (
+                            <tr>
+                                <td colSpan="7" className="dashboard-table-empty-cell">
+                                    <div className="dashboard-table-empty">No faculty found.</div>
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
+                {!normalizedSearch && <TablePaginationFooter
+                    totalRows={totalRows}
+                    page={page}
+                    totalPages={totalPages}
+                    pageSize={pageSize}
+                    onPageSizeChange={setPageSize}
+                    onFirstPage={fetchFirstPage}
+                    onPreviousPage={fetchPreviousPage}
+                    onNextPage={fetchNextPage}
+                    onLastPage={fetchLastPage}
+                    disabled={tableLoading}
+                />}
             </div>
         </div>
     );

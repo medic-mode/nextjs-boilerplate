@@ -8,8 +8,7 @@
 
   .user-table-container h1 {
     color: var(--dark-green);
-    margin-bottom: 20px;
-    text-align: center; /* Center the title */
+    text-align: left;
   }
 
   .scroll{

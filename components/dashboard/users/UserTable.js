@@ -1,11 +1,12 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { db } from '../../../lib/firebase'; 
-import { collection, getDocs} from 'firebase/firestore'; 
 import './UserTable.css'; 
-import { useAuth } from '../../../app/context/AuthContext';
 import { GridLoader } from 'react-spinners';
 import Link from 'next/link';
+import TablePaginationFooter from '../table-pagination/TablePaginationFooter';
+import { useFirestorePagination } from '@/hooks/useFirestorePagination';
+import { auth } from '@/lib/firebase';
+import { toast } from 'sonner';
 import { 
   Button, 
   Dialog, 
@@ -19,38 +20,53 @@ import {
 const UserTable = () => {
 
 
-  const {loading, setLoading} = useAuth();
-
-  const [users, setUsers] = useState([]);
+  const {
+    rows: users,
+    setRows: setUsers,
+    allRows,
+    allRowsLoading,
+    fetchAllRows,
+    loading: tableLoading,
+    page,
+    pageSize,
+    setPageSize,
+    totalRows,
+    totalPages,
+    fetchFirstPage,
+    fetchLastPage,
+    fetchNextPage,
+    fetchPreviousPage,
+  } = useFirestorePagination({
+    collectionName: 'users',
+    orderField: 'createdAt',
+  });
 
   const [open, setOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const searchableUsers = normalizedSearch ? allRows || [] : users;
+  const visibleUsers = normalizedSearch
+    ? searchableUsers.filter((user) =>
+        [
+          user.firstName,
+          user.lastName,
+          user.email,
+          user.phone,
+          user.jobTitle,
+          user.organization,
+          formatDate(user.createdAt),
+        ].some((value) => String(value || '').toLowerCase().includes(normalizedSearch))
+      )
+    : users;
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, 'users')); 
-        const usersList = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        usersList.sort((a, b) => {
-          const dateA = a.createdAt?.seconds || 0; 
-          const dateB = b.createdAt?.seconds || 0;
-          return dateB - dateA; // Descending order
-        });
-        setUsers(usersList);
-      } catch (error) {
-        console.error('Error fetching users: ', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-    // eslint-disable-next-line
-  }, []);
+    if (normalizedSearch) {
+      fetchAllRows();
+    }
+  }, [normalizedSearch, fetchAllRows]);
 
   const handleClickOpen = (user) => {
     setSelectedUser(user);
@@ -63,10 +79,19 @@ const UserTable = () => {
   setIsDeleting(true);
 
     try {
+      const idToken = await auth.currentUser?.getIdToken();
+
+      if (!idToken) {
+        toast.error("Admin session expired. Please log in again.");
+        return;
+      }
 
       const res = await fetch('/api/delete-user', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
+        },
         body: JSON.stringify({ 
           userId: selectedUser.id, 
           authUid: selectedUser.uid || null
@@ -93,7 +118,7 @@ const UserTable = () => {
 };
 
 
-  const formatDate = (timestamp) => {
+  function formatDate(timestamp) {
     if (timestamp && timestamp.seconds) {
       const date = new Date(timestamp.seconds * 1000); 
       const day = String(date.getDate()).padStart(2, '0');
@@ -102,21 +127,23 @@ const UserTable = () => {
       return `${day}-${month}-${year}`; // Format date as 'dd-mm-yyyy'
     }
     return 'N/A'; // Return 'N/A' if the timestamp is invalid
-  };
-
-
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <GridLoader color={"#0A4044"} loading={loading} size={10} />
-      </div>
-    );
   }
+
 
   return (
     <div className="user-table-container">
-      <h1>User List</h1>
-      {users.length > 0 ? (
+      <div className="dashboard-list-toolbar">
+        <h1>User List</h1>
+        <input
+          className="dashboard-list-search"
+          type="search"
+          placeholder="Search users..."
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+        />
+      </div>
+      {(users.length > 0 || tableLoading || allRowsLoading) ? (
+        <>
         <div className="scroll">
         <table>
           <thead>
@@ -135,9 +162,18 @@ const UserTable = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
+            {tableLoading || allRowsLoading ? (
+              <tr>
+                <td colSpan="11" className="dashboard-table-loading-cell">
+                  <div className="dashboard-table-loading">
+                    <GridLoader color={"#0A4044"} loading={tableLoading} size={10} />
+                  </div>
+                </td>
+              </tr>
+            ) : visibleUsers.length > 0 ? (
+            visibleUsers.map((user, index) => (
               <tr key={user.id}>
-                <td>{index + 1}</td> 
+                  <td>{normalizedSearch ? index + 1 : (page - 1) * pageSize + index + 1}</td> 
                 <td>{user.firstName}</td>
                 <td>{user.lastName}</td>
                 <td>{user.email}</td> 
@@ -182,10 +218,30 @@ const UserTable = () => {
                   </button> }
                 </td>
               </tr>
-            ))}
+            ))
+            ) : (
+              <tr>
+                <td colSpan="11" className="dashboard-table-empty-cell">
+                  <div className="dashboard-table-empty">No users found.</div>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
         </div>
+        {!normalizedSearch && <TablePaginationFooter
+          totalRows={totalRows}
+          page={page}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          onPageSizeChange={setPageSize}
+          onFirstPage={fetchFirstPage}
+          onPreviousPage={fetchPreviousPage}
+          onNextPage={fetchNextPage}
+          onLastPage={fetchLastPage}
+          disabled={tableLoading}
+        />}
+        </>
       ) : (
         <div></div>
       )}

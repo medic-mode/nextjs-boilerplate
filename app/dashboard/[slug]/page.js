@@ -11,24 +11,23 @@ import ReviewEvent from '@/components/dashboard/reviewevent/ReviewEvent';
 import ReviewJob from '@/components/dashboard/reviewjob/ReviewJob';
 import ReviewPost from '@/components/dashboard/reviewpost/ReviewPost';
 import UserTable from '@/components/dashboard/users/UserTable';
-import PaymentHistory from '@/components/paymenthistory/PaymentHistory';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { GridLoader } from 'react-spinners';
 
+const validSlugs = [
+  'users', 'create-post', 'review-post',
+  'create-course', 'review-course', 'events', 'create-job', 'review-job',
+  'review-event', 'gallery', 'faculties'
+];
+
 const DashboardPage = () => {
-  const { loading, logged, setLoading, userEmail } = useAuth(); 
+  const { loading, logged, userEmail } = useAuth(); 
   const router = useRouter();
   const { slug } = useParams();
 
   
-
-  const validSlugs = [
-    'users', 'create-post', 'review-post', 
-    'create-course', 'review-course', 'events', 'create-job', 'review-job',
-    'review-event', 'gallery', 'faculties'
-  ];
 
   useEffect(() => {
     if (!loading) {

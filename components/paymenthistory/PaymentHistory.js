@@ -4,6 +4,7 @@ import './PaymentHistory.css';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { GridLoader } from 'react-spinners';
 import Link from 'next/link';
+import TablePaginationFooter from '@/components/dashboard/table-pagination/TablePaginationFooter';
 
 const PaymentHistory = () => {
   const searchParams = useSearchParams();
@@ -11,6 +12,9 @@ const PaymentHistory = () => {
   const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState({});
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const db = getFirestore();
 
@@ -26,33 +30,6 @@ const PaymentHistory = () => {
           const userData = userDoc.data();
           setUserDetails(userData);
   
-          // Check if purchaseHistory exists and iterate through it
-          if (userData.purchaseHistory && userData.purchaseHistory.length > 0) {
-            userData.purchaseHistory.forEach(async (purchase) => {
-              const paymentId = purchase.paymentId;
-              
-              // Log to verify the paymentId
-              console.log('Fetching status for paymentId:', paymentId);
-  
-              if (paymentId) {
-                try {
-                  const response = await fetch(`/api/paymentStatus?paymentId=${paymentId}`);
-                  const data = await response.json();
-                  if (data.status) {
-                    // Handle the payment status
-                    console.log('Payment Status:', data.status);
-                    setPaymentStatus(data.status); // Update the state with payment status
-                  } else {
-                    console.warn('No status in response:', data);
-                  }
-                } catch (error) {
-                  console.error('Error fetching payment status:', error);
-                }
-              } else {
-                console.warn('No paymentId found for purchase:', purchase);
-              }
-            });
-          }
         } else {
           console.warn('No user found with the given ID');
         }
@@ -84,13 +61,16 @@ const PaymentHistory = () => {
     };
 
     if (userDetails && userDetails.purchaseHistory) {
-      userDetails.purchaseHistory.forEach((purchase) => {
+      const startIndex = (page - 1) * pageSize;
+      const pagePurchases = userDetails.purchaseHistory.slice(startIndex, startIndex + pageSize);
+
+      pagePurchases.forEach((purchase) => {
         if (purchase.paymentId) {
           fetchPaymentStatus(purchase.paymentId);
         }
       });
     }
-  }, [userDetails]);
+  }, [userDetails, page, pageSize]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -117,10 +97,41 @@ const PaymentHistory = () => {
     return status.charAt(0).toUpperCase() + status.slice(1); // Capitalize the first letter
   };
 
+  const purchaseHistory = userDetails.purchaseHistory || [];
+  const totalRows = purchaseHistory.length;
+  const totalPages = Math.max(1, Math.ceil(totalRows / pageSize));
+  const pagePurchases = purchaseHistory.slice((page - 1) * pageSize, page * pageSize);
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const visiblePagePurchases = normalizedSearch
+    ? pagePurchases.filter((purchase) =>
+        [
+          formatDate(purchase.purchaseDate),
+          purchase.paymentAmount,
+          purchase.paymentId,
+          purchase.courseTitle,
+          paymentStatus[purchase.paymentId],
+        ].some((value) => String(value || '').toLowerCase().includes(normalizedSearch))
+      )
+    : pagePurchases;
+
+  const handlePageSizeChange = (nextPageSize) => {
+    setPageSize(nextPageSize);
+    setPage(1);
+  };
+
   return (
     <div className='payment-history-container'>
-      <h1>Purchase History</h1>
       <div className="purchase-history">
+        <div className="dashboard-list-toolbar">
+          <h1>Purchase History</h1>
+          <input
+            className="dashboard-list-search"
+            type="search"
+            placeholder="Search purchases..."
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+          />
+        </div>
         <div className="purchase-user-details">
           <h4>Name: {userDetails.firstName} {userDetails.lastName}</h4>
           <h4>Contact: {userDetails.phone}</h4>
@@ -128,11 +139,12 @@ const PaymentHistory = () => {
         </div>
 
         <div className="purchase-history-details">
-          {userDetails.purchaseHistory && userDetails.purchaseHistory.length > 0 ? (
-            userDetails.purchaseHistory.map((purchase, index) => {
+          {purchaseHistory.length > 0 ? (
+            visiblePagePurchases.length > 0 ? (
+            visiblePagePurchases.map((purchase, index) => {
               const status = paymentStatus[purchase.paymentId] || 'Fetching status...';
               return (
-                <div key={index} className="purchase-items">
+                <div key={`${purchase.paymentId || purchase.courseId}-${index}`} className="purchase-items">
                   <div className="items-head">
                     <div className="items-head-row">
                       <p>Purchase Date:</p>
@@ -174,8 +186,24 @@ const PaymentHistory = () => {
                 </div>
               );
             })
+            ) : (
+              <div className="dashboard-table-empty">No purchases found.</div>
+            )
           ) : (
             <div>No purchase history found.</div>
+          )}
+          {purchaseHistory.length > 0 && (
+            <TablePaginationFooter
+              totalRows={totalRows}
+              page={page}
+              totalPages={totalPages}
+              pageSize={pageSize}
+              onPageSizeChange={handlePageSizeChange}
+              onFirstPage={() => setPage(1)}
+              onPreviousPage={() => setPage((currentPage) => Math.max(1, currentPage - 1))}
+              onNextPage={() => setPage((currentPage) => Math.min(totalPages, currentPage + 1))}
+              onLastPage={() => setPage(totalPages)}
+            />
           )}
         </div>
       </div>

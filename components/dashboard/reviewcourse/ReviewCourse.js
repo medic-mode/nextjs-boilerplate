@@ -3,56 +3,72 @@ import React, { useEffect, useState } from 'react'
 import './ReviewCourse.css'
 import EditCourse from '../editcourse/EditCourse'
 import { db } from '../../../lib/firebase'; // Adjust the path as necessary
-import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { GridLoader } from 'react-spinners';
 import Link from 'next/link';
-import { useAuth } from '../../../app/context/AuthContext';
+import TablePaginationFooter from '../table-pagination/TablePaginationFooter';
+import { useFirestorePagination } from '@/hooks/useFirestorePagination';
 
 const ReviewCourse = () => {
 
-  const {loading, setLoading} = useAuth();
-
-    const [courses, setCourses] = useState([]);
     const [approvalStatus, setApprovalStatus] = useState({});
     const [approvedCourses, setApprovedCourses] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const {
+      rows: courses,
+      setRows: setCourses,
+      allRows,
+      allRowsLoading,
+      fetchAllRows,
+      loading: tableLoading,
+      page,
+      pageSize,
+      setPageSize,
+      totalRows,
+      totalPages,
+      fetchFirstPage,
+      fetchLastPage,
+      fetchNextPage,
+      fetchPreviousPage,
+    } = useFirestorePagination({
+      collectionName: 'courses',
+      orderField: 'dateCreated',
+    });
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+    const searchableCourses = normalizedSearch ? allRows || [] : courses;
+    const visibleCourses = normalizedSearch
+      ? searchableCourses.filter((course) =>
+          [
+            formatDate(course.dateCreated),
+            course.courseTitle,
+            course.mode,
+            course.audience?.join(', '),
+            course.priceDetail,
+            course.price,
+          ].some((value) => String(value || '').toLowerCase().includes(normalizedSearch))
+        )
+      : courses;
 
     useEffect(() => {
-        const fetchCourses = async () => {
-          try {
-            const querySnapshot = await getDocs(collection(db, 'courses'));
-            const courses = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      if (normalizedSearch) {
+        fetchAllRows();
+      }
+    }, [normalizedSearch, fetchAllRows]);
 
+    useEffect(() => {
+      const initialApprovalStatus = {};
+      const approvedList = [];
 
-            courses.sort((a, b) => {
-              const dateA = new Date(a.dateCreated); // Convert to Date object
-              const dateB = new Date(b.dateCreated); // Convert to Date object
-              return dateB - dateA; // Descending order
-            });
+      courses.forEach((course) => {
+        initialApprovalStatus[course.id] = course.approved === 'yes';
+        if (initialApprovalStatus[course.id]) {
+          approvedList.push(course);
+        }
+      });
 
-            // Initialize approval status and approved posts
-            const initialApprovalStatus = {};
-            const approvedList = []; // Temporary array to hold approved posts
-    
-            courses.forEach((course) => {
-              initialApprovalStatus[course.id] = course.approved === 'yes'; // Check Firestore approval status
-              if (initialApprovalStatus[course.id]) {
-                approvedList.push(course); // Add to approved list if already approved
-              }
-            });
-
-            setCourses(courses);
-            setApprovalStatus(initialApprovalStatus);
-            setApprovedCourses(approvedList);
-          } catch (error) {
-            console.error('Error fetching courses: ', error);
-          } finally {
-            setLoading(false);
-          }
-        };
-    
-        fetchCourses();
-        // eslint-disable-next-line
-      }, []);
+      setApprovalStatus(initialApprovalStatus);
+      setApprovedCourses(approvedList);
+    }, [courses]);
 
     const handleApprovalChange = async (courseId) => {
         const isApproved = approvalStatus[courseId];
@@ -83,7 +99,7 @@ const ReviewCourse = () => {
       };
     
 
-    const formatDate = (date) => {
+    function formatDate(date) {
         if (!date) {
           return 'N/A';
         }
@@ -95,15 +111,15 @@ const ReviewCourse = () => {
     
         const parsedDate = new Date(date);
         return formatDateString(parsedDate);
-      };
+      }
     
 
-    const formatDateString = (date) => {
+    function formatDateString(date) {
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
         return `${day}-${month}-${year}`;
-      };
+      }
 
       const handleDelete = async (courseId) => {
         const confirmDelete = window.confirm('Are you sure you want to delete this post?');
@@ -119,19 +135,20 @@ const ReviewCourse = () => {
       };
     
       
-if (loading) {
-  return (
-    <div className="loading-container">
-      <GridLoader color={"#0A4044"} loading={loading} size={10} />
-    </div>
-  );
-}
-
-      
   return (
     <div className="review-course-container">
-      <h1>Review Course</h1>
-      {courses.length > 0 ? (
+      <div className="dashboard-list-toolbar">
+        <h1>Review Course</h1>
+        <input
+          className="dashboard-list-search"
+          type="search"
+          placeholder="Search courses..."
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+        />
+      </div>
+      {(courses.length > 0 || tableLoading || allRowsLoading) ? (
+        <>
         <div className="scroll">
           <table>
             <thead>
@@ -148,9 +165,18 @@ if (loading) {
               </tr>
             </thead>
             <tbody>
-              {courses.map((course, index) => (
+              {tableLoading || allRowsLoading ? (
+                <tr>
+                  <td colSpan="12" className="dashboard-table-loading-cell">
+                    <div className="dashboard-table-loading">
+                      <GridLoader color={"#0A4044"} loading={tableLoading} size={10} />
+                    </div>
+                  </td>
+                </tr>
+              ) : visibleCourses.length > 0 ? (
+              visibleCourses.map((course, index) => (
                 <tr key={course.id}>
-                  <td>{index + 1}</td>
+                  <td>{normalizedSearch ? index + 1 : (page - 1) * pageSize + index + 1}</td>
                   <td>{formatDate(course.dateCreated)}</td>
                   <td>{course.courseTitle}</td>
                   <td>{course.mode}</td>
@@ -199,10 +225,30 @@ if (loading) {
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))
+              ) : (
+                <tr>
+                  <td colSpan="12" className="dashboard-table-empty-cell">
+                    <div className="dashboard-table-empty">No courses found.</div>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
+        {!normalizedSearch && <TablePaginationFooter
+          totalRows={totalRows}
+          page={page}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          onPageSizeChange={setPageSize}
+          onFirstPage={fetchFirstPage}
+          onPreviousPage={fetchPreviousPage}
+          onNextPage={fetchNextPage}
+          onLastPage={fetchLastPage}
+          disabled={tableLoading}
+        />}
+        </>
       ) : (
         <div></div>
       )}

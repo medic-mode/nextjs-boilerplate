@@ -2,54 +2,73 @@
 import React, { useEffect, useState } from 'react'
 import './ReviewJob.css'
 import { db } from '../../../lib/firebase'; // Adjust the path as necessary
-import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { GridLoader } from 'react-spinners';
 import Link from 'next/link';
-import { useAuth } from '../../../app/context/AuthContext';
+import TablePaginationFooter from '../table-pagination/TablePaginationFooter';
+import { useFirestorePagination } from '@/hooks/useFirestorePagination';
 
 const ReviewJob = () => {
 
-  const {loading, setLoading} = useAuth();
-  const [jobs, setJobs] = useState([]);
   const [approvalStatus, setApprovalStatus] = useState({});
   const [approvedJobs, setApprovedJobs] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const {
+    rows: jobs,
+    setRows: setJobs,
+    allRows,
+    allRowsLoading,
+    fetchAllRows,
+    loading: tableLoading,
+    page,
+    pageSize,
+    setPageSize,
+    totalRows,
+    totalPages,
+    fetchFirstPage,
+    fetchLastPage,
+    fetchNextPage,
+    fetchPreviousPage,
+  } = useFirestorePagination({
+    collectionName: 'jobs',
+    orderField: 'createdAt',
+  });
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const searchableJobs = normalizedSearch ? allRows || [] : jobs;
+  const visibleJobs = normalizedSearch
+    ? searchableJobs.filter((job) =>
+        [
+          formatDate(job.createdAt),
+          job.jobTitle,
+          job.jobType,
+          job.city,
+          job.state,
+          job.country,
+          job.experience,
+        ].some((value) => String(value || '').toLowerCase().includes(normalizedSearch))
+      )
+    : jobs;
 
   useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, 'jobs'));
-        const jobs = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        
-        jobs.sort((a, b) => {
-          const dateA = a.createdAt instanceof Date ? a.createdAt : a.createdAt.toDate(); 
-          const dateB = b.createdAt instanceof Date ? b.createdAt : b.createdAt.toDate(); 
-          return dateB - dateA; // Sort in descending order
-        });
-        
+    if (normalizedSearch) {
+      fetchAllRows();
+    }
+  }, [normalizedSearch, fetchAllRows]);
 
-        setJobs(jobs);
+  useEffect(() => {
+    const initialApprovalStatus = {};
+    const approvedList = [];
 
-        const initialApprovalStatus = {};
-        const approvedList = []; 
-
-        jobs.forEach((job) => {
-          initialApprovalStatus[job.id] = job.approved === true;
-          if (initialApprovalStatus[job.id]) {
-            approvedList.push(job); 
-          }
-        });
-
-        setApprovalStatus(initialApprovalStatus);
-        setApprovedJobs(approvedList);
-      } catch (error) {
-        console.error('Error fetching courses: ', error);
-      } finally {
-        setLoading(false);
+    jobs.forEach((job) => {
+      initialApprovalStatus[job.id] = job.approved === true;
+      if (initialApprovalStatus[job.id]) {
+        approvedList.push(job);
       }
-    };
+    });
 
-    fetchJobs();
-  }, [setLoading]);
+    setApprovalStatus(initialApprovalStatus);
+    setApprovedJobs(approvedList);
+  }, [jobs]);
 
   const handleApprovalChange = async (jobId) => {
     const isApproved = approvalStatus[jobId];
@@ -78,7 +97,7 @@ const ReviewJob = () => {
     }
   };
 
-  const formatDate = (date) => {
+  function formatDate(date) {
     if (!date) {
       return 'N/A';
     }
@@ -86,14 +105,14 @@ const ReviewJob = () => {
       return formatDateString(new Date(date.seconds * 1000));
     }
     return formatDateString(new Date(date));
-  };
+  }
 
-  const formatDateString = (date) => {
+  function formatDateString(date) {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
-  };
+  }
 
   const handleDelete = async (jobId) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this post?');
@@ -107,18 +126,20 @@ const ReviewJob = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="loading-container">
-        <GridLoader color={"#0A4044"} loading={loading} size={10} />
-      </div>
-    );
-  }
-
   return (
     <div className="review-course-container">
-      <h1>Review Jobs</h1>
-      {jobs.length > 0 ? (
+      <div className="dashboard-list-toolbar">
+        <h1>Review Jobs</h1>
+        <input
+          className="dashboard-list-search"
+          type="search"
+          placeholder="Search jobs..."
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+        />
+      </div>
+      {(jobs.length > 0 || tableLoading || allRowsLoading) ? (
+        <>
         <div className="scroll">
           <table>
             <thead>
@@ -136,9 +157,18 @@ const ReviewJob = () => {
               </tr>
             </thead>
             <tbody>
-              {jobs.map((job, index) => (
+              {tableLoading || allRowsLoading ? (
+                <tr>
+                  <td colSpan="12" className="dashboard-table-loading-cell">
+                    <div className="dashboard-table-loading">
+                      <GridLoader color={"#0A4044"} loading={tableLoading} size={10} />
+                    </div>
+                  </td>
+                </tr>
+              ) : visibleJobs.length > 0 ? (
+              visibleJobs.map((job, index) => (
                 <tr key={job.id}>
-                  <td>{index + 1}</td>
+                  <td>{normalizedSearch ? index + 1 : (page - 1) * pageSize + index + 1}</td>
                   <td>{formatDate(job.createdAt)}</td>
                   <td>{job.jobTitle}</td>
                   <td>{job.jobType}</td>
@@ -175,10 +205,30 @@ const ReviewJob = () => {
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))
+              ) : (
+                <tr>
+                  <td colSpan="12" className="dashboard-table-empty-cell">
+                    <div className="dashboard-table-empty">No jobs found.</div>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
+        {!normalizedSearch && <TablePaginationFooter
+          totalRows={totalRows}
+          page={page}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          onPageSizeChange={setPageSize}
+          onFirstPage={fetchFirstPage}
+          onPreviousPage={fetchPreviousPage}
+          onNextPage={fetchNextPage}
+          onLastPage={fetchLastPage}
+          disabled={tableLoading}
+        />}
+        </>
       ) : (
         <div>No jobs found.</div>
       )}

@@ -10,17 +10,12 @@ import { GridLoader } from "react-spinners";
 
  const Page = () => {
 
-	const {loading, logged, setLoading, userEmail} = useAuth()
+	const {loading, logged, userEmail} = useAuth()
   	
 	const router = useRouter();
 
-  console.log(userEmail)
-
   useEffect(() => {
-    setLoading(false)
-
     if (!loading && (!logged || userEmail !== 'admin@medicmode.com')) {
-      console.log("Redirecting to homepage");
       router.push('/');
     }
   }, [loading, logged, userEmail, router]);

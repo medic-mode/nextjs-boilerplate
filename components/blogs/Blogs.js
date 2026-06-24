@@ -9,12 +9,14 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ShareIcon from '@mui/icons-material/Share';
 import SearchIcon from '@mui/icons-material/Search';
+import TuneIcon from '@mui/icons-material/Tune';
 import CloseIcon from '@mui/icons-material/Close';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { toast, Toaster } from 'sonner';
 import { RWebShare } from "react-web-share";
 import { Button } from '@mui/material';
 import { GridLoader } from 'react-spinners';
+import { LoaderCircle } from 'lucide-react';
 import Image from 'next/image';
 import { useAuth } from "../../app/context/AuthContext";
 import { useRouter } from 'next/navigation';
@@ -25,7 +27,7 @@ const Blogs = () => {
 
   const { logged, handleOpen, userEmail } = useAuth();
 
-  const { blogPosts, categories, years, months, selectedCategory, setSelectedCategory, likedPosts, handleLike, showBlogOptions, recentBlog, closeBlogOptions, otherBlogs, selectedYear, setSelectedYear, selectedMonth, setSelectedMonth, isDrawerOpen, setIsDrawerOpen} = useBlog()
+  const { blogPosts, loading: blogsLoading, loadingMoreBlogs, hasMoreBlogs, fetchMoreBlogs, categories, years, months, blogSearchTerm, setBlogSearchTerm, selectedCategory, setSelectedCategory, likedPosts, handleLike, showBlogOptions, recentBlog, closeBlogOptions, otherBlogs, selectedYear, setSelectedYear, selectedMonth, setSelectedMonth, isDrawerOpen, setIsDrawerOpen} = useBlog()
 
   const [loading, setLoading] = useState(false);
   
@@ -69,11 +71,28 @@ const Blogs = () => {
     AOS.init({duration: 1000})
   }, [])
 
+  useEffect(() => {
+    AOS.refresh();
+  }, [otherBlogs.length]);
 
-  if (loading || !blogPosts) {
+  useEffect(() => {
+    const handleScroll = () => {
+      const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 240;
+
+      if (nearBottom && hasMoreBlogs && !loadingMoreBlogs) {
+        fetchMoreBlogs();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasMoreBlogs, loadingMoreBlogs, fetchMoreBlogs]);
+
+  if (loading || blogsLoading || !blogPosts) {
     return (
       <div className="loading-container">
-        <GridLoader color={"#0A4044"} loading={loading} size={10} />
+        <GridLoader color={"#0A4044"} loading={loading || blogsLoading} size={10} />
+        <p className="blogs-loading-text">Loading Blogs...</p>
       </div>
     );
   }
@@ -81,15 +100,14 @@ const Blogs = () => {
 
   const handleCommentIconClick = (id) => {
     setLoading(true)
-    router.push(`/blogs/${id}?focusOnComments=true`, undefined, { shallow: true });
+    router.push(`/blogs/${id}?focusOnComments=true`, { scroll: true });
   };
   
   const viewBlogs = (id) => {
     setLoading(true);
-    router.push(`/blogs/${id}`)
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    router.push(`/blogs/${id}`, { scroll: true })
   }
-
-
 
   return (
     <div style={{display:'flex', justifyContent:'center', }}>
@@ -106,8 +124,8 @@ const Blogs = () => {
         
         <div className="blog-search-bar"  >
           <div onClick={showBlogOptions} style={{display: 'flex', alignItems: 'center'}}>
-            <p>Search</p>
-            <SearchIcon style={{marginLeft: '5px'}}/>  
+            <p>Filters</p>
+            <TuneIcon style={{marginLeft: '5px'}}/>  
           </div>
                 <p className='create-user-blog-btn create-user-blog' onClick={handlePost}>Create Blog</p>
         </div>
@@ -192,13 +210,25 @@ const Blogs = () => {
           </div>
         ) : (
           <div className="loading-container">
-            <GridLoader color={"#0A4044"} loading={loading} size={10} />
+            <GridLoader color={"#0A4044"} loading={loading || blogsLoading} size={10} />
+            <p className="blogs-loading-text">Loading Blogs...</p>
           </div>
         )}
 
         <div className={`blog-options ${isDrawerOpen ? 'open' : ''}`}>
           <div className="drawer-header">
             <CloseIcon onClick={closeBlogOptions} style={{ cursor: 'pointer', position: 'absolute', right: '20px', color: 'var(--dark-green)' }} />
+          </div>
+          <div className="blog-filter-search">
+            <h2>
+              <SearchIcon style={{ fontSize: '20px', marginRight: '8px' }} /> Search
+            </h2>
+            <input
+              type="search"
+              placeholder="Search blog titles, author, category..."
+              value={blogSearchTerm}
+              onChange={(event) => setBlogSearchTerm(event.target.value)}
+            />
           </div>
           <div className="categories">
             <h2>
@@ -325,6 +355,12 @@ const Blogs = () => {
           <></>
         )}
       </div>
+      {loadingMoreBlogs && (
+        <div className="blogs-load-more">
+          <LoaderCircle className="blogs-loader-icon" />
+          <p className="blogs-loading-text">Loading Blogs...</p>
+        </div>
+      )}
     </div>
     </div>
   );

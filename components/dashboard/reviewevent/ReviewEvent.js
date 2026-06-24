@@ -1,46 +1,63 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { db } from '../../../lib/firebase'; // Import Firestore configuration
-import { collection, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import './ReviewEvent.css';
 import Link from 'next/link';
+import { GridLoader } from 'react-spinners';
+import TablePaginationFooter from '../table-pagination/TablePaginationFooter';
+import { useFirestorePagination } from '@/hooks/useFirestorePagination';
 
 const ReviewEvent = () => {
 
   
-  const [events, setEvents] = useState([]);
   const [approvalStatus, setApprovalStatus] = useState({});
+  const [searchTerm, setSearchTerm] = useState('');
+  const {
+    rows: events,
+    setRows: setEvents,
+    allRows,
+    allRowsLoading,
+    fetchAllRows,
+    loading: tableLoading,
+    page,
+    pageSize,
+    setPageSize,
+    totalRows,
+    totalPages,
+    fetchFirstPage,
+    fetchLastPage,
+    fetchNextPage,
+    fetchPreviousPage,
+  } = useFirestorePagination({
+    collectionName: 'events',
+    orderField: 'date',
+  });
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const searchableEvents = normalizedSearch ? allRows || [] : events;
+  const visibleEvents = normalizedSearch
+    ? searchableEvents.filter((event) =>
+        [
+          formatDate(event.date),
+          event.title,
+          event.location,
+        ].some((value) => String(value || '').toLowerCase().includes(normalizedSearch))
+      )
+    : events;
 
-  // Fetch events from Firestore
   useEffect(() => {
-    const fetchEvents = async () => {
-      const querySnapshot = await getDocs(collection(db, 'events'));
-      const eventsData = querySnapshot.docs.map((doc, index) => ({
-        id: doc.id,
-        sNo: index + 1,
-        ...doc.data(),
-      }));
+    if (normalizedSearch) {
+      fetchAllRows();
+    }
+  }, [normalizedSearch, fetchAllRows]);
 
-      eventsData.sort((a, b) => {
-        const dateA = new Date(a.date); // Convert to Date object
-        const dateB = new Date(b.date); // Convert to Date object
-        return dateB - dateA; // Descending order
-      });
-      
-
-
-      setEvents(eventsData);
-
-      // Set initial approval status
-      const initialApproval = {};
-      eventsData.forEach((event) => {
-        initialApproval[event.id] = event.approved || false;
-      });
-      setApprovalStatus(initialApproval);
-    };
-
-    fetchEvents();
-  }, []);
+  useEffect(() => {
+    const initialApproval = {};
+    events.forEach((event) => {
+      initialApproval[event.id] = event.approved || false;
+    });
+    setApprovalStatus(initialApproval);
+  }, [events]);
 
   // Handle Approval Toggle
   const handleApprovalChange = async (eventId) => {
@@ -59,7 +76,7 @@ const ReviewEvent = () => {
     }
   };
 
-  const formatDate = (date) => {
+  function formatDate(date) {
     if (!date) {
       return 'N/A';
     }
@@ -71,18 +88,27 @@ const ReviewEvent = () => {
 
     const parsedDate = new Date(date);
     return formatDateString(parsedDate);
-  };
+  }
 
-  const formatDateString = (date) => {
+  function formatDateString(date) {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
-  };
+  }
 
   return (
     <div className="review-event-container">
-      <h1>Review Event</h1>
+      <div className="dashboard-list-toolbar">
+        <h1>Review Event</h1>
+        <input
+          className="dashboard-list-search"
+          type="search"
+          placeholder="Search events..."
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+        />
+      </div>
       <div className="scroll">
         <table>
           <thead>
@@ -96,9 +122,18 @@ const ReviewEvent = () => {
             </tr>
           </thead>
           <tbody>
-            {events.map((event, index) => (
+            {tableLoading || allRowsLoading ? (
+              <tr>
+                <td colSpan="7" className="dashboard-table-loading-cell">
+                  <div className="dashboard-table-loading">
+                    <GridLoader color={"#0A4044"} loading={tableLoading} size={10} />
+                  </div>
+                </td>
+              </tr>
+            ) : visibleEvents.length > 0 ? (
+            visibleEvents.map((event, index) => (
               <tr key={event.id}>
-                <td>{index + 1}</td>
+                <td>{normalizedSearch ? index + 1 : (page - 1) * pageSize + index + 1}</td>
                 <td>{formatDate(event.date)}</td>
                 <td>{event.title}</td>
                 <td>{event.location}</td>
@@ -129,10 +164,29 @@ const ReviewEvent = () => {
                   </button>
                 </td>
               </tr>
-            ))}
+            ))
+            ) : (
+              <tr>
+                <td colSpan="7" className="dashboard-table-empty-cell">
+                  <div className="dashboard-table-empty">No events found.</div>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
+      {!normalizedSearch && <TablePaginationFooter
+        totalRows={totalRows}
+        page={page}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        onPageSizeChange={setPageSize}
+        onFirstPage={fetchFirstPage}
+        onPreviousPage={fetchPreviousPage}
+        onNextPage={fetchNextPage}
+        onLastPage={fetchLastPage}
+        disabled={tableLoading}
+      />}
     </div>
   );
 };

@@ -175,6 +175,12 @@ const BlogDetail = ({ loading, slug}) => {
     };
 
     useEffect(() => {
+        if (searchParams.get('focusOnComments') !== 'true') {
+            window.scrollTo({ top: 0, behavior: 'auto' });
+        }
+    }, [postId, searchParams]);
+
+    useEffect(() => {
         if (!loading && post ) {
             if (comments.length || comments.length === 0) {
 
@@ -192,7 +198,7 @@ const BlogDetail = ({ loading, slug}) => {
                 }
             }
         }
-    }, [loading, post, comments]);
+    }, [loading, post, comments, searchParams]);
     
 
    

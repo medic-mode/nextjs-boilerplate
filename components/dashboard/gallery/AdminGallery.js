@@ -1,14 +1,16 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './AdminGallery.css';
 import { InputText } from 'primereact/inputtext';
-import { collection, addDoc, getDocs, deleteDoc, doc  } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, doc  } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../../lib/firebase'; 
 import { toast, Toaster } from 'sonner';
 import { GridLoader } from 'react-spinners';
 import 'primeicons/primeicons.css';
 import { Button } from 'primereact/button';
+import TablePaginationFooter from '../table-pagination/TablePaginationFooter';
+import { useFirestorePagination } from '@/hooks/useFirestorePagination';
 
 const AdminGallery = () => {
   const [thumbnail, setThumbnail] = useState(null);
@@ -16,6 +18,7 @@ const AdminGallery = () => {
   const [caption, setCaption] = useState('');
   const [carouselImages, setCarouselImages] = useState([]);
   const [submitted, setSubmitted] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Handle thumbnail image upload
   const handleThumbnailUpload = (e) => {
@@ -106,35 +109,43 @@ const AdminGallery = () => {
     }
   };
 
-  const [galleryItems, setGalleryItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    rows: galleryItems,
+    setRows: setGalleryItems,
+    allRows,
+    allRowsLoading,
+    fetchAllRows,
+    loading,
+    page,
+    pageSize,
+    setPageSize,
+    totalRows,
+    totalPages,
+    fetchFirstPage,
+    fetchLastPage,
+    fetchNextPage,
+    fetchPreviousPage,
+  } = useFirestorePagination({
+    collectionName: 'gallery',
+    orderDirection: 'asc',
+  });
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const searchableGalleryItems = normalizedSearch ? allRows || [] : galleryItems;
+  const visibleGalleryItems = normalizedSearch
+    ? searchableGalleryItems.filter((item) =>
+        [item.caption].some((value) => String(value || '').toLowerCase().includes(normalizedSearch))
+      )
+    : galleryItems;
+
+  React.useEffect(() => {
+    if (normalizedSearch) {
+      fetchAllRows();
+    }
+  }, [normalizedSearch, fetchAllRows]);
 
   const fetchGallery = async () => {
-    setLoading(true);
-    try {
-      const galleryCollection = collection(db, 'gallery');
-      const querySnapshot = await getDocs(galleryCollection);
-      const itemsList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setGalleryItems(itemsList);
-    } catch (error) {
-      console.error("Error fetching gallery items: ", error);
-    } finally {
-      setLoading(false);
-    }
+    await fetchFirstPage();
   };
-
-  useEffect(() => {
-    fetchGallery();
-  }, []);
-
-
-  if (loading || !fetchGallery) {
-    return (
-      <div className="loading-container">
-        <GridLoader color={"#0A4044"} loading={loading} size={10} />
-      </div>
-    );
-  }
 
   const handleDelete = async (id) => {
     // Confirm deletion
@@ -156,7 +167,16 @@ const AdminGallery = () => {
   return (
     <div className='admin-gallery'>
       <Toaster position="top-center" richColors /> 
-      <h1>Gallery Images</h1>
+      <div className="dashboard-list-toolbar">
+        <h1>Gallery Images</h1>
+        <input
+          className="dashboard-list-search"
+          type="search"
+          placeholder="Search gallery..."
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+        />
+      </div>
       <div className="upload-image">
         
         <div className="g-field">
@@ -284,9 +304,18 @@ const AdminGallery = () => {
                 </tr>
               </thead>
               <tbody>
-                {galleryItems.map((item, index) => (
+                {loading || allRowsLoading ? (
+                  <tr>
+                    <td colSpan="4" className="dashboard-table-loading-cell">
+                      <div className="dashboard-table-loading">
+                        <GridLoader color={"#0A4044"} loading={loading} size={10} />
+                      </div>
+                    </td>
+                  </tr>
+                ) : visibleGalleryItems.length > 0 ? (
+                visibleGalleryItems.map((item, index) => (
                   <tr key={item.id}>
-                    <td>{index + 1}</td> 
+                    <td>{normalizedSearch ? index + 1 : (page - 1) * pageSize + index + 1}</td> 
                     <td className="caption-cell">{item.caption}</td>
                     <td>
                       <img src={item.thumbnail} alt={item.caption} style={{ width: '50px', height: '50px' }} />
@@ -295,10 +324,29 @@ const AdminGallery = () => {
                       <button className='gallery-delete-btn' onClick={() => handleDelete(item.id)}>Delete</button>
                     </td>
                   </tr>
-                ))}
+                ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" className="dashboard-table-empty-cell">
+                      <div className="dashboard-table-empty">No gallery items found.</div>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
+          {!normalizedSearch && <TablePaginationFooter
+            totalRows={totalRows}
+            page={page}
+            totalPages={totalPages}
+            pageSize={pageSize}
+            onPageSizeChange={setPageSize}
+            onFirstPage={fetchFirstPage}
+            onPreviousPage={fetchPreviousPage}
+            onNextPage={fetchNextPage}
+            onLastPage={fetchLastPage}
+            disabled={loading}
+          />}
         </div>
 
     </div>

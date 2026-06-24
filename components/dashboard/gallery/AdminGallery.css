@@ -4,9 +4,8 @@
 
 .admin-gallery h1{
     color: var(--dark-green);
-    margin-bottom: 20px;
     font-size: 30px;
-    text-align: center;
+    text-align: left;
 }
 
 .upload-image{

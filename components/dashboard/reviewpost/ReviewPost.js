@@ -1,56 +1,72 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { db } from '../../../lib/firebase'; // Adjust the path as necessary
-import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import './ReviewPost.css';
 import { GridLoader } from 'react-spinners';
 import Link from 'next/link';
-import { useAuth } from "../../../app/context/AuthContext";
+import TablePaginationFooter from '../table-pagination/TablePaginationFooter';
+import { useFirestorePagination } from '@/hooks/useFirestorePagination';
 
 const ReviewPost = () => {
   
-  const {loading, setLoading} = useAuth();
-  const [blogPosts, setBlogPosts] = useState([]);
   const [approvalStatus, setApprovalStatus] = useState({});
   const [approvedPosts, setApprovedPosts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const {
+    rows: blogPosts,
+    setRows: setBlogPosts,
+    allRows,
+    allRowsLoading,
+    fetchAllRows,
+    loading: tableLoading,
+    page,
+    pageSize,
+    setPageSize,
+    totalRows,
+    totalPages,
+    fetchFirstPage,
+    fetchLastPage,
+    fetchNextPage,
+    fetchPreviousPage,
+  } = useFirestorePagination({
+    collectionName: 'blogPosts',
+    orderField: 'dateCreated',
+  });
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const searchablePosts = normalizedSearch ? allRows || [] : blogPosts;
+  const visiblePosts = normalizedSearch
+    ? searchablePosts.filter((post) =>
+        [
+          formatDate(post.dateCreated),
+          post.title,
+          post.author,
+          post.coAuthor,
+          post.category,
+        ].some((value) => String(value || '').toLowerCase().includes(normalizedSearch))
+      )
+    : blogPosts;
 
   useEffect(() => {
-    const fetchBlogPosts = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, 'blogPosts'));
-        const posts = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    if (normalizedSearch) {
+      fetchAllRows();
+    }
+  }, [normalizedSearch, fetchAllRows]);
 
-        posts.sort((a, b) => {
-          const dateA = new Date(a.dateCreated); // Convert to Date object
-          const dateB = new Date(b.dateCreated); // Convert to Date object
-          return dateB - dateA; // Descending order
-        });
-  
+  useEffect(() => {
+    const initialApprovalStatus = {};
+    const approvedList = [];
 
-        // Initialize approval status and approved posts
-        const initialApprovalStatus = {};
-        const approvedList = []; // Temporary array to hold approved posts
-
-        posts.forEach((post) => {
-          initialApprovalStatus[post.id] = post.approved === 'yes'; // Check Firestore approval status
-          if (initialApprovalStatus[post.id]) {
-            approvedList.push(post); // Add to approved list if already approved
-          }
-        });
-
-        setBlogPosts(posts);
-        setApprovalStatus(initialApprovalStatus);
-        setApprovedPosts(approvedList);
-      } catch (error) {
-        console.error('Error fetching blog posts: ', error);
-      } finally {
-        setLoading(false);
+    blogPosts.forEach((post) => {
+      initialApprovalStatus[post.id] = post.approved === 'yes';
+      if (initialApprovalStatus[post.id]) {
+        approvedList.push(post);
       }
-    };
+    });
 
-    fetchBlogPosts();
-    // eslint-disable-next-line
-  }, []);
+    setApprovalStatus(initialApprovalStatus);
+    setApprovedPosts(approvedList);
+  }, [blogPosts]);
 
   const handleApprovalChange = async (postId) => {
     const isApproved = approvalStatus[postId];
@@ -80,7 +96,7 @@ const ReviewPost = () => {
     }
   };
 
-  const formatDate = (date) => {
+  function formatDate(date) {
     if (!date) {
       return 'N/A';
     }
@@ -92,14 +108,14 @@ const ReviewPost = () => {
 
     const parsedDate = new Date(date);
     return formatDateString(parsedDate);
-  };
+  }
 
-  const formatDateString = (date) => {
+  function formatDateString(date) {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
-  };
+  }
 
   const handleDelete = async (postId) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this post?');
@@ -114,21 +130,20 @@ const ReviewPost = () => {
     }
   };
 
-  if (loading || !blogPosts) {
-    return (
-      <div className="loading-container">
-        <GridLoader color={"#0A4044"} loading={loading} size={10} />
-      </div>
-    );
-  }
-
-
- 
-
   return (
     <div className="review-post-container">
-      <h1>Review Post</h1>
-      {blogPosts.length > 0 ? (
+      <div className="dashboard-list-toolbar">
+        <h1>Review Post</h1>
+        <input
+          className="dashboard-list-search"
+          type="search"
+          placeholder="Search posts..."
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+        />
+      </div>
+      {(blogPosts.length > 0 || tableLoading || allRowsLoading) ? (
+        <>
         <div className="scroll">
           <table>
             <thead>
@@ -145,9 +160,18 @@ const ReviewPost = () => {
               </tr>
             </thead>
             <tbody>
-              {blogPosts.map((post, index) => (
+              {tableLoading || allRowsLoading ? (
+                <tr>
+                  <td colSpan="11" className="dashboard-table-loading-cell">
+                    <div className="dashboard-table-loading">
+                      <GridLoader color={"#0A4044"} loading={tableLoading} size={10} />
+                    </div>
+                  </td>
+                </tr>
+              ) : visiblePosts.length > 0 ? (
+              visiblePosts.map((post, index) => (
                 <tr key={post.id}>
-                  <td>{index + 1}</td>
+                  <td>{normalizedSearch ? index + 1 : (page - 1) * pageSize + index + 1}</td>
                   <td>{formatDate(post.dateCreated)}</td>
                   <td>{post.title}</td>
                   <td>{post.author}</td>
@@ -196,10 +220,30 @@ const ReviewPost = () => {
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))
+              ) : (
+                <tr>
+                  <td colSpan="11" className="dashboard-table-empty-cell">
+                    <div className="dashboard-table-empty">No posts found.</div>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
+        {!normalizedSearch && <TablePaginationFooter
+          totalRows={totalRows}
+          page={page}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          onPageSizeChange={setPageSize}
+          onFirstPage={fetchFirstPage}
+          onPreviousPage={fetchPreviousPage}
+          onNextPage={fetchNextPage}
+          onLastPage={fetchLastPage}
+          disabled={tableLoading}
+        />}
+        </>
       ) : (
         <div></div>
       )}

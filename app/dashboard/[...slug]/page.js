@@ -10,30 +10,42 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { GridLoader } from 'react-spinners';
 
+const validSlugs = ['review-post/edit-post', 'review-course/edit-course', 'review-event/edit-event', 'review-job/edit-job', 'users/payment-history'];
+
 const DashboardPage = () => {
 
-  const {setLoading, logged} = useAuth()
+  const { loading, logged, userEmail } = useAuth()
   const router = useRouter();
 
     const { slug } = useParams();
 
     const baseRoute = slug ? `${slug[0]}/${slug[1]}` : '';
 
-    const validSlugs = ['review-post/edit-post', 'review-course/edit-course', 'review-event/edit-event', 'review-job/edit-job', 'users/payment-history'];
-
     useEffect(() => {
      
       if (!slug || !validSlugs.includes(baseRoute)) {
         router.push('/dashboard');
       }
-    }, [ slug, router]);
+    }, [baseRoute, slug, router]);
 
 
     useEffect(() => {
-      if (logged === false) {
+      if (!loading && (!logged || userEmail !== 'admin@medicmode.com')) {
         router.push('/');
       }
-    }, [logged, router]);
+    }, [loading, logged, userEmail, router]);
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <GridLoader color={"#0A4044"} loading={loading} size={10} />
+      </div>
+    );
+  }
+
+  if (!logged || userEmail !== 'admin@medicmode.com') {
+    return null;
+  }
 
   return (
     

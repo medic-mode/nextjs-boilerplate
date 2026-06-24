@@ -219,6 +219,71 @@
     margin: 20px 0 40px 0;
 }
 
+.blog-filter-search {
+    margin-bottom: 20px;
+}
+
+.blog-filter-search h2 {
+    font-size: 18px !important;
+    color: var(--dark-green);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background-color: var(--light-green);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.blog-filter-search input {
+    background-color: white;
+    border: none;
+    border-radius: 10px;
+    color: var(--dark-green);
+    font-size: 15px;
+    outline: none;
+    padding: 14px 16px;
+    width: 100%;
+}
+
+.blog-filter-search input::placeholder {
+    color: var(--grey);
+}
+
+.blogs-load-more {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
+    padding: 20px 0 40px;
+    width: 100%;
+}
+
+.blogs-loading-text {
+    color: var(--dark-green);
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 12px;
+}
+
+.blogs-load-more .blogs-loading-text {
+    margin-top: 0;
+}
+
+.blogs-loader-icon {
+    animation: blogsSpin 0.8s linear infinite;
+    color: var(--dark-green);
+    height: 32px;
+    width: 32px;
+}
+
+@keyframes blogsSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .other-blogs {
     display: flex; /* Use flexbox for the container */
     flex-direction: column; /* Stack children vertically */
