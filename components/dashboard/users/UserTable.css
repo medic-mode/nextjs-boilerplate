@@ -3,6 +3,7 @@
     padding: 20px 10px;
     display: flex;
     flex-direction: column;
+    font-family: var(--font-montserrat), "Montserrat", sans-serif;
     font-size: 13px;
   }
 
@@ -21,17 +22,22 @@
     width: 1000px;
     border-collapse: collapse;
     margin-top: 20px;
+    font-family: var(--font-montserrat), "Montserrat", sans-serif;
   }
   
   th, td {
     padding: 10px;
     border: 1px solid #ddd;
     text-align: left;
+    font-family: var(--font-montserrat), "Montserrat", sans-serif;
+    font-size: 13px;
+    line-height: 1.45;
   }
   
   th {
     background-color: var(--dark-green); /* Blue background for headers */
     color: var(--light-green); /* White text for headers */
+    font-weight: 700;
   }
   
   .delete-btn {

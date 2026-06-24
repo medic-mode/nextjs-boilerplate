@@ -1,6 +1,7 @@
 .contact-container {
     margin: 0 auto; /* Center the container */
     position: relative; /* Position for absolute children */
+    font-family: var(--font-montserrat), "Montserrat", sans-serif;
 }
 
 .contact {
@@ -34,6 +35,21 @@
     gap: 20px;
 }
 
+.contact-heading h1 {
+    font-family: var(--font-montserrat), "Montserrat", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0;
+}
+
+.contact-heading p {
+    font-family: var(--font-montserrat), "Montserrat", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
 .contact-info{
     display: flex;
     margin: 50px 0;
@@ -64,6 +80,7 @@
     text-align: center;
     margin-bottom: 20px;
     font-size: 23px;
+    font-weight: 700;
     color: var(--dark-green);
   }
   
@@ -82,18 +99,22 @@
     width: 100%;
     border-radius: 8px;
     border: none;
-    font-family: "Montserrat", sans-serif;
+    font-family: var(--font-montserrat), "Montserrat", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
   }
   
   .contact-form form textarea:focus {
     outline: none;
   }
   
-  .enquiry-btn {
+.enquiry-btn {
+    font-family: var(--font-montserrat), "Montserrat", sans-serif !important;
     background-color: var(--dark-green);
     color: var(--light-green);
     padding: 10px 30px;
     font-size: 15px;
+    font-weight: 500;
     margin-top: 20px;
     border: none;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
@@ -153,6 +174,13 @@
     text-align: center;
     font-weight: 600;
     line-height: 25px;
+}
+
+.addr h3 {
+    font-family: var(--font-montserrat), "Montserrat", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
 }
 
 .addr-icon{
