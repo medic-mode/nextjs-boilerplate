@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
 
 
   return (
-    <html lang="en">
+    <html lang="en" className={montserrat.variable}>
       <head>
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=G-KV23NQK3GB`}

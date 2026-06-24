@@ -1,0 +1,54 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.email == "admin@medicmode.com";
+    }
+
+    function isImage() {
+      return request.resource != null
+        && request.resource.contentType.matches('image/.*')
+        && request.resource.size < 10 * 1024 * 1024;
+    }
+
+    match /thumbnails/{fileName} {
+      allow read: if true;
+      allow write: if signedIn() && isImage();
+    }
+
+    match /authorImg/{fileName} {
+      allow read: if true;
+      allow write: if signedIn() && isImage();
+    }
+
+    match /slides/{fileName} {
+      allow read: if true;
+      allow write: if signedIn() && isImage();
+    }
+
+    match /slideImages/{fileName} {
+      allow read: if true;
+      allow write: if signedIn() && isImage();
+    }
+
+    match /gallery/{fileName} {
+      allow read: if true;
+      allow write: if isAdmin() && isImage();
+    }
+
+    match /faculties/{fileName} {
+      allow read: if true;
+      allow write: if isAdmin() && isImage();
+    }
+
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

@@ -1,0 +1,104 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.email == "admin@medicmode.com";
+    }
+
+    function isOwnerEmail(email) {
+      return signedIn() && request.auth.token.email == email;
+    }
+
+    function onlyChanged(keys) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys);
+    }
+
+    match /users/{userId} {
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email is string;
+
+      // Current app queries users by email/phone from the client. For stricter privacy,
+      // migrate user documents to use auth.uid as the document ID, then restrict reads to owners.
+      allow read: if signedIn();
+
+      allow update: if isAdmin()
+        || (signedIn()
+          && resource.data.uid == request.auth.uid
+          && request.resource.data.uid == resource.data.uid
+          && request.resource.data.email == resource.data.email);
+
+      allow delete: if isAdmin();
+    }
+
+    match /blogPosts/{postId} {
+      allow read: if isAdmin() || resource.data.approved == "yes";
+
+      allow create: if signedIn()
+        && request.resource.data.approved in ["no", "yes"]
+        && (isAdmin() || request.resource.data.approved == "no");
+
+      allow update: if isAdmin()
+        || (signedIn() && onlyChanged(["likesCount"]))
+        || (signedIn() && onlyChanged(["commentsCount"]));
+
+      allow delete: if isAdmin();
+
+      match /likes/{email} {
+        allow read: if isAdmin() || isOwnerEmail(email);
+        allow create, delete: if isOwnerEmail(email);
+        allow update: if false;
+      }
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if signedIn()
+          && request.resource.data.email == request.auth.token.email
+          && request.resource.data.commentText is string
+          && request.resource.data.commentText.size() > 0;
+        allow update: if false;
+        allow delete: if isAdmin() || isOwnerEmail(resource.data.email);
+      }
+    }
+
+    match /courses/{courseId} {
+      allow read: if isAdmin() || resource.data.approved == "yes";
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin() || onlyChanged(["ratingValue"]);
+    }
+
+    match /jobs/{jobId} {
+      allow read: if isAdmin() || resource.data.approved == true;
+      allow write: if isAdmin();
+    }
+
+    match /events/{eventId} {
+      allow read: if isAdmin() || resource.data.approved == true;
+      allow write: if isAdmin();
+    }
+
+    match /gallery/{itemId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /faculties/{facultyId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Written only through server/admin SDK API routes.
+    match /productClicks/{productId} {
+      allow read, write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

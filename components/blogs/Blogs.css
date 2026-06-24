@@ -27,7 +27,7 @@
     padding: 20px;
     color: var(--dark-green);
     font-size: 36px;
-    font-family: 'Futura', sans-serif;
+    font-family: var(--font-montserrat), "Montserrat", sans-serif;
     animation: slideInFromRight 1s ease-out forwards;
     width: auto;
     box-sizing: border-box;
@@ -41,7 +41,7 @@
     padding: 20px;
     color: var(--dark-green);
     font-size: 20px;
-    font-family: 'Futura', sans-serif;
+    font-family: var(--font-montserrat), "Montserrat", sans-serif;
     animation: slideInFromRight 1s ease-out forwards;
     width: auto;
 }

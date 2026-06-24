@@ -92,7 +92,6 @@ const Blogs = () => {
     return (
       <div className="loading-container">
         <GridLoader color={"#0A4044"} loading={loading || blogsLoading} size={10} />
-        <p className="blogs-loading-text">Loading Blogs...</p>
       </div>
     );
   }
@@ -211,7 +210,6 @@ const Blogs = () => {
         ) : (
           <div className="loading-container">
             <GridLoader color={"#0A4044"} loading={loading || blogsLoading} size={10} />
-            <p className="blogs-loading-text">Loading Blogs...</p>
           </div>
         )}
 
@@ -358,7 +356,6 @@ const Blogs = () => {
       {loadingMoreBlogs && (
         <div className="blogs-load-more">
           <LoaderCircle className="blogs-loader-icon" />
-          <p className="blogs-loading-text">Loading Blogs...</p>
         </div>
       )}
     </div>

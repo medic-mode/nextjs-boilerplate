@@ -26,7 +26,7 @@ import {
   import "react-vertical-timeline-component/style.min.css";
   import { FaCalendarAlt } from "react-icons/fa";
   import { db } from '../../lib/firebase'; 
-import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 
 
@@ -53,7 +53,8 @@ export default function Home() {
       const fetchEvents = async () => {
         try {
           const eventsCollection = collection(db, 'events');
-          const eventSnapshot = await getDocs(eventsCollection);
+          const approvedEventsQuery = query(eventsCollection, where('approved', '==', true));
+          const eventSnapshot = await getDocs(approvedEventsQuery);
     
           const currentDate = new Date(); // Get the current date
           const updatedEventList = [];
@@ -80,11 +81,6 @@ export default function Home() {
                 id: docSnap.id,
                 ...eventData,
                 date: formattedDate,
-              });
-            } else if (eventData.approved === true && eventDate < currentDate) {
-              // Set event to unapproved if in the past
-              await updateDoc(doc(db, 'events', docSnap.id), {
-                approved: false,
               });
             }
           }

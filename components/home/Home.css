@@ -41,6 +41,12 @@
     animation: slideInFromBottom 1s ease-out;
   }
 
+  .intro-text h1 {
+    font-size: 60px;
+    font-weight: 800;
+    line-height: 1.15;
+  }
+
   @keyframes slideInFromBottom {
     0% {
       transform: translateY(100%); /* Start off-screen at the bottom */
@@ -84,6 +90,7 @@
   margin-top: 30px;
   margin-bottom: 30px;
   font-size: 35px;
+  font-weight: 700;
 }
 
 .about-us-content{
@@ -275,6 +282,10 @@
     top: 50% !important;
     right: 8% !important;
     font-size: 15px !important;
+  }
+
+  .intro-text h1 {
+    font-size: 30px;
   }
 
   .explore-btn{
