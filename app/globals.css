@@ -54,6 +54,33 @@ body {
     overflow-x: hidden;
 }
 
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-montserrat), "Montserrat", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-montserrat), "Montserrat", sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.MuiButton-root,
+.MuiInputBase-root,
+.MuiTypography-root,
+.p-component {
+  font-family: var(--font-montserrat), "Montserrat", sans-serif !important;
+}
+
 .next-app {
   display: flex;
   flex-direction: column;
