@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '@/components/dashboard/Sidebar';
 import './DashboardLayout.css'
+import './table-pagination/TablePaginationFooter.css'
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import ReviewPost from './reviewpost/ReviewPost';
