@@ -6,7 +6,7 @@ export default function page() {
 
 
   return (
-    <div className="user-create-blog">
+    <div className="create-blog-page">
       <CreatePost />
     </div>
   );

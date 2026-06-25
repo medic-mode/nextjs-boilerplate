@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import './Blogs.css';
@@ -21,6 +21,7 @@ import Image from 'next/image';
 import { useAuth } from "../../app/context/AuthContext";
 import { useRouter } from 'next/navigation';
 import { useBlog } from '../../app/context/BlogContext';
+import { auth } from '../../lib/firebase';
 
 
 const Blogs = () => {
@@ -36,6 +37,20 @@ const Blogs = () => {
 
   const [pendingPath, setPendingPath] = useState(null);
 
+  const goToCreatePost = useCallback(() => {
+    const firebaseEmail = auth.currentUser?.email?.trim().toLowerCase();
+    const fallbackEmail = userEmail?.trim().toLowerCase();
+    const isAdmin = (firebaseEmail || fallbackEmail) === "admin@medicmode.com";
+    const path = isAdmin 
+      ? '/dashboard/create-post' 
+      : '/blogs/create-post';
+
+    setIsDrawerOpen(false);
+    setLoading(true);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    router.push(path, { scroll: true });
+  }, [router, setIsDrawerOpen, userEmail]);
+
   const handlePost = (e) => {
     e.preventDefault();  
     if (!logged) {
@@ -44,25 +59,16 @@ const Blogs = () => {
       handleOpen(); 
       return;
     }
-  
-    setLoading(true);
-  
-    const path = userEmail?.trim() === "admin@medicmode.com" 
-      ? '/dashboard/create-post' 
-      : '/blogs/create-post';
-    router.push(path);
+
+    goToCreatePost();
   };
   
   useEffect(() => {
     if (logged && pendingPath) {
-      const path = userEmail?.trim() === "admin@medicmode.com" 
-        ? '/dashboard/create-post' 
-        : '/blogs/create-post';
-      router.push(path);
-      
+      goToCreatePost();
       setPendingPath(null); // Reset pendingPath after navigation
     }
-  }, [logged, userEmail, pendingPath, router]);
+  }, [logged, pendingPath, goToCreatePost]);
   
 
   

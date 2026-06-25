@@ -1,8 +1,8 @@
 "use client";
 
 import { ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import "./TablePaginationFooter.css";
+
 
 const PAGE_SIZE_OPTIONS = [10, 20, 30, 40, 50];
 
@@ -50,50 +50,42 @@ export default function TablePaginationFooter({
         </div>
 
         <div className="dashboard-table-footer__buttons">
-          <Button
+          <button
             type="button"
-            variant="outline"
-            size="icon"
             className="dashboard-table-footer__button"
             onClick={onFirstPage}
             disabled={disabled || isFirstPage}
             aria-label="Go to first page"
           >
             <ChevronsLeft size={17} />
-          </Button>
-          <Button
+          </button>
+          <button
             type="button"
-            variant="outline"
-            size="icon"
             className="dashboard-table-footer__button"
             onClick={onPreviousPage}
             disabled={disabled || isFirstPage}
             aria-label="Go to previous page"
           >
             <ChevronLeft size={17} />
-          </Button>
-          <Button
+          </button>
+          <button
             type="button"
-            variant="outline"
-            size="icon"
             className="dashboard-table-footer__button"
             onClick={onNextPage}
             disabled={disabled || isLastPage}
             aria-label="Go to next page"
           >
             <ChevronRight size={17} />
-          </Button>
-          <Button
+          </button>
+          <button
             type="button"
-            variant="outline"
-            size="icon"
             className="dashboard-table-footer__button"
             onClick={onLastPage}
             disabled={disabled || isLastPage}
             aria-label="Go to last page"
           >
             <ChevronsRight size={17} />
-          </Button>
+          </button>
         </div>
       </div>
     </div>

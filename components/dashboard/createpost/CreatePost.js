@@ -38,21 +38,25 @@ const CreatePost = () => {
   const navigate = useRouter();
 
   
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, []);
+
 
   useEffect(() => {
-    if (logged === false) {
+    if (!loading && logged === false) {
       const timeout = setTimeout(() => {
         navigate.push('/blogs');
       }, 500);
 
       return () => clearTimeout(timeout); // Cleanup timeout on component unmount
     }
-  }, [logged, navigate]);
+  }, [loading, logged, navigate]);
 
   if (!logged) {
     return (
       <div className="loading-container">
-        <GridLoader color={"#0A4044"} loading={loading} size={10} />
+        <GridLoader color={"#0A4044"} loading={true} size={10} />
       </div>
     );
   }

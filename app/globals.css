@@ -1,8 +1,7 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 
 :root {
-    --font-montserrat: "Montserrat";
     --dark-green: #0A4044; 
     --light-green: #F2F7F7;
     --orange: #E68657;
@@ -34,6 +33,10 @@ body {
 
 .content-footer {
   margin-top: auto; 
+}
+
+.create-blog-page {
+  width: 100%;
 }
 
 * {

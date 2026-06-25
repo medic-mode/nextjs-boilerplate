@@ -1,3 +1,4 @@
+
 .dashboard-list-toolbar {
   align-items: center;
   display: flex;
@@ -11,6 +12,9 @@
 .dashboard-list-toolbar h2,
 .dashboard-list-toolbar h3 {
   color: var(--dark-green);
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
   line-height: 1.25;
   margin: 0;
   text-align: left;
@@ -133,11 +137,18 @@
 }
 
 .dashboard-table-footer__button {
+  align-items: center;
   background: #ffffff !important;
   border: 1px solid rgba(10, 64, 68, 0.22) !important;
   border-radius: 8px !important;
   color: var(--dark-green) !important;
+  cursor: pointer;
+  display: inline-flex;
+  flex-shrink: 0;
+  font: inherit;
   height: 32px !important;
+  justify-content: center;
+  padding: 0;
   width: 32px !important;
 }
 

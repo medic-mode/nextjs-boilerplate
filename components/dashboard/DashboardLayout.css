@@ -5,18 +5,6 @@
     font-family: var(--font-montserrat), "Montserrat", sans-serif;
 }
 
-.dashboard-layout .dashboard-list-toolbar h1,
-.dashboard-layout .dashboard-list-toolbar h2,
-.dashboard-layout .dashboard-list-toolbar h3 {
-    color: var(--dark-green);
-    font-family: "Montserrat", sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.25;
-    margin: 0;
-    text-align: left;
-}
-
 .dashboard {
     position: sticky; /* Make the sidebar sticky */
     top: 80px; /* Adjust based on your header's height */
